@@ -1,8 +1,6 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Text } from 'react-native-paper'
+import { StyleSheet, View, Text } from 'react-native'
 import { ExternalLink } from './ExternalLink'
-import { MonoText } from './StyledText'
 
 export default function EditScreenInfo({ path }: { path: string }) {
   return (
@@ -15,7 +13,7 @@ export default function EditScreenInfo({ path }: { path: string }) {
         <View
           style={[styles.codeHighlightContainer, styles.homeScreenFilename]}
         >
-          <MonoText>{path}</MonoText>
+          <Text>{path}</Text>
         </View>
 
         <Text style={styles.getStartedText}>

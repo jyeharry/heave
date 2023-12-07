@@ -3,6 +3,7 @@ import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
 import { useEffect } from 'react'
+import { colours } from '@/constants/Colours'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -44,9 +45,26 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <ThemeProvider value={DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+      <Stack
+        screenOptions={{
+          contentStyle: { backgroundColor: colours.light },
+          headerStyle: { backgroundColor: colours.dark },
+          headerTitleStyle: { color: colours.white },
+          headerTintColor: colours.grey300,
+        }}
+      >
+        <Stack.Screen
+          name="(tabs)"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="modal"
+          options={{
+            presentation: 'modal',
+          }}
+        />
       </Stack>
     </ThemeProvider>
   )
