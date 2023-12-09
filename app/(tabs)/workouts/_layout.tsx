@@ -1,15 +1,15 @@
 import { Stack } from 'expo-router'
 import { FC } from 'react'
-import { colours } from '@/constants/Colours'
+import { theme } from '@/constants/theme'
 
 const WorkoutsLayout: FC = () => {
   return (
     <Stack
       screenOptions={{
-        contentStyle: { backgroundColor: colours.light },
-        headerStyle: { backgroundColor: colours.dark },
-        headerTitleStyle: { color: colours.white },
-        headerTintColor: colours.grey300,
+        contentStyle: { backgroundColor: theme.colours.light },
+        headerStyle: { backgroundColor: theme.colours.dark },
+        headerTitleStyle: { color: theme.colours.white },
+        headerTintColor: theme.colours.grey300,
       }}
     >
       <Stack.Screen

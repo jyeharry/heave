@@ -2,8 +2,10 @@ import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
+import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
-import { colours } from '@/constants/Colours'
+import { Platform } from 'react-native'
+import { theme } from '@/constants/theme'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -47,10 +49,10 @@ function RootLayoutNav() {
     <ThemeProvider value={DefaultTheme}>
       <Stack
         screenOptions={{
-          contentStyle: { backgroundColor: colours.light },
-          headerStyle: { backgroundColor: colours.dark },
-          headerTitleStyle: { color: colours.white },
-          headerTintColor: colours.grey300,
+          contentStyle: { backgroundColor: theme.colours.light },
+          headerStyle: { backgroundColor: theme.colours.dark },
+          headerTitleStyle: { color: theme.colours.white },
+          headerTintColor: theme.colours.grey300,
         }}
       >
         <Stack.Screen
@@ -66,6 +68,9 @@ function RootLayoutNav() {
           }}
         />
       </Stack>
+
+      {/* Use a light status bar on iOS to account for the black space above the modal */}
+      <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
     </ThemeProvider>
   )
 }

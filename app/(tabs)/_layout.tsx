@@ -1,6 +1,6 @@
 import { Link, Tabs } from 'expo-router'
 import { Icon, IconButton } from 'react-native-paper'
-import { colours } from '@/constants/Colours'
+import { theme } from '@/constants/theme'
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
@@ -13,12 +13,12 @@ export default function TabLayout() {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colours.accent1,
-        tabBarInactiveTintColor: colours.grey300,
-        headerStyle: { backgroundColor: colours.dark },
-        headerTitleStyle: { color: colours.white },
-        tabBarStyle: { backgroundColor: colours.dark },
-        headerTintColor: colours.grey300,
+        tabBarActiveTintColor: theme.colours.accent1,
+        tabBarInactiveTintColor: theme.colours.grey300,
+        headerStyle: { backgroundColor: theme.colours.dark },
+        headerTitleStyle: { color: theme.colours.white },
+        tabBarStyle: { backgroundColor: theme.colours.dark },
+        headerTintColor: theme.colours.grey300,
       }}
     >
       <Tabs.Screen

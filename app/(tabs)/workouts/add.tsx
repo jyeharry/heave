@@ -1,28 +1,31 @@
-import { Stack } from 'expo-router'
 import { FC } from 'react'
-import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native'
-import { colours } from '@/constants/Colours'
+import { StyleSheet, TextInput, View } from 'react-native'
+import { Button } from '@/components/Button'
+import { theme } from '@/constants/theme'
+import Text from '@/components/Text'
 
 const Add: FC = () => {
   return (
-    <View>
+    <View style={styles.container}>
       <WorkoutTitle />
       <ExerciseList />
+      <Button style={{ marginTop: 16 }} colour="danger">
+        Cancel Workout
+      </Button>
     </View>
   )
 }
 
 const WorkoutTitle = () => {
   return (
-    <View style={styles.container}>
+    <View>
       <TextInput
         placeholder="Workout Title"
-        placeholderTextColor={colours.grey300}
-        style={styles.title}
+        placeholderTextColor={theme.placeholderColour}
       />
       <TextInput
         placeholder="Notes"
-        placeholderTextColor={colours.grey300}
+        placeholderTextColor={theme.placeholderColour}
         style={styles.notes}
         multiline
       />
@@ -32,18 +35,9 @@ const WorkoutTitle = () => {
 
 const ExerciseList = () => {
   return (
-    <View style={styles.container}>
+    <View>
       <Text>Exercise List</Text>
-      <Pressable
-        style={({ pressed }) => [
-          styles.button,
-          {
-            opacity: pressed ? 0.5 : 1,
-          },
-        ]}
-      >
-        <Text style={[styles.buttonText]}>Add Exercise</Text>
-      </Pressable>
+      <Button>Add Exercise</Button>
     </View>
   )
 }
@@ -52,31 +46,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 16,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: colours.dark,
-  },
   notes: {
-    fontSize: 16,
     marginTop: 8,
-    fontWeight: '600',
-    color: colours.dark,
-  },
-  button: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 8,
-    borderRadius: 8,
-    elevation: 3,
-    backgroundColor: colours.primary100,
-    borderColor: colours.primary,
-    borderWidth: 1,
-  },
-  buttonText: {
-    fontWeight: 'bold',
-    fontSize: 16,
-    color: colours.primary,
   },
 })
 
