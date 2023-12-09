@@ -1,7 +1,7 @@
 import { FC } from 'react'
-import { StyleSheet, TextInput, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { Button } from '@/components/Button'
-import { theme } from '@/constants/theme'
+import Input from '@/components/Input'
 import Text from '@/components/Text'
 
 const Add: FC = () => {
@@ -19,16 +19,8 @@ const Add: FC = () => {
 const WorkoutTitle = () => {
   return (
     <View>
-      <TextInput
-        placeholder="Workout Title"
-        placeholderTextColor={theme.placeholderColour}
-      />
-      <TextInput
-        placeholder="Notes"
-        placeholderTextColor={theme.placeholderColour}
-        style={styles.notes}
-        multiline
-      />
+      <Input placeholder="Workout Title" size="title" />
+      <Input placeholder="Notes" style={styles.notes} multiline />
     </View>
   )
 }
