@@ -1,13 +1,14 @@
-import { Link, Tabs } from 'expo-router'
-import { Icon, IconButton } from 'react-native-paper'
+import MCIcon from '@expo/vector-icons/MaterialCommunityIcons'
+import { Tabs } from 'expo-router'
+import HeaderIcon from '@/components/HeaderIcon'
 import { theme } from '@/constants/theme'
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
-function TabBarIcon(props: { source: any; color: string }) {
-  return <Icon size={28} {...props} />
-}
+const TabBarIcon = (props: { source: any; color: string }) => (
+  <MCIcon size={28} name={props.source} type="material-community" {...props} />
+)
 
 export default function TabLayout() {
   return (
@@ -27,9 +28,7 @@ export default function TabLayout() {
           title: 'Tab One',
           tabBarIcon: ({ color }) => <TabBarIcon source="home" color={color} />,
           headerRight: ({ tintColor }) => (
-            <Link href="/modal" asChild>
-              <IconButton icon="information" size={25} iconColor={tintColor} />
-            </Link>
+            <HeaderIcon href="/modal" color={tintColor} name="information" />
           ),
         }}
       />
@@ -41,9 +40,7 @@ export default function TabLayout() {
             <TabBarIcon source="weight-lifter" color={color} />
           ),
           headerRight: ({ tintColor }) => (
-            <Link href="/workouts/add" asChild>
-              <IconButton icon="plus" size={25} iconColor={tintColor} />
-            </Link>
+            <HeaderIcon href="/workouts/add" color={tintColor} name="plus" />
           ),
         }}
       />
