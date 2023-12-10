@@ -19,7 +19,6 @@ const HeaderIcon: FC<HeaderIconProps> = ({ color, name, href }) => {
             size={25}
             color={color}
             style={{ marginHorizontal: 16, opacity: pressed ? 0.5 : 1 }}
-            type="material-community"
           />
         )}
       </Pressable>

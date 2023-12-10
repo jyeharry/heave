@@ -6,7 +6,6 @@ const WorkoutsLayout: FC = () => {
   return (
     <Stack
       screenOptions={{
-        contentStyle: { backgroundColor: theme.colours.light },
         headerStyle: { backgroundColor: theme.colours.dark },
         headerTitleStyle: { color: theme.colours.white },
         headerTintColor: theme.colours.grey300,

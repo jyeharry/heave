@@ -7,6 +7,10 @@ export const theme = {
   text: StyleSheet.create({
     body: {
       fontSize: 16,
+      fontWeight: '700',
+    },
+    notes: {
+      fontSize: 16,
       fontWeight: '600',
     },
     title: {
