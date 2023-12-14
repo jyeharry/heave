@@ -10,11 +10,11 @@ export type Colour =
   | 'success'
   | 'warning'
 
-export type Shade = 'light' | 'white' | 'dark'
+type Shade = 'light' | 'white' | 'dark'
 
 export type BaseColour = Colour | Shade
 
-export type ColourVariant<T extends Colour> = `${T}${
+type ColourVariant<T extends Colour> = `${T}${
   | 100
   | 200
   | 300
@@ -34,6 +34,6 @@ export type SingleColourVariantMap<K extends Colour, T> = Record<
   T
 >
 
-export type ColourVariantMap<T> = Record<ColourVariant<Colour>, T>
+type ColourVariantMap<T> = Record<ColourVariant<Colour>, T>
 
-export type ColourThemeMap<T> = BaseColourMap<T> & ColourVariantMap<T>
+export type ColourThemeMap<T = any> = BaseColourMap<T> & ColourVariantMap<T>

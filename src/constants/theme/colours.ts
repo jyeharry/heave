@@ -2,7 +2,7 @@ import Color from 'color'
 import { ColourThemeMap } from './types'
 import { generateShades } from './utils'
 
-export const colours: ColourThemeMap<string> = (() => {
+const colourTheme: ColourThemeMap<string> = (() => {
   const accent1 = Color('#55b38b')
   const accent2 = Color('#296bd3')
   const accent3 = Color('#21d052')
@@ -40,3 +40,9 @@ export const colours: ColourThemeMap<string> = (() => {
     ...generateShades('warning', warning),
   }
 })()
+
+const extraColours = {
+  grey150: Color(colourTheme.grey).lightness(90).toString(),
+}
+
+export const colours = { ...colourTheme, ...extraColours }
