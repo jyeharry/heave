@@ -6,7 +6,12 @@ interface TextProps extends RNTextProps {
   size?: keyof typeof theme.text
 }
 
-const Text: FC<TextProps> = ({ children, style, size = 'body', ...props }) => {
+export const Text: FC<TextProps> = ({
+  children,
+  style,
+  size = 'body',
+  ...props
+}) => {
   return (
     <RNText
       style={[{ color: theme.colours.dark }, theme.text[size], style]}
@@ -16,5 +21,3 @@ const Text: FC<TextProps> = ({ children, style, size = 'body', ...props }) => {
     </RNText>
   )
 }
-
-export default Text
