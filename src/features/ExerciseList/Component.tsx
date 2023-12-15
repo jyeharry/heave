@@ -1,14 +1,22 @@
 import MCIcon from '@expo/vector-icons/MaterialCommunityIcons'
 import Octicon from '@expo/vector-icons/Octicons'
-import { FC, useRef, useState } from 'react'
+import { Dispatch, FC, useRef, useState } from 'react'
 import { Modal, Pressable, TextInputProps, View } from 'react-native'
 import { Row, Table } from 'react-native-reanimated-table'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
 
-const CompleteSetButton = () => (
-  <Button size="none" colour="grey" style={{ borderWidth: 0 }}>
+const CompleteSetButton: FC<{
+  completed: boolean
+  setCompleted: Dispatch<React.SetStateAction<boolean>>
+}> = ({ completed, setCompleted }) => (
+  <Button
+    size="none"
+    colour={completed ? 'primary' : 'grey'}
+    style={{ borderWidth: completed ? 1 : 0, padding: completed ? 0 : 1 }}
+    onPress={() => setCompleted((prevCompleted) => !prevCompleted)}
+  >
     <MCIcon
       name="check"
       size={22}
@@ -116,6 +124,7 @@ const SetRow = ({
 }) => {
   const [visible, setVisible] = useState(false)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
+  const [completed, setCompleted] = useState(false)
   const ref = useRef<View | null>(null)
 
   const handleOpenModal = () => {
@@ -145,7 +154,7 @@ const SetRow = ({
     ),
     <TableInput placeholder={weight?.toString()} />,
     <TableInput placeholder={reps?.toString()} />,
-    <CompleteSetButton />,
+    <CompleteSetButton completed={completed} setCompleted={setCompleted} />,
   ]
 
   return (
