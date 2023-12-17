@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
@@ -7,13 +7,15 @@ import { ExerciseList } from '@/features/ExerciseList'
 
 const Add: FC = () => {
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentInset={{ bottom: 48 }}
+      style={styles.container}
+      contentContainerStyle={contentStyles.container}
+    >
       <WorkoutTitle />
       <ExerciseList />
-      <Button style={{ marginTop: 16 }} colour="danger">
-        Cancel Workout
-      </Button>
-    </View>
+      <Button colour="danger">Cancel Workout</Button>
+    </ScrollView>
   )
 }
 
@@ -33,9 +35,16 @@ const WorkoutTitle = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 16,
+    flex: 1,
   },
   notes: {
     marginTop: 8,
+  },
+})
+
+const contentStyles = StyleSheet.create({
+  container: {
+    gap: 16,
   },
 })
 

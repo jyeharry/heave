@@ -1,0 +1,1 @@
+export { SetTypeModal } from './Component'

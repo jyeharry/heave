@@ -22,6 +22,9 @@ const WorkoutsLayout: FC = () => {
         options={{
           presentation: 'modal',
           title: 'Add Workout',
+          contentStyle: {
+            flex: 1,
+          },
         }}
       />
     </Stack>
