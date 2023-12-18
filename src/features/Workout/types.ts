@@ -43,7 +43,7 @@ export const WorkoutSchema = z.object({
       sets: z.array(
         z.object({
           setType: z.object({
-            name: z.nativeEnum(SetTypeName),
+            name: z.nativeEnum(SetTypeName).default(SetTypeName.Standard),
             abbreviation: z.nativeEnum(SetTypeAbbreviation).optional(),
           }),
           weight: z.number().nonnegative().optional(),
@@ -53,3 +53,5 @@ export const WorkoutSchema = z.object({
     }),
   ),
 })
+
+export type WorkoutSchemaType = z.infer<typeof WorkoutSchema>

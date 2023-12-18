@@ -1,4 +1,3 @@
-import { Dispatch } from 'react'
 import { SetType, SetTypeName } from '../../types'
 import { Button } from '@/components/Button'
 import { theme } from '@/constants/theme'
@@ -8,17 +7,13 @@ export const SetTypeModalButton = ({
   selected,
   top,
   bottom,
-  setSetType,
   setVisible,
-  setNumOfWarmups,
 }: {
   setType: SetType
   selected?: boolean
   top?: boolean
   bottom?: boolean
-  setSetType: (type: SetType) => void
   setVisible: (visible: boolean) => void
-  setNumOfWarmups: Dispatch<React.SetStateAction<number>>
 }) => (
   <Button
     style={[
@@ -39,11 +34,7 @@ export const SetTypeModalButton = ({
     colour="grey"
     bordered={false}
     onPress={() => {
-      setSetType(selected ? { name: SetTypeName.Standard } : setType)
       setVisible(false)
-      if (setType.name === SetTypeName.Warmup) {
-        setNumOfWarmups((prevNum) => (selected ? prevNum - 1 : prevNum + 1))
-      }
     }}
   >
     {SetTypeName[setType.name]}

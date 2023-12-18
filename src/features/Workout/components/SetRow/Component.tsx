@@ -1,9 +1,10 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import Octicons from '@expo/vector-icons/Octicons'
 import { Dispatch, FC, useRef, useState } from 'react'
+import { Controller, useFormContext } from 'react-hook-form'
 import { TextInputProps, View } from 'react-native'
 import { Row } from 'react-native-reanimated-table'
-import { SetType, SetTypeAbbreviation, nonStandardSetTypes } from '../../types'
+import { WorkoutSchemaType, nonStandardSetTypes } from '../../types'
 import { SetTypeModal } from '../SetTypeModal'
 import { SetTypeModalButton } from '../SetTypeModalButton'
 import { Button } from '@/components/Button'
@@ -30,7 +31,7 @@ const CompleteSetButton: FC<{
   </Button>
 )
 
-const RowInput: FC<TextInputProps> = ({ placeholder }) => (
+const RowInput: FC<TextInputProps> = ({ placeholder, value, ...props }) => (
   <Input
     size="body"
     placeholder={placeholder}
@@ -39,32 +40,30 @@ const RowInput: FC<TextInputProps> = ({ placeholder }) => (
       textAlign: 'center',
     }}
     colour="grey"
+    value={value}
+    {...props}
   />
 )
 
 export const SetRow = ({
-  numOfWarmups,
-  position,
+  index,
   flexArr,
-  setType,
   previous,
   weight,
   reps,
-  setNumOfWarmups,
+  name,
 }: {
-  numOfWarmups: number
-  position: number
+  index: number
+  name: `exercises.${number}.sets.${number}`
   flexArr: number[]
-  setType: SetType
   previous?: string
   weight?: number
   reps?: number
-  setNumOfWarmups: Dispatch<React.SetStateAction<number>>
 }) => {
   const [visible, setVisible] = useState(false)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
   const [completed, setCompleted] = useState(false)
-  const [thisSetType, setThisSetType] = useState<SetType>(setType)
+  const methods = useFormContext<WorkoutSchemaType>()
   const ref = useRef<View | null>(null)
 
   const handleOpenModal = () => {
@@ -84,9 +83,7 @@ export const SetRow = ({
         onPress={handleOpenModal}
         bordered={false}
       >
-        {thisSetType?.abbreviation === undefined
-          ? position - numOfWarmups
-          : SetTypeAbbreviation[thisSetType.abbreviation]}
+        {index + 1}
       </Button>
     </View>,
     previous ?? (
@@ -94,8 +91,30 @@ export const SetRow = ({
         <Octicons name="dash" size={22} />
       </View>
     ),
-    <RowInput placeholder={weight?.toString()} />,
-    <RowInput placeholder={reps?.toString()} />,
+    <Controller
+      control={methods.control}
+      name={`${name}.weight`}
+      render={({ field }) => (
+        <RowInput
+          placeholder={weight?.toString()}
+          inputMode="decimal"
+          {...field}
+          value={field.value?.toString()}
+        />
+      )}
+    />,
+    <Controller
+      control={methods.control}
+      name={`${name}.reps`}
+      render={({ field }) => (
+        <RowInput
+          placeholder={reps?.toString()}
+          inputMode="numeric"
+          {...field}
+          value={field.value?.toString()}
+        />
+      )}
+    />,
     <CompleteSetButton completed={completed} setCompleted={setCompleted} />,
   ]
 
@@ -110,10 +129,7 @@ export const SetRow = ({
           <SetTypeModalButton
             key={i}
             setType={nonStandardSetType}
-            setSetType={setThisSetType}
             setVisible={setVisible}
-            setNumOfWarmups={setNumOfWarmups}
-            selected={thisSetType.name === nonStandardSetType.name}
             top={i === 0}
             bottom={i === arr.length - 1}
           />

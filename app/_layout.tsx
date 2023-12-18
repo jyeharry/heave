@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
 import { SplashScreen, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
@@ -44,9 +44,11 @@ export default function RootLayout() {
   return <RootLayoutNav />
 }
 
+const queryClient = new QueryClient()
+
 function RootLayoutNav() {
   return (
-    <ThemeProvider value={DefaultTheme}>
+    <QueryClientProvider client={queryClient}>
       <Stack
         screenOptions={{
           contentStyle: { backgroundColor: theme.colours.light },
@@ -71,6 +73,6 @@ function RootLayoutNav() {
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </ThemeProvider>
+    </QueryClientProvider>
   )
 }
