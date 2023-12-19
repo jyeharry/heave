@@ -7,7 +7,7 @@ import {
 } from 'react-hook-form'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Exercise } from './components/Exercise'
-import { WorkoutSchema, WorkoutSchemaType } from './types'
+import { SetTypeName, WorkoutSchema, WorkoutSchemaType } from './types'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
@@ -21,7 +21,7 @@ export const Workout = () => {
     },
     resolver: zodResolver(WorkoutSchema),
   })
-  const { fields: exerciseFields } = useFieldArray<WorkoutSchemaType>({
+  const { fields: exerciseFields, append } = useFieldArray<WorkoutSchemaType>({
     control: methods.control,
     name: 'exercises',
   })
@@ -38,7 +38,7 @@ export const Workout = () => {
             control={methods.control}
             name="title"
             render={({ field }) => (
-              <Input {...field} placeholder="Workout Title" size="title" />
+              <Input placeholder="Workout Title" size="title" {...field} />
             )}
           />
           <Controller
@@ -46,24 +46,32 @@ export const Workout = () => {
             name="notes"
             render={({ field }) => (
               <Input
-                {...field}
                 placeholder="Notes"
                 style={[theme.text.notes, styles.notes]}
                 multiline
+                {...field}
               />
             )}
           />
         </View>
         <View style={{ gap: 32 }}>
           {exerciseFields.map((exercise, i) => (
-            <Controller
-              control={methods.control}
+            <Exercise
               key={exercise.id}
-              name={`exercises.${i}`}
-              render={({ field }) => <Exercise index={i} {...field} />}
+              exerciseIndex={i}
+              name={methods.getValues(`exercises.${i}.name`)}
             />
           ))}
-          <Button>Add Exercise</Button>
+          <Button
+            onPress={() =>
+              append({
+                name: 'Bench Press',
+                sets: [{ setType: { name: SetTypeName.Standard } }],
+              })
+            }
+          >
+            Add Exercise
+          </Button>
         </View>
         <Button colour="danger">Cancel Workout</Button>
       </ScrollView>

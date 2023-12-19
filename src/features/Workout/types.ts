@@ -48,6 +48,7 @@ export const WorkoutSchema = z.object({
           }),
           weight: z.number().nonnegative().optional(),
           reps: z.number().nonnegative().optional(),
+          completed: z.optional(z.boolean().default(false)),
         }),
       ),
     }),

@@ -1,8 +1,8 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import Octicons from '@expo/vector-icons/Octicons'
-import { Dispatch, FC, useRef, useState } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
-import { TextInputProps, View } from 'react-native'
+import { FC, useRef, useState } from 'react'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import { PressableProps, TextInputProps, View } from 'react-native'
 import { Row } from 'react-native-reanimated-table'
 import { WorkoutSchemaType, nonStandardSetTypes } from '../../types'
 import { SetTypeModal } from '../SetTypeModal'
@@ -11,15 +11,16 @@ import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
 
-const CompleteSetButton: FC<{
-  completed: boolean
-  setCompleted: Dispatch<React.SetStateAction<boolean>>
-}> = ({ completed, setCompleted }) => (
+const CompleteSetButton: FC<
+  PressableProps & {
+    completed: boolean
+  }
+> = ({ completed, onPress }) => (
   <Button
     size="none"
     colour={completed ? 'primary' : 'grey'}
     style={{ borderWidth: completed ? 1 : 0, padding: completed ? 0 : 1 }}
-    onPress={() => setCompleted((prevCompleted) => !prevCompleted)}
+    onPress={onPress}
   >
     <MaterialCommunityIcons
       name="check"
@@ -46,15 +47,15 @@ const RowInput: FC<TextInputProps> = ({ placeholder, value, ...props }) => (
 )
 
 export const SetRow = ({
-  index,
+  setRowIndex,
+  exerciseIndex,
   flexArr,
   previous,
   weight,
   reps,
-  name,
 }: {
-  index: number
-  name: `exercises.${number}.sets.${number}`
+  setRowIndex: number
+  exerciseIndex: number
   flexArr: number[]
   previous?: string
   weight?: number
@@ -62,9 +63,13 @@ export const SetRow = ({
 }) => {
   const [visible, setVisible] = useState(false)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
-  const [completed, setCompleted] = useState(false)
-  const methods = useFormContext<WorkoutSchemaType>()
   const ref = useRef<View | null>(null)
+  const { control, setValue, getValues } = useFormContext<WorkoutSchemaType>()
+  const setFormName = `exercises.${exerciseIndex}.sets.${setRowIndex}` as const
+  const completed = useWatch<WorkoutSchemaType>({
+    name: `${setFormName}.completed`,
+    defaultValue: getValues(`${setFormName}.completed`),
+  })
 
   const handleOpenModal = () => {
     if (ref.current) {
@@ -83,7 +88,7 @@ export const SetRow = ({
         onPress={handleOpenModal}
         bordered={false}
       >
-        {index + 1}
+        {setRowIndex + 1}
       </Button>
     </View>,
     previous ?? (
@@ -92,8 +97,8 @@ export const SetRow = ({
       </View>
     ),
     <Controller
-      control={methods.control}
-      name={`${name}.weight`}
+      control={control}
+      name={`${setFormName}.weight`}
       render={({ field }) => (
         <RowInput
           placeholder={weight?.toString()}
@@ -104,8 +109,8 @@ export const SetRow = ({
       )}
     />,
     <Controller
-      control={methods.control}
-      name={`${name}.reps`}
+      control={control}
+      name={`${setFormName}.reps`}
       render={({ field }) => (
         <RowInput
           placeholder={reps?.toString()}
@@ -115,7 +120,10 @@ export const SetRow = ({
         />
       )}
     />,
-    <CompleteSetButton completed={completed} setCompleted={setCompleted} />,
+    <CompleteSetButton
+      completed={!!completed}
+      onPress={() => setValue(`${setFormName}.completed`, !completed)}
+    />,
   ]
 
   return (

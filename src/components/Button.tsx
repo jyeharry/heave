@@ -19,33 +19,31 @@ export const Button: FC<ButtonProps> = ({
   onPress,
   style,
   size = 'regular',
-}) => {
-  return (
-    <Pressable
-      style={({ pressed }) => [
-        styles.button,
-        {
-          opacity: pressed ? 0.5 : 1,
-          borderWidth: bordered ? 1 : 0,
-        },
-        buttonVariants[colour],
-        buttonSizes[size],
-        style,
-      ]}
-      onPress={onPress}
-    >
-      {(state) =>
-        React.Children.only(
-          typeof children === 'function' ? (
-            children(state)
-          ) : (
-            <Text style={[buttonTextVariants[colour]]}>{children}</Text>
-          ),
-        )
-      }
-    </Pressable>
-  )
-}
+}) => (
+  <Pressable
+    style={({ pressed }) => [
+      styles.button,
+      {
+        opacity: pressed ? 0.5 : 1,
+        borderWidth: bordered ? 1 : 0,
+      },
+      buttonVariants[colour],
+      buttonSizes[size],
+      style,
+    ]}
+    onPress={onPress}
+  >
+    {(state) =>
+      React.Children.only(
+        typeof children === 'function' ? (
+          children(state)
+        ) : (
+          <Text style={[buttonTextVariants[colour]]}>{children}</Text>
+        ),
+      )
+    }
+  </Pressable>
+)
 
 const styles = StyleSheet.create({
   button: {

@@ -1,6 +1,6 @@
 import MCIcon from '@expo/vector-icons/MaterialCommunityIcons'
 import { FC } from 'react'
-import { Controller, useFieldArray, useFormContext } from 'react-hook-form'
+import { useFieldArray } from 'react-hook-form'
 import { View } from 'react-native'
 import { Row, Table } from 'react-native-reanimated-table'
 import { SetTypeName, WorkoutSchemaType } from '../../types'
@@ -11,13 +11,12 @@ import { theme } from '@/constants/theme'
 
 interface ExerciseProps {
   name: string
-  index: number
+  exerciseIndex: number
 }
 
-export const Exercise: FC<ExerciseProps> = ({ name, index }) => {
-  const methods = useFormContext<WorkoutSchemaType>()
+export const Exercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
   const { fields: setFields, append } = useFieldArray<WorkoutSchemaType>({
-    name: `exercises.${index}.sets`,
+    name: `exercises.${exerciseIndex}.sets`,
   })
 
   const header = [
@@ -53,19 +52,21 @@ export const Exercise: FC<ExerciseProps> = ({ name, index }) => {
           }}
         />
         {setFields.map((set, i) => (
-          <Controller
-            control={methods.control}
+          <SetRow
             key={set.id}
-            name={`exercises.${index}.sets.${i}`}
-            render={({ field }) => (
-              <SetRow key={i} index={i} flexArr={flexArr} {...field} />
-            )}
+            exerciseIndex={exerciseIndex}
+            setRowIndex={i}
+            flexArr={flexArr}
           />
         ))}
         <Button
           size="small"
           colour="grey"
-          onPress={() => append({ setType: { name: SetTypeName.Standard } })}
+          onPress={() =>
+            append({
+              setType: { name: SetTypeName.Standard },
+            })
+          }
         >
           Add Set
         </Button>
