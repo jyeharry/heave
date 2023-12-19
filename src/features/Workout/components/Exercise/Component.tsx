@@ -63,9 +63,12 @@ export const Exercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
           size="small"
           colour="grey"
           onPress={() =>
-            append({
-              setType: { name: SetTypeName.Standard },
-            })
+            append(
+              {
+                setType: { name: SetTypeName.Standard },
+              },
+              { shouldFocus: false },
+            )
           }
         >
           Add Set

@@ -1,4 +1,9 @@
-import { FC } from 'react'
+import {
+  ForwardRefExoticComponent,
+  ForwardedRef,
+  RefAttributes,
+  forwardRef,
+} from 'react'
 import {
   TextInputProps as RNTextInputProps,
   StyleSheet,
@@ -13,14 +18,13 @@ interface InputProps extends RNTextInputProps {
   colour?: keyof InputColourMap
 }
 
-export const Input: FC<InputProps> = ({
-  size = 'body',
-  placeholder,
-  style,
-  colour,
-  ...props
-}) => {
-  return (
+export const Input: ForwardRefExoticComponent<
+  InputProps & RefAttributes<TextInput>
+> = forwardRef(
+  (
+    { size = 'body', placeholder, style, colour, ...props },
+    ref: ForwardedRef<TextInput>,
+  ) => (
     <TextInput
       placeholder={placeholder}
       placeholderTextColor={theme.placeholderColour}
@@ -31,9 +35,10 @@ export const Input: FC<InputProps> = ({
         style,
       ]}
       {...props}
+      ref={ref}
     />
-  )
-}
+  ),
+)
 
 const styles: InputColourMap = StyleSheet.create({
   grey: { backgroundColor: theme.colours.grey150 },

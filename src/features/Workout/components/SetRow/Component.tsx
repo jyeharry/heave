@@ -1,8 +1,15 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import Octicons from '@expo/vector-icons/Octicons'
-import { FC, useRef, useState } from 'react'
-import { Controller, useFormContext, useWatch } from 'react-hook-form'
-import { PressableProps, TextInputProps, View } from 'react-native'
+import {
+  FC,
+  ForwardRefExoticComponent,
+  ForwardedRef,
+  forwardRef,
+  useRef,
+  useState,
+} from 'react'
+import { useFormContext, useWatch } from 'react-hook-form'
+import { PressableProps, TextInput, TextInputProps, View } from 'react-native'
 import { Row } from 'react-native-reanimated-table'
 import { WorkoutSchemaType, nonStandardSetTypes } from '../../types'
 import { SetTypeModal } from '../SetTypeModal'
@@ -32,18 +39,21 @@ const CompleteSetButton: FC<
   </Button>
 )
 
-const RowInput: FC<TextInputProps> = ({ placeholder, value, ...props }) => (
-  <Input
-    size="body"
-    placeholder={placeholder}
-    style={{
-      height: '100%',
-      textAlign: 'center',
-    }}
-    colour="grey"
-    value={value}
-    {...props}
-  />
+const RowInput: ForwardRefExoticComponent<TextInputProps> = forwardRef(
+  ({ placeholder, value, ...props }, ref: ForwardedRef<TextInput>) => (
+    <Input
+      size="body"
+      placeholder={placeholder}
+      style={{
+        height: '100%',
+        textAlign: 'center',
+      }}
+      colour="grey"
+      value={value}
+      {...props}
+      ref={ref}
+    />
+  ),
 )
 
 export const SetRow = ({
@@ -64,7 +74,7 @@ export const SetRow = ({
   const [visible, setVisible] = useState(false)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
   const ref = useRef<View | null>(null)
-  const { control, setValue, getValues } = useFormContext<WorkoutSchemaType>()
+  const { setValue, getValues, register } = useFormContext<WorkoutSchemaType>()
   const setFormName = `exercises.${exerciseIndex}.sets.${setRowIndex}` as const
   const completed = useWatch<WorkoutSchemaType>({
     name: `${setFormName}.completed`,
@@ -96,29 +106,15 @@ export const SetRow = ({
         <Octicons name="dash" size={22} />
       </View>
     ),
-    <Controller
-      control={control}
-      name={`${setFormName}.weight`}
-      render={({ field }) => (
-        <RowInput
-          placeholder={weight?.toString()}
-          inputMode="decimal"
-          {...field}
-          value={field.value?.toString()}
-        />
-      )}
+    <RowInput
+      placeholder={weight?.toString()}
+      inputMode="decimal"
+      {...register(`${setFormName}.weight`)}
     />,
-    <Controller
-      control={control}
-      name={`${setFormName}.reps`}
-      render={({ field }) => (
-        <RowInput
-          placeholder={reps?.toString()}
-          inputMode="numeric"
-          {...field}
-          value={field.value?.toString()}
-        />
-      )}
+    <RowInput
+      placeholder={reps?.toString()}
+      inputMode="numeric"
+      {...register(`${setFormName}.reps`)}
     />,
     <CompleteSetButton
       completed={!!completed}
