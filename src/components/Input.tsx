@@ -4,16 +4,12 @@ import {
   RefAttributes,
   forwardRef,
 } from 'react'
-import {
-  TextInputProps as RNTextInputProps,
-  StyleSheet,
-  TextInput,
-} from 'react-native'
+import { TextInputProps, StyleSheet, TextInput } from 'react-native'
 import { BaseColourMap, theme } from '@/constants/theme'
 
 type InputColourMap = Pick<BaseColourMap, 'grey'>
 
-interface InputProps extends RNTextInputProps {
+export interface InputProps extends TextInputProps {
   size?: keyof typeof theme.text
   colour?: keyof InputColourMap
 }

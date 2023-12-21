@@ -38,5 +38,59 @@ export const mockWorkoutData = {
         },
       ],
     },
+    {
+      name: 'Incline Dumbbell Press',
+      sets: [
+        {
+          setType: { name: SetTypeName.Standard },
+          previous: '25kg x 9',
+          weight: 25,
+          reps: 10,
+        },
+        {
+          setType: {
+            name: SetTypeName.Standard,
+          },
+          previous: '25kg x 8',
+          weight: 25,
+          reps: 9,
+        },
+        {
+          setType: {
+            name: SetTypeName.Standard,
+          },
+          previous: '25kg x 8',
+          weight: 25,
+          reps: 10,
+        },
+      ],
+    },
+    {
+      name: 'Chest Fly (Machine)',
+      sets: [
+        {
+          setType: { name: SetTypeName.Standard },
+          previous: '55kg x 11',
+          weight: 57.5,
+          reps: 10,
+        },
+        {
+          setType: {
+            name: SetTypeName.Standard,
+          },
+          previous: '55kg x 10',
+          weight: 57.5,
+          reps: 9,
+        },
+        {
+          setType: {
+            name: SetTypeName.Standard,
+          },
+          previous: '55kg x 10',
+          weight: 57.5,
+          reps: 8,
+        },
+      ],
+    },
   ],
 }

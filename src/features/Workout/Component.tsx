@@ -1,21 +1,37 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useQuery } from '@tanstack/react-query'
+import { FC } from 'react'
 import { useForm, FormProvider, useFieldArray } from 'react-hook-form'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Exercise } from './components/Exercise'
+import { mockWorkoutData } from './mock'
 import { SetTypeName, WorkoutSchema, WorkoutSchemaType } from './types'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
 
-export const Workout = () => {
+interface WorkoutProps {
+  mode: 'create' | 'edit'
+}
+
+export const Workout: FC<WorkoutProps> = ({ mode }) => {
+  const { data } = useQuery<WorkoutSchemaType>({
+    queryKey: ['workouts-'],
+    queryFn: () =>
+      new Promise((res) => setTimeout(() => res(mockWorkoutData), 1500)),
+    enabled: mode === 'edit',
+    gcTime: 0,
+  })
+
   const methods = useForm<WorkoutSchemaType>({
     defaultValues: {
       title: '',
-      notes: '',
       exercises: [],
     },
+    values: data,
     resolver: zodResolver(WorkoutSchema),
   })
+
   const { fields: exerciseFields, append } = useFieldArray<WorkoutSchemaType>({
     control: methods.control,
     name: 'exercises',
