@@ -7,7 +7,7 @@ import { Exercise } from './components/Exercise'
 import { mockWorkoutData } from './mock'
 import { SetTypeName, WorkoutSchema, WorkoutSchemaType } from './types'
 import { Button } from '@/components/Button'
-import { Input } from '@/components/Input'
+import { ControlledInput } from '@/components/ControlledInput'
 import { theme } from '@/constants/theme'
 
 interface WorkoutProps {
@@ -45,16 +45,20 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
         contentContainerStyle={contentStyles.container}
       >
         <View>
-          <Input
+          <ControlledInput
             placeholder="Workout Title"
+            name="title"
+            control={methods.control}
             size="title"
-            {...methods.register('title')}
+            showValue={mode === 'edit'}
           />
-          <Input
+          <ControlledInput
             placeholder="Notes"
+            name="notes"
+            control={methods.control}
             style={[theme.text.notes, styles.notes]}
             multiline
-            {...methods.register('notes')}
+            showValue={mode === 'edit'}
           />
         </View>
         <View style={{ gap: 32 }}>

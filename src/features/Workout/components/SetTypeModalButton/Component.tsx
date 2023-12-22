@@ -1,20 +1,17 @@
+import { FC } from 'react'
+import { PressableProps } from 'react-native'
 import { SetType, SetTypeName } from '../../types'
 import { Button } from '@/components/Button'
 import { theme } from '@/constants/theme'
 
-export const SetTypeModalButton = ({
-  setType,
-  selected,
-  top,
-  bottom,
-  setVisible,
-}: {
-  setType: SetType
-  selected?: boolean
-  top?: boolean
-  bottom?: boolean
-  setVisible: (visible: boolean) => void
-}) => (
+export const SetTypeModalButton: FC<
+  PressableProps & {
+    setType: SetType
+    selected?: boolean
+    top?: boolean
+    bottom?: boolean
+  }
+> = ({ setType, selected, top, bottom, onPress }) => (
   <Button
     style={[
       { borderRadius: 0 },
@@ -33,9 +30,7 @@ export const SetTypeModalButton = ({
     size="large"
     colour="grey"
     bordered={false}
-    onPress={() => {
-      setVisible(false)
-    }}
+    onPress={onPress}
   >
     {SetTypeName[setType.name]}
   </Button>

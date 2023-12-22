@@ -1,6 +1,6 @@
-import { SetTypeAbbreviation, SetTypeName } from './types'
+import { SetTypeAbbreviation, SetTypeName, WorkoutSchemaType } from './types'
 
-export const mockWorkoutData = {
+export const mockWorkoutData: WorkoutSchemaType = {
   title: 'Push',
   notes: '1 second concentric, 3 second eccentric',
   exercises: [

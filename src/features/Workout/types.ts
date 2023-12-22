@@ -46,6 +46,7 @@ export const WorkoutSchema = z.object({
             name: z.nativeEnum(SetTypeName).default(SetTypeName.Standard),
             abbreviation: z.nativeEnum(SetTypeAbbreviation).optional(),
           }),
+          previous: z.string().optional(),
           weight: z.number().nonnegative().optional(),
           reps: z.number().nonnegative().optional(),
           completed: z.optional(z.boolean().default(false)),
