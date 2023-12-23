@@ -10,8 +10,8 @@ import { Button } from '@/components/Button'
 import { ControlledInput } from '@/components/ControlledInput'
 import { theme } from '@/constants/theme'
 
-interface WorkoutProps {
-  mode: 'create' | 'edit'
+export interface WorkoutProps {
+  mode: 'create' | 'edit' | 'perform'
 }
 
 export const Workout: FC<WorkoutProps> = ({ mode }) => {
@@ -50,7 +50,6 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
             name="title"
             control={methods.control}
             size="title"
-            showValue={mode === 'edit'}
           />
           <ControlledInput
             placeholder="Notes"
@@ -58,7 +57,6 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
             control={methods.control}
             style={[theme.text.notes, styles.notes]}
             multiline
-            showValue={mode === 'edit'}
           />
         </View>
         <View style={{ gap: 32 }}>

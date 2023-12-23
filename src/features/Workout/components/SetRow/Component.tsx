@@ -53,18 +53,22 @@ export const SetRow = ({
   const setTypeButtonRef = useRef<View | null>(null)
   const { setValue, getValues } = useFormContext<WorkoutSchemaType>()
   const setFormName = `exercises.${exerciseIndex}.sets.${setRowIndex}` as const
+
   const completed = useWatch<WorkoutSchemaType>({
     name: `${setFormName}.completed`,
     defaultValue: false,
   })
+
   const setType = useWatch<WorkoutSchemaType>({
     name: `${setFormName}.setType`,
     defaultValue: { name: SetTypeName.Standard },
   }) as SetType | undefined
+
   const sets = useWatch<WorkoutSchemaType>({
     name: `exercises.${exerciseIndex}.sets`,
     defaultValue: [],
   }) as WorkoutSet[]
+
   const previousWarmups = sets
     .slice(0, setRowIndex)
     .reduce(

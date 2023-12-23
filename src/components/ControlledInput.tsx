@@ -12,17 +12,16 @@ export const ControlledInput: FC<ControlledInputProps> = ({
   name,
   control,
   showValue,
+  placeholder,
   ...props
 }) => {
-  const {
-    field: { value, ...field },
-  } = useController({ name, control })
+  const { field } = useController({ name, control })
 
   return (
     <Input
-      placeholder={value?.toString()}
+      placeholder={field.value?.toString() || placeholder}
       {...field}
-      value={showValue && value?.toString()}
+      value={field.value?.toString() ?? ''}
       {...props}
     />
   )
