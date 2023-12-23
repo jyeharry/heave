@@ -22,7 +22,7 @@ export const ControlledInput: FC<ControlledInputProps> = ({
     <Input
       placeholder={value?.toString()}
       {...field}
-      {...{ value }}
+      value={showValue && value?.toString()}
       {...props}
     />
   )

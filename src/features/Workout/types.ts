@@ -16,13 +16,6 @@ export interface SetType {
   abbreviation?: SetTypeAbbreviation
 }
 
-export interface Set {
-  setType: SetType
-  previous?: string
-  weight?: number
-  reps?: number
-}
-
 export const nonStandardSetTypes: SetType[] = [
   {
     name: SetTypeName.Warmup,
@@ -34,24 +27,26 @@ export const nonStandardSetTypes: SetType[] = [
   },
 ]
 
+export const WorkoutSetSchema = z.object({
+  setType: z.object({
+    name: z.nativeEnum(SetTypeName).default(SetTypeName.Standard),
+    abbreviation: z.nativeEnum(SetTypeAbbreviation).optional(),
+  }),
+  previous: z.string().optional(),
+  weight: z.number().nonnegative().optional(),
+  reps: z.number().nonnegative().optional(),
+  completed: z.optional(z.boolean().default(false)),
+})
+
+export type WorkoutSet = z.infer<typeof WorkoutSetSchema>
+
 export const WorkoutSchema = z.object({
   title: z.string(),
   notes: z.string().optional(),
   exercises: z.array(
     z.object({
       name: z.string(),
-      sets: z.array(
-        z.object({
-          setType: z.object({
-            name: z.nativeEnum(SetTypeName).default(SetTypeName.Standard),
-            abbreviation: z.nativeEnum(SetTypeAbbreviation).optional(),
-          }),
-          previous: z.string().optional(),
-          weight: z.number().nonnegative().optional(),
-          reps: z.number().nonnegative().optional(),
-          completed: z.optional(z.boolean().default(false)),
-        }),
-      ),
+      sets: z.array(WorkoutSetSchema),
     }),
   ),
 })

@@ -9,6 +9,7 @@ import {
   SetTypeAbbreviation,
   SetTypeName,
   WorkoutSchemaType,
+  WorkoutSet,
   nonStandardSetTypes,
 } from '../../types'
 import { SetTypeModal } from '../SetTypeModal'
@@ -54,12 +55,25 @@ export const SetRow = ({
   const setFormName = `exercises.${exerciseIndex}.sets.${setRowIndex}` as const
   const completed = useWatch<WorkoutSchemaType>({
     name: `${setFormName}.completed`,
-    defaultValue: getValues(`${setFormName}.completed`),
+    defaultValue: false,
   })
   const setType = useWatch<WorkoutSchemaType>({
     name: `${setFormName}.setType`,
-    defaultValue: getValues(`${setFormName}.setType`),
+    defaultValue: { name: SetTypeName.Standard },
   }) as SetType | undefined
+  const sets = useWatch<WorkoutSchemaType>({
+    name: `exercises.${exerciseIndex}.sets`,
+    defaultValue: [],
+  }) as WorkoutSet[]
+  const previousWarmups = sets
+    .slice(0, setRowIndex)
+    .reduce(
+      (numOfWarmups, set) =>
+        set.setType.name === SetTypeName.Warmup
+          ? numOfWarmups + 1
+          : numOfWarmups,
+      0,
+    )
   const previous = getValues(`${setFormName}.previous`)
 
   const handleOpenModal = () => {
@@ -83,7 +97,7 @@ export const SetRow = ({
       >
         {(setType?.abbreviation != null &&
           SetTypeAbbreviation[setType.abbreviation]) ||
-          setRowIndex + 1}
+          setRowIndex + 1 - previousWarmups}
       </Button>
     </View>,
     previous ?? (
