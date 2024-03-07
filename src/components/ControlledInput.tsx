@@ -1,27 +1,26 @@
-import { FC } from 'react'
-import { Control, useController } from 'react-hook-form'
+import { Control, FieldPath, FieldValues, useController } from 'react-hook-form'
 import { Input, InputProps } from './Input'
 
-interface ControlledInputProps extends InputProps {
-  name: string
-  control?: Control<any>
-  showValue?: boolean
+interface ControlledInputProps<T extends FieldValues> extends InputProps {
+  name: FieldPath<T>
+  control?: Control<T>
 }
 
-export const ControlledInput: FC<ControlledInputProps> = ({
+export const ControlledInput = <T extends FieldValues>({
   name,
   control,
-  showValue,
   placeholder,
   ...props
-}) => {
-  const { field } = useController({ name, control })
+}: ControlledInputProps<T>) => {
+  const {
+    field: { value, ...field },
+  } = useController<T>({ name, control })
 
   return (
     <Input
-      placeholder={field.value?.toString() || placeholder}
+      placeholder={value?.toString() || placeholder}
       {...field}
-      value={field.value?.toString() ?? ''}
+      value={value?.toString() ?? ''}
       {...props}
     />
   )

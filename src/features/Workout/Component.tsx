@@ -1,13 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import { FC } from 'react'
-import { useForm, FormProvider, useFieldArray } from 'react-hook-form'
+import {
+  useForm,
+  FormProvider,
+  useFieldArray,
+  Controller,
+} from 'react-hook-form'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { Exercise } from './components/Exercise'
 import { mockWorkoutData } from './mock'
 import { SetTypeName, WorkoutSchema, WorkoutSchemaType } from './types'
 import { Button } from '@/components/Button'
-import { ControlledInput } from '@/components/ControlledInput'
+import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
 
 export interface WorkoutProps {
@@ -16,7 +21,7 @@ export interface WorkoutProps {
 
 export const Workout: FC<WorkoutProps> = ({ mode }) => {
   const { data } = useQuery<WorkoutSchemaType>({
-    queryKey: ['workouts-'],
+    queryKey: ['workouts'],
     queryFn: () =>
       new Promise((res) => setTimeout(() => res(mockWorkoutData), 1500)),
     enabled: mode === 'edit',
@@ -45,18 +50,30 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
         contentContainerStyle={contentStyles.container}
       >
         <View>
-          <ControlledInput
-            placeholder="Workout Title"
+          <Controller
             name="title"
-            control={methods.control}
-            size="title"
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                placeholder="Workout Title"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                size="title"
+                value={value}
+              />
+            )}
           />
-          <ControlledInput
-            placeholder="Notes"
+          <Controller
             name="notes"
-            control={methods.control}
-            style={[theme.text.notes, styles.notes]}
-            multiline
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                placeholder="Notes"
+                onBlur={onBlur}
+                onChangeText={onChange}
+                value={value}
+                style={[theme.text.notes, styles.notes]}
+                multiline
+              />
+            )}
           />
         </View>
         <View style={{ gap: 32 }}>

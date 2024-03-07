@@ -1,7 +1,7 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import Octicons from '@expo/vector-icons/Octicons'
 import { FC, useRef, useState } from 'react'
-import { useFormContext, useWatch } from 'react-hook-form'
+import { Controller, useFormContext, useWatch } from 'react-hook-form'
 import { PressableProps, View } from 'react-native'
 import { Row } from 'react-native-reanimated-table'
 import {
@@ -15,7 +15,7 @@ import {
 import { SetTypeModal } from '../SetTypeModal'
 import { SetTypeModalButton } from '../SetTypeModalButton'
 import { Button } from '@/components/Button'
-import { ControlledInput } from '@/components/ControlledInput'
+import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
 
 const CompleteSetButton: FC<
@@ -109,23 +109,37 @@ export const SetRow = ({
         <Octicons name="dash" size={22} />
       </View>
     ),
-    <ControlledInput
+    <Controller
       name={`${setFormName}.weight`}
-      inputMode="decimal"
-      style={{
-        height: '100%',
-        textAlign: 'center',
-      }}
-      colour="grey"
+      render={({ field: { onChange, onBlur, value } }) => (
+        <Input
+          onBlur={onBlur}
+          onChangeText={onChange}
+          value={value}
+          inputMode="decimal"
+          style={{
+            height: '100%',
+            textAlign: 'center',
+          }}
+          colour="grey"
+        />
+      )}
     />,
-    <ControlledInput
+    <Controller
       name={`${setFormName}.reps`}
-      inputMode="numeric"
-      style={{
-        height: '100%',
-        textAlign: 'center',
-      }}
-      colour="grey"
+      render={({ field: { onChange, onBlur, value } }) => (
+        <Input
+          onBlur={onBlur}
+          onChangeText={onChange}
+          value={value}
+          inputMode="numeric"
+          style={{
+            height: '100%',
+            textAlign: 'center',
+          }}
+          colour="grey"
+        />
+      )}
     />,
     <CompleteSetButton
       completed={!!completed}
