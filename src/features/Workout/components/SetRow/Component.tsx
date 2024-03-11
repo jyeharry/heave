@@ -51,7 +51,7 @@ export const SetRow = ({
   const [visible, setVisible] = useState(false)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
   const setTypeButtonRef = useRef<View | null>(null)
-  const { setValue, getValues } = useFormContext<WorkoutSchemaType>()
+  const { setValue, getValues, control } = useFormContext<WorkoutSchemaType>()
   const setFormName = `exercises.${exerciseIndex}.sets.${setRowIndex}` as const
 
   const completed = useWatch<WorkoutSchemaType>({
@@ -110,12 +110,13 @@ export const SetRow = ({
       </View>
     ),
     <Controller
+      control={control}
       name={`${setFormName}.weight`}
       render={({ field: { onChange, onBlur, value } }) => (
         <Input
           onBlur={onBlur}
           onChangeText={onChange}
-          value={value}
+          value={value?.toString()}
           inputMode="decimal"
           style={{
             height: '100%',
@@ -126,12 +127,13 @@ export const SetRow = ({
       )}
     />,
     <Controller
+      control={control}
       name={`${setFormName}.reps`}
       render={({ field: { onChange, onBlur, value } }) => (
         <Input
           onBlur={onBlur}
           onChangeText={onChange}
-          value={value}
+          value={value?.toString()}
           inputMode="numeric"
           style={{
             height: '100%',
