@@ -161,6 +161,7 @@ export const SetRow = ({
   return (
     <Swipeable
       containerStyle={{ overflow: 'visible' }}
+      overshootFriction={2}
       renderRightActions={() => (
         <Button
           size="none"
