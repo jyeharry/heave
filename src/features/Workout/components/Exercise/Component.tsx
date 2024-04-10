@@ -15,7 +15,11 @@ interface ExerciseProps {
 }
 
 export const Exercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
-  const { fields: setFields, append } = useFieldArray<WorkoutSchemaType>({
+  const {
+    fields: setFields,
+    append,
+    remove,
+  } = useFieldArray<WorkoutSchemaType>({
     name: `exercises.${exerciseIndex}.sets`,
   })
 
@@ -57,6 +61,7 @@ export const Exercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
             exerciseIndex={exerciseIndex}
             setRowIndex={i}
             flexArr={flexArr}
+            remove={remove}
           />
         ))}
         <Button

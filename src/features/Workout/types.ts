@@ -28,10 +28,12 @@ export const nonStandardSetTypes: SetType[] = [
 ]
 
 export const WorkoutSetSchema = z.object({
-  setType: z.object({
-    name: z.nativeEnum(SetTypeName).default(SetTypeName.Standard),
-    abbreviation: z.nativeEnum(SetTypeAbbreviation).optional(),
-  }),
+  setType: z
+    .object({
+      name: z.nativeEnum(SetTypeName).default(SetTypeName.Standard),
+      abbreviation: z.nativeEnum(SetTypeAbbreviation).optional(),
+    })
+    .default({ name: SetTypeName.Standard }),
   previous: z.string().optional(),
   weight: z.number().nonnegative().optional(),
   reps: z.number().nonnegative().optional(),

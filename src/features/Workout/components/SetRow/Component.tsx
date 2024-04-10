@@ -1,8 +1,14 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import Octicons from '@expo/vector-icons/Octicons'
 import { FC, useRef, useState } from 'react'
-import { Controller, useFormContext, useWatch } from 'react-hook-form'
+import {
+  Controller,
+  UseFieldArrayRemove,
+  useFormContext,
+  useWatch,
+} from 'react-hook-form'
 import { PressableProps, View } from 'react-native'
+import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { Row } from 'react-native-reanimated-table'
 import {
   SetType,
@@ -10,10 +16,8 @@ import {
   SetTypeName,
   WorkoutSchemaType,
   WorkoutSet,
-  nonStandardSetTypes,
 } from '../../types'
 import { SetTypeModal } from '../SetTypeModal'
-import { SetTypeModalButton } from '../SetTypeModalButton'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
@@ -43,33 +47,35 @@ export const SetRow = ({
   setRowIndex,
   exerciseIndex,
   flexArr,
+  remove,
 }: {
   setRowIndex: number
   exerciseIndex: number
   flexArr: number[]
+  remove: UseFieldArrayRemove
 }) => {
   const [visible, setVisible] = useState(false)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
   const setTypeButtonRef = useRef<View | null>(null)
   const { setValue, getValues, control } = useFormContext<WorkoutSchemaType>()
-  const setFormName = `exercises.${exerciseIndex}.sets.${setRowIndex}` as const
+  const formSetName = `exercises.${exerciseIndex}.sets.${setRowIndex}` as const
 
   const completed = useWatch<WorkoutSchemaType>({
-    name: `${setFormName}.completed`,
+    name: `${formSetName}.completed`,
     defaultValue: false,
   })
 
   const setType = useWatch<WorkoutSchemaType>({
-    name: `${setFormName}.setType`,
+    name: `${formSetName}.setType`,
     defaultValue: { name: SetTypeName.Standard },
-  }) as SetType | undefined
+  }) as SetType
 
   const sets = useWatch<WorkoutSchemaType>({
     name: `exercises.${exerciseIndex}.sets`,
     defaultValue: [],
   }) as WorkoutSet[]
 
-  const previousWarmups = sets
+  const numOfPreviousWarmups = sets
     .slice(0, setRowIndex)
     .reduce(
       (numOfWarmups, set) =>
@@ -78,7 +84,7 @@ export const SetRow = ({
           : numOfWarmups,
       0,
     )
-  const previous = getValues(`${setFormName}.previous`)
+  const previous = getValues(`${formSetName}.previous`)
 
   const handleOpenModal = () => {
     if (setTypeButtonRef.current) {
@@ -91,6 +97,11 @@ export const SetRow = ({
     setVisible(true)
   }
 
+  const setLabel =
+    (setType?.abbreviation != null &&
+      SetTypeAbbreviation[setType.abbreviation]) ||
+    setRowIndex + 1 - numOfPreviousWarmups
+
   const row = [
     <View ref={setTypeButtonRef}>
       <Button
@@ -99,9 +110,7 @@ export const SetRow = ({
         onPress={handleOpenModal}
         bordered={false}
       >
-        {(setType?.abbreviation != null &&
-          SetTypeAbbreviation[setType.abbreviation]) ||
-          setRowIndex + 1 - previousWarmups}
+        {setLabel}
       </Button>
     </View>,
     previous ?? (
@@ -111,7 +120,7 @@ export const SetRow = ({
     ),
     <Controller
       control={control}
-      name={`${setFormName}.weight`}
+      name={`${formSetName}.weight`}
       render={({ field: { onChange, onBlur, value } }) => (
         <Input
           onBlur={onBlur}
@@ -128,7 +137,7 @@ export const SetRow = ({
     />,
     <Controller
       control={control}
-      name={`${setFormName}.reps`}
+      name={`${formSetName}.reps`}
       render={({ field: { onChange, onBlur, value } }) => (
         <Input
           onBlur={onBlur}
@@ -145,39 +154,36 @@ export const SetRow = ({
     />,
     <CompleteSetButton
       completed={!!completed}
-      onPress={() => setValue(`${setFormName}.completed`, !completed)}
+      onPress={() => setValue(`${formSetName}.completed`, !completed)}
     />,
   ]
 
   return (
-    <>
+    <Swipeable
+      containerStyle={{ overflow: 'visible' }}
+      renderRightActions={() => (
+        <Button
+          size="none"
+          colour="danger"
+          style={{ width: 33, marginLeft: 6 }}
+          onPress={() => remove(setRowIndex)}
+        >
+          <MaterialCommunityIcons
+            name="close"
+            size={22}
+            style={{
+              textAlign: 'center',
+            }}
+          />
+        </Button>
+      )}
+    >
       <SetTypeModal
         visible={visible}
         setVisible={setVisible}
         position={modalPosition}
-      >
-        {nonStandardSetTypes.map((nonStandardSetType, i, arr) => {
-          const selected = setType?.name === nonStandardSetType.name
-          return (
-            <SetTypeModalButton
-              key={i}
-              setType={nonStandardSetType}
-              selected={selected}
-              onPress={() => {
-                setValue(
-                  `${setFormName}.setType`,
-                  selected
-                    ? { name: SetTypeName.Standard }
-                    : nonStandardSetType,
-                )
-                setVisible(false)
-              }}
-              top={i === 0}
-              bottom={i === arr.length - 1}
-            />
-          )
-        })}
-      </SetTypeModal>
+        formSetName={formSetName}
+      />
       <Row
         data={row}
         flexArr={flexArr}
@@ -190,6 +196,6 @@ export const SetRow = ({
           gap: 6,
         }}
       />
-    </>
+    </Swipeable>
   )
 }
