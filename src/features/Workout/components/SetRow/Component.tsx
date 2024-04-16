@@ -59,7 +59,11 @@ export const SetRow = ({
   const [visible, setVisible] = useState(false)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
   const setTypeButtonRef = useRef<View | null>(null)
-  const { setValue, getValues, control } = useFormContext<WorkoutSchemaType>()
+  const {
+    setValue,
+    control,
+    formState: { defaultValues },
+  } = useFormContext<WorkoutSchemaType>()
   const formSetName = `exercises.${exerciseIndex}.sets.${setRowIndex}` as const
 
   const completed = useWatch<WorkoutSchemaType>({
@@ -86,7 +90,8 @@ export const SetRow = ({
           : numOfWarmups,
       0,
     )
-  const previous = getValues(`${formSetName}.previous`)
+  const previous =
+    defaultValues?.exercises?.[exerciseIndex]?.sets?.[setRowIndex]?.previous
 
   const handleOpenModal = () => {
     if (setTypeButtonRef.current) {
