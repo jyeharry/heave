@@ -2,9 +2,10 @@ import MCIcon from '@expo/vector-icons/MaterialCommunityIcons'
 import { FC } from 'react'
 import { useFieldArray } from 'react-hook-form'
 import { View } from 'react-native'
+import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Row, Table } from 'react-native-reanimated-table'
 import { SetTypeName, WorkoutSchemaType } from '../../types'
-import { SetRow } from '../SetRow'
+import { SET_ROW_HEIGHT, SetRow } from '../SetRow'
 import { Button } from '@/components/Button'
 import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
@@ -38,10 +39,17 @@ export const Exercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
   ]
 
   const flexArr = [1, 4, 2, 2, 1]
+  const rowGap = 16
+  const animatedStyle = useAnimatedStyle(() => ({
+    height: withTiming(
+      setFields.length * SET_ROW_HEIGHT + (setFields.length - 1) * rowGap,
+      { duration: 100 },
+    ),
+  }))
 
   return (
     <View>
-      <Table style={{ rowGap: 16 }}>
+      <Table style={{ rowGap }}>
         <Text>{name}</Text>
         <Row
           data={header}
@@ -55,15 +63,17 @@ export const Exercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
             gap: 6,
           }}
         />
-        {setFields.map((set, i) => (
-          <SetRow
-            key={set.id}
-            exerciseIndex={exerciseIndex}
-            setRowIndex={i}
-            flexArr={flexArr}
-            remove={remove}
-          />
-        ))}
+        <Animated.View style={[{ rowGap }, animatedStyle]}>
+          {setFields.map((set, i) => (
+            <SetRow
+              key={set.id}
+              exerciseIndex={exerciseIndex}
+              setRowIndex={i}
+              flexArr={flexArr}
+              remove={remove}
+            />
+          ))}
+        </Animated.View>
         <Button
           size="small"
           colour="grey"

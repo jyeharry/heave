@@ -43,6 +43,8 @@ const CompleteSetButton: FC<
   </Button>
 )
 
+export const SET_ROW_HEIGHT = 22
+
 export const SetRow = ({
   setRowIndex,
   exerciseIndex,
@@ -193,7 +195,7 @@ export const SetRow = ({
           textAlign: 'center',
         }}
         style={{
-          height: 22,
+          height: SET_ROW_HEIGHT,
           gap: 6,
         }}
       />
