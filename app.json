@@ -16,6 +16,7 @@
       "**/*"
     ],
     "ios": {
+      "usesAppleSignIn": true,
       "supportsTablet": true
     },
     "android": {
@@ -30,6 +31,7 @@
       "favicon": "./src/assets/images/favicon.png"
     },
     "plugins": [
+      "expo-apple-authentication",
       "expo-router"
     ],
     "experiments": {
