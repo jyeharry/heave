@@ -3,9 +3,7 @@ import { supabase } from '@/utils/supabase'
 
 type SignOutProps = Pick<ButtonProps, 'colour' | 'size'>
 
-export const SignOutButton = (
-  { colour, size }: SignOutProps = { colour: 'danger' },
-) => {
+export const SignOutButton = ({ colour = 'danger', size }: SignOutProps) => {
   const signOut = async () => {
     const { error } = await supabase.auth.signOut()
     if (error) throw error
