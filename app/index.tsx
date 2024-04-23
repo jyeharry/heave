@@ -1,4 +1,4 @@
-import { Authentication } from '@/features/Authentication/Authentication'
+import { Authentication } from '@/features/Authentication'
 
 const SignIn = () => <Authentication />
 

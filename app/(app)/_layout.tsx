@@ -1,9 +1,8 @@
+import { useSession } from '@supabase/auth-helpers-react'
 import { Redirect, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { Platform } from 'react-native'
-// import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
-// import { useAuthentication } from '@/providers/Authentication'
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -11,15 +10,9 @@ export const unstable_settings = {
 }
 
 export default function RootLayout() {
-  // const { session, isLoading } = useAuthentication()
+  const session = useSession()
 
-  // if (isLoading) {
-  // return <Text>Loading...</Text>
-  // }
-
-  // if (!session) {
-  // return <Redirect href="/sign-in" />
-  // }
+  if (!session) return <Redirect href="/" />
 
   return (
     <>

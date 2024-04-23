@@ -6,7 +6,7 @@ import { theme, BaseColourMap } from '@/constants/theme'
 
 type ButtonColourMap = Pick<BaseColourMap, 'primary' | 'danger' | 'grey'>
 
-interface ButtonProps extends PressableProps {
+export interface ButtonProps extends PressableProps {
   colour?: keyof ButtonColourMap
   size?: keyof typeof buttonSizes
   bordered?: boolean

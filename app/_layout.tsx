@@ -1,9 +1,10 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { SessionContextProvider } from '@supabase/auth-helpers-react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useFonts } from 'expo-font'
 import { SplashScreen, Slot } from 'expo-router'
 import { useEffect } from 'react'
-// import { AuthenticationProvider } from '@/providers/Authentication'
+import { supabase } from '@/utils/supabase'
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -38,9 +39,9 @@ export default function Root() {
   // Set up the auth context and render our layout inside of it.
   return (
     <QueryClientProvider client={queryClient}>
-      {/* <AuthenticationProvider> */}
-      <Slot />
-      {/* </AuthenticationProvider> */}
+      <SessionContextProvider supabaseClient={supabase}>
+        <Slot />
+      </SessionContextProvider>
     </QueryClientProvider>
   )
 }
