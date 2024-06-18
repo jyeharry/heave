@@ -24,6 +24,13 @@ const WorkoutsLayout: FC = () => {
           title: 'Add Workout',
         }}
       />
+      <Stack.Screen
+        name="add-exercise"
+        options={{
+          presentation: 'modal',
+          title: 'Add Exercise',
+        }}
+      />
     </Stack>
   )
 }

@@ -1,1 +1,0 @@
-export { SetTypeModalButton } from './Component'

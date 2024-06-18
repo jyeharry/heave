@@ -6,7 +6,7 @@ import {
   WorkoutSchemaType,
   nonStandardSetTypes,
 } from '../../types'
-import { SetTypeModalButton } from '../SetTypeModalButton'
+import { Button } from '@/components/Button'
 import { theme } from '@/constants/theme'
 
 export const SetTypeModal = ({
@@ -34,25 +34,29 @@ export const SetTypeModal = ({
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
+          padding: 16,
         }}
         onPress={() => setVisible(false)}
       >
         <View
           style={{
             borderRadius: 16,
+            overflow: 'hidden',
             backgroundColor: theme.colours.grey150,
             position: 'absolute',
             top: position.top,
             left: position.left,
           }}
         >
-          {nonStandardSetTypes.map((nonStandardSetType, i, arr) => {
+          {nonStandardSetTypes.map((nonStandardSetType, i) => {
             const selected = setType?.name === nonStandardSetType.name
             return (
-              <SetTypeModalButton
+              <Button
                 key={i}
-                setType={nonStandardSetType}
-                selected={selected}
+                style={[selected && { backgroundColor: theme.colours.grey200 }]}
+                size="large"
+                colour="grey"
+                bordered={false}
                 onPress={() => {
                   setValue(
                     `${formSetName}.setType`,
@@ -62,9 +66,9 @@ export const SetTypeModal = ({
                   )
                   setVisible(false)
                 }}
-                top={i === 0}
-                bottom={i === arr.length - 1}
-              />
+              >
+                {SetTypeName[nonStandardSetType.name]}
+              </Button>
             )
           })}
         </View>

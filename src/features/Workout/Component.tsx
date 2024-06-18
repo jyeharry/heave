@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
+import { router, useLocalSearchParams } from 'expo-router'
 import { FC } from 'react'
 import {
   useForm,
@@ -23,7 +24,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
   const { data } = useQuery<WorkoutSchemaType>({
     queryKey: ['workouts'],
     queryFn: () =>
-      new Promise((res) => setTimeout(() => res(mockWorkoutData), 1500)),
+      new Promise((res) => setTimeout(() => res(mockWorkoutData), 500)),
     enabled: mode === 'edit',
     gcTime: 0,
   })
@@ -41,6 +42,18 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     control: methods.control,
     name: 'exercises',
   })
+
+  const { newExercise, exerciseCount } = useLocalSearchParams<{
+    newExercise?: string
+    exerciseCount?: string
+  }>()
+
+  if (Number(exerciseCount) === exerciseFields.length && newExercise) {
+    append({
+      name: newExercise,
+      sets: [{ setType: { name: SetTypeName.Standard } }],
+    })
+  }
 
   return (
     <FormProvider {...methods}>
@@ -86,13 +99,10 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           ))}
           <Button
             onPress={() =>
-              append(
-                {
-                  name: 'Bench Press',
-                  sets: [{ setType: { name: SetTypeName.Standard } }],
-                },
-                { shouldFocus: false },
-              )
+              router.navigate({
+                pathname: '/(app)/(tabs)/workouts/add-exercise',
+                params: { exerciseCount: exerciseFields.length },
+              })
             }
           >
             Add Exercise
