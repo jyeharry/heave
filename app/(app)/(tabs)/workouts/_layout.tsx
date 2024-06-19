@@ -1,5 +1,6 @@
 import { Stack } from 'expo-router'
 import { FC } from 'react'
+import HeaderIcon from '@/components/HeaderIcon'
 import { theme } from '@/constants/theme'
 
 const WorkoutsLayout: FC = () => {
@@ -14,13 +15,16 @@ const WorkoutsLayout: FC = () => {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: false,
+          title: 'Workouts',
+          headerShown: true,
+          headerRight: ({ tintColor }) => (
+            <HeaderIcon href="/workouts/add" color={tintColor} name="plus" />
+          ),
         }}
       />
       <Stack.Screen
         name="add"
         options={{
-          presentation: 'modal',
           title: 'Add Workout',
         }}
       />
