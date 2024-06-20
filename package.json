@@ -8,7 +8,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "gen-types": "supabase gen types typescript --linked > src/supabase/types.ts",
+    "gen-types-local": "supabase gen types typescript --local > src/supabase/types.ts"
   },
   "jest": {
     "preset": "jest-expo"

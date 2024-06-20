@@ -5,7 +5,7 @@ import { useFonts } from 'expo-font'
 import { SplashScreen, Slot } from 'expo-router'
 import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import { supabase } from '@/utils/supabase'
+import { supabase } from '@/supabase'
 
 export {
   // Catch any errors thrown by the Layout component.

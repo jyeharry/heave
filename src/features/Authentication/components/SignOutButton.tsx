@@ -1,5 +1,5 @@
 import { Button, ButtonProps } from '@/components/Button'
-import { supabase } from '@/utils/supabase'
+import { supabase } from '@/supabase'
 
 type SignOutProps = Pick<ButtonProps, 'colour' | 'size'>
 
