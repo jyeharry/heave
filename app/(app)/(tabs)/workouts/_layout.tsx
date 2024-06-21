@@ -8,6 +8,7 @@ const WorkoutsLayout: FC = () => {
     <Stack
       screenOptions={{
         headerStyle: { backgroundColor: theme.colours.dark },
+        contentStyle: { backgroundColor: theme.colours.grey100 },
         headerTitleStyle: { color: theme.colours.white },
         headerTintColor: theme.colours.grey300,
       }}

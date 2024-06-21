@@ -5,7 +5,7 @@ export const useExercisesQuery = () =>
   useQuery({
     queryKey: ['exercises'],
     queryFn: async () => {
-      const { data } = await supabase.from('exercise').select()
+      const { data } = await supabase.from('exercise').select().order('name')
       return data
     },
   })

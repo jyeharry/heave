@@ -43,14 +43,15 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     name: 'exercises',
   })
 
-  const { newExercise, exerciseCount } = useLocalSearchParams<{
-    newExercise?: string
+  const { newExerciseName, exerciseCount } = useLocalSearchParams<{
+    newExerciseName?: string
+    newExerciseID?: string
     exerciseCount?: string
   }>()
 
-  if (Number(exerciseCount) === exerciseFields.length && newExercise) {
+  if (Number(exerciseCount) === exerciseFields.length && newExerciseName) {
     append({
-      name: newExercise,
+      name: newExerciseName,
       sets: [{ setType: { name: SetTypeName.Standard } }],
     })
   }
