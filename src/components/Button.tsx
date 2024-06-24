@@ -19,12 +19,14 @@ export const Button: FC<ButtonProps> = ({
   onPress,
   style,
   size = 'regular',
+  disabled,
+  ...props
 }) => (
   <Pressable
     style={({ pressed }) => [
       styles.button,
       {
-        opacity: pressed ? 0.5 : 1,
+        opacity: pressed || disabled ? 0.5 : 1,
         borderWidth: bordered ? 1 : 0,
       },
       buttonVariants[colour],
@@ -32,6 +34,7 @@ export const Button: FC<ButtonProps> = ({
       style,
     ]}
     onPress={onPress}
+    {...props}
   >
     {(state) =>
       React.Children.only(

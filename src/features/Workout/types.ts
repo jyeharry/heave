@@ -43,10 +43,12 @@ export const WorkoutSetSchema = z.object({
 export type WorkoutSet = z.infer<typeof WorkoutSetSchema>
 
 export const WorkoutSchema = z.object({
+  id: z.string(),
   title: z.string(),
   notes: z.string().optional(),
   exercises: z.array(
     z.object({
+      id: z.string(),
       name: z.string(),
       sets: z.array(WorkoutSetSchema),
     }),

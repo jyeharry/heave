@@ -1,6 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import Octicons from '@expo/vector-icons/Octicons'
-import { FC, useRef, useState } from 'react'
+import { FC, useContext, useRef, useState } from 'react'
 import {
   Controller,
   UseFieldArrayRemove,
@@ -10,6 +10,7 @@ import {
 import { PressableProps, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { Row } from 'react-native-reanimated-table'
+import { WorkoutModeContext } from '../../Component'
 import {
   SetType,
   SetTypeAbbreviation,
@@ -20,26 +21,33 @@ import {
 import { SetTypeModal } from '../SetTypeModal'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
+import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
 
 const CompleteSetButton: FC<
   PressableProps & {
     completed: boolean
   }
-> = ({ completed, onPress }) => (
+> = ({ completed, onPress, disabled, ...props }) => (
   <Button
     size="none"
     colour={completed ? 'primary' : 'grey'}
     style={{ borderWidth: completed ? 1 : 0, padding: completed ? 0 : 1 }}
     onPress={onPress}
+    disabled={disabled}
+    {...props}
   >
-    <MaterialCommunityIcons
-      name="check"
-      size={22}
-      style={{
-        textAlign: 'center',
-      }}
-    />
+    {disabled ? (
+        <Octicons name="dash" size={22} />
+    ) : (
+      <MaterialCommunityIcons
+        name="check"
+        size={22}
+        style={{
+          textAlign: 'center',
+        }}
+      />
+    )}
   </Button>
 )
 
@@ -56,6 +64,7 @@ export const SetRow = ({
   flexArr: number[]
   remove: UseFieldArrayRemove
 }) => {
+  const workoutMode = useContext(WorkoutModeContext)
   const [visible, setVisible] = useState(false)
   const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
   const setTypeButtonRef = useRef<View | null>(null)
@@ -162,6 +171,7 @@ export const SetRow = ({
     <CompleteSetButton
       completed={!!completed}
       onPress={() => setValue(`${formSetName}.completed`, !completed)}
+      disabled={workoutMode !== 'perform'}
     />,
   ]
 
