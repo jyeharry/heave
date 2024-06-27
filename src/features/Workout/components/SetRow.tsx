@@ -10,18 +10,17 @@ import {
 import { PressableProps, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { Row } from 'react-native-reanimated-table'
-import { WorkoutModeContext } from '../../Component'
 import {
   SetType,
   SetTypeAbbreviation,
   SetTypeName,
   WorkoutSchemaType,
   WorkoutSet,
-} from '../../types'
-import { SetTypeModal } from '../SetTypeModal'
+} from '../types'
+import { SetTypeModal } from './SetTypeModal'
+import { WorkoutModeContext } from './WorkoutModeContext'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
-import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
 
 const CompleteSetButton: FC<
@@ -38,7 +37,7 @@ const CompleteSetButton: FC<
     {...props}
   >
     {disabled ? (
-        <Octicons name="dash" size={22} />
+      <Octicons name="dash" size={22} />
     ) : (
       <MaterialCommunityIcons
         name="check"

@@ -57,7 +57,7 @@ export const Exercise: FC = () => {
         )}
         renderItem={({ item: { name, body_part, exercise_id } }) => (
           <Pressable
-            style={({pressed}) => ({
+            style={({ pressed }) => ({
               gap: 2,
               paddingHorizontal: 16,
               paddingVertical: 8,

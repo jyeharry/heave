@@ -1,2 +1,2 @@
-export { Authentication } from './Component'
+export { Authentication } from './Authentication'
 export { SignOutButton } from './components/SignOutButton'

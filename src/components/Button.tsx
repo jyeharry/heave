@@ -34,6 +34,7 @@ export const Button: FC<ButtonProps> = ({
       style,
     ]}
     onPress={onPress}
+    disabled={disabled}
     {...props}
   >
     {(state) =>

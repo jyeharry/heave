@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
 import { Stack, router, useLocalSearchParams } from 'expo-router'
-import { FC, createContext } from 'react'
+import { FC } from 'react'
 import {
   useForm,
   FormProvider,
@@ -9,7 +9,8 @@ import {
   Controller,
 } from 'react-hook-form'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { Exercise } from './components/Exercise'
+import { WorkoutExercise } from './components/WorkoutExercise'
+import { WorkoutModeProvider } from './components/WorkoutModeContext'
 import { mockWorkoutData } from './mock'
 import { SetTypeName, WorkoutSchema, WorkoutSchemaType } from './types'
 import { Button } from '@/components/Button'
@@ -21,8 +22,6 @@ type WorkoutMode = 'create' | 'edit' | 'perform'
 export interface WorkoutProps {
   mode: WorkoutMode
 }
-
-export const WorkoutModeContext = createContext<WorkoutMode>('create')
 
 export const Workout: FC<WorkoutProps> = ({ mode }) => {
   const { data } = useQuery<WorkoutSchemaType>({
@@ -67,7 +66,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
   }
 
   return (
-    <WorkoutModeContext.Provider value={mode}>
+    <WorkoutModeProvider value={mode}>
       <Stack.Screen
         options={{
           headerRight: () => (
@@ -112,7 +111,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           </View>
           <View style={{ gap: 32 }}>
             {exerciseFields.map((exercise, i) => (
-              <Exercise
+              <WorkoutExercise
                 key={exercise.id}
                 exerciseIndex={i}
                 name={methods.getValues(`exercises.${i}.name`)}
@@ -132,7 +131,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           </View>
         </ScrollView>
       </FormProvider>
-    </WorkoutModeContext.Provider>
+    </WorkoutModeProvider>
   )
 }
 

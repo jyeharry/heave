@@ -4,8 +4,8 @@ import { useFieldArray } from 'react-hook-form'
 import { View } from 'react-native'
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Row, Table } from 'react-native-reanimated-table'
-import { SetTypeName, WorkoutSchemaType } from '../../types'
-import { SET_ROW_HEIGHT, SetRow } from '../SetRow'
+import { SET_ROW_HEIGHT, SetRow } from './SetRow'
+import { SetTypeName, WorkoutSchemaType } from '../types'
 import { Button } from '@/components/Button'
 import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
@@ -15,7 +15,7 @@ interface ExerciseProps {
   exerciseIndex: number
 }
 
-export const Exercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
+export const WorkoutExercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
   const {
     fields: setFields,
     append,

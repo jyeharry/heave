@@ -1,1 +1,1 @@
-export { Exercise } from './Component'
+export { Exercise } from './Exercise'

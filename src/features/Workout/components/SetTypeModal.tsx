@@ -5,7 +5,7 @@ import {
   SetTypeName,
   WorkoutSchemaType,
   nonStandardSetTypes,
-} from '../../types'
+} from '../types'
 import { Button } from '@/components/Button'
 import { theme } from '@/constants/theme'
 
