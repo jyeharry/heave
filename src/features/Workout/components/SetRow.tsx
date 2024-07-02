@@ -1,6 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
 import Octicons from '@expo/vector-icons/Octicons'
-import { FC, useContext, useRef, useState } from 'react'
+import { FC, useContext } from 'react'
 import {
   Controller,
   UseFieldArrayRemove,
@@ -10,17 +10,18 @@ import {
 import { PressableProps, View } from 'react-native'
 import Swipeable from 'react-native-gesture-handler/Swipeable'
 import { Row } from 'react-native-reanimated-table'
+import { WorkoutModeContext } from './WorkoutModeContext'
 import {
   SetType,
   SetTypeAbbreviation,
   SetTypeName,
   WorkoutSchemaType,
   WorkoutSet,
+  nonStandardSetTypes,
 } from '../types'
-import { SetTypeModal } from './SetTypeModal'
-import { WorkoutModeContext } from './WorkoutModeContext'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
+import { MenuButton, MenuOption } from '@/components/Menu'
 import { theme } from '@/constants/theme'
 
 const CompleteSetButton: FC<
@@ -64,9 +65,6 @@ export const SetRow = ({
   remove: UseFieldArrayRemove
 }) => {
   const workoutMode = useContext(WorkoutModeContext)
-  const [visible, setVisible] = useState(false)
-  const [modalPosition, setModalPosition] = useState({ top: 0, left: 0 })
-  const setTypeButtonRef = useRef<View | null>(null)
   const {
     setValue,
     control,
@@ -101,33 +99,38 @@ export const SetRow = ({
   const previous =
     defaultValues?.exercises?.[exerciseIndex]?.sets?.[setRowIndex]?.previous
 
-  const handleOpenModal = () => {
-    if (setTypeButtonRef.current) {
-      setTypeButtonRef.current.measure(
-        (_x, _y, _width, _height, pageX, pageY) => {
-          setModalPosition({ top: pageY, left: pageX })
-        },
-      )
-    }
-    setVisible(true)
-  }
-
   const setLabel =
     (setType?.abbreviation != null &&
       SetTypeAbbreviation[setType.abbreviation]) ||
     setRowIndex + 1 - numOfPreviousWarmups
 
   const row = [
-    <View ref={setTypeButtonRef}>
-      <Button
-        colour="grey"
-        size="small"
-        onPress={handleOpenModal}
-        bordered={false}
-      >
-        {setLabel}
-      </Button>
-    </View>,
+    <MenuButton
+      triggerButtonChildren={setLabel}
+      triggerButtonProps={{
+        size: 'small',
+        colour: 'grey',
+        bordered: false,
+      }}
+      menuProps={{
+        onSelect: (value) => {
+          const isAlreadySelected = setType?.name === value.name
+          setValue(
+            `${formSetName}.setType`,
+            isAlreadySelected ? { name: SetTypeName.Standard } : value,
+          )
+        },
+      }}
+    >
+      {nonStandardSetTypes.map((nonStandardSetType, i) => (
+        <MenuOption
+          key={i}
+          value={nonStandardSetType}
+          text={SetTypeName[nonStandardSetType.name]}
+          active={setType?.name === nonStandardSetType.name}
+        />
+      ))}
+    </MenuButton>,
     previous ?? (
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <Octicons name="dash" size={22} />
@@ -195,12 +198,6 @@ export const SetRow = ({
         </Button>
       )}
     >
-      <SetTypeModal
-        visible={visible}
-        setVisible={setVisible}
-        position={modalPosition}
-        formSetName={formSetName}
-      />
       <Row
         data={row}
         flexArr={flexArr}

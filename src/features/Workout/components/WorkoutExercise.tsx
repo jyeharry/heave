@@ -6,8 +6,8 @@ import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Row, Table } from 'react-native-reanimated-table'
 import { SET_ROW_HEIGHT, SetRow } from './SetRow'
 import { SetTypeName, WorkoutSchemaType } from '../types'
-import { Button } from '@/components/Button'
 import { Text } from '@/components/Text'
+import { Button } from '@/components/Button'
 import { theme } from '@/constants/theme'
 
 interface ExerciseProps {

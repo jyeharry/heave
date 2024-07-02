@@ -1,10 +1,12 @@
 import { SetTypeAbbreviation, SetTypeName, WorkoutSchemaType } from './types'
 
 export const mockWorkoutData: WorkoutSchemaType = {
+  id: '0',
   title: 'Push',
   notes: '1 second concentric, 3 second eccentric',
   exercises: [
     {
+      id: '1',
       name: 'Bench Press',
       sets: [
         {
@@ -24,7 +26,7 @@ export const mockWorkoutData: WorkoutSchemaType = {
         },
         {
           setType: {
-            name: SetTypeName.Dropset,
+            name: SetTypeName["Drop Set"],
             abbreviation: SetTypeAbbreviation.D,
           },
           previous: '70kg x 8',
@@ -39,6 +41,7 @@ export const mockWorkoutData: WorkoutSchemaType = {
       ],
     },
     {
+      id: '2',
       name: 'Incline Dumbbell Press',
       sets: [
         {
@@ -66,6 +69,7 @@ export const mockWorkoutData: WorkoutSchemaType = {
       ],
     },
     {
+      id: '3',
       name: 'Chest Fly (Machine)',
       sets: [
         {

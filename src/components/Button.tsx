@@ -24,7 +24,7 @@ export const Button: FC<ButtonProps> = ({
 }) => (
   <Pressable
     style={({ pressed }) => [
-      styles.button,
+      buttonStyles.button,
       {
         opacity: pressed || disabled ? 0.5 : 1,
         borderWidth: bordered ? 1 : 0,
@@ -49,7 +49,7 @@ export const Button: FC<ButtonProps> = ({
   </Pressable>
 )
 
-const styles = StyleSheet.create({
+export const buttonStyles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
   },
 })
 
-const buttonVariants: ButtonColourMap = StyleSheet.create({
+export const buttonVariants: ButtonColourMap = StyleSheet.create({
   primary: {
     backgroundColor: theme.colours.primary100,
     borderColor: theme.colours.primary,
@@ -72,7 +72,7 @@ const buttonVariants: ButtonColourMap = StyleSheet.create({
   },
 })
 
-const buttonSizes = StyleSheet.create({
+export const buttonSizes = StyleSheet.create({
   none: {},
   small: {
     paddingVertical: 2,
@@ -88,7 +88,7 @@ const buttonSizes = StyleSheet.create({
   },
 })
 
-const buttonTextVariants: ButtonColourMap = StyleSheet.create({
+export const buttonTextVariants: ButtonColourMap = StyleSheet.create({
   primary: {
     color: theme.colours.primary,
   },

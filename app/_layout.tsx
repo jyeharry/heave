@@ -5,6 +5,7 @@ import { useFonts } from 'expo-font'
 import { SplashScreen, Slot } from 'expo-router'
 import { useEffect } from 'react'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import { MenuProvider } from 'react-native-popup-menu'
 import { supabase } from '@/supabase'
 
 export {
@@ -42,7 +43,16 @@ export default function Root() {
     <GestureHandlerRootView>
       <QueryClientProvider client={queryClient}>
         <SessionContextProvider supabaseClient={supabase}>
-          <Slot />
+          <MenuProvider
+            customStyles={{
+              backdrop: {
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                opacity: 0.5,
+              },
+            }}
+          >
+            <Slot />
+          </MenuProvider>
         </SessionContextProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>

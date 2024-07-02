@@ -7,7 +7,7 @@ export enum SetTypeAbbreviation {
 
 export enum SetTypeName {
   Warmup,
-  Dropset,
+  'Drop Set',
   Standard,
 }
 
@@ -22,7 +22,7 @@ export const nonStandardSetTypes: SetType[] = [
     abbreviation: SetTypeAbbreviation.W,
   },
   {
-    name: SetTypeName.Dropset,
+    name: SetTypeName['Drop Set'],
     abbreviation: SetTypeAbbreviation.D,
   },
 ]
