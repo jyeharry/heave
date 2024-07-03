@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useQuery } from '@tanstack/react-query'
-import { Stack, router, useLocalSearchParams } from 'expo-router'
+import { Link, Stack, useLocalSearchParams } from 'expo-router'
 import { FC } from 'react'
 import {
   useForm,
@@ -13,8 +13,8 @@ import { WorkoutExercise } from './components/WorkoutExercise'
 import { WorkoutModeProvider } from './components/WorkoutModeContext'
 import { mockWorkoutData } from './mock'
 import { SetTypeName, WorkoutSchema, WorkoutSchemaType } from './types'
-import { Input } from '@/components/Input'
 import { Button } from '@/components/Button'
+import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
 
 type WorkoutMode = 'create' | 'edit' | 'perform'
@@ -26,8 +26,7 @@ export interface WorkoutProps {
 export const Workout: FC<WorkoutProps> = ({ mode }) => {
   const { data } = useQuery<WorkoutSchemaType>({
     queryKey: ['workouts'],
-    queryFn: () =>
-      new Promise((res) => setTimeout(() => res(mockWorkoutData), 500)),
+    queryFn: () => mockWorkoutData,
     enabled: mode === 'edit' || mode === 'perform',
     gcTime: 0,
   })
@@ -117,16 +116,15 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
                 name={methods.getValues(`exercises.${i}.name`)}
               />
             ))}
-            <Button
-              onPress={() =>
-                router.navigate({
-                  pathname: '/(app)/(tabs)/workouts/add-exercise',
-                  params: { exerciseCount: exerciseFields.length },
-                })
-              }
+            <Link
+              href={{
+                pathname: '/(app)/(tabs)/workouts/add-exercise',
+                params: { exerciseCount: exerciseFields.length },
+              }}
+              asChild
             >
-              Add Exercise
-            </Button>
+              <Button>Add Exercise</Button>
+            </Link>
             <Button colour="danger">Cancel Workout</Button>
           </View>
         </ScrollView>

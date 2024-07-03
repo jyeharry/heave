@@ -1,6 +1,11 @@
 import Color from 'color'
-import React, { FC } from 'react'
-import { Pressable, PressableProps, StyleSheet } from 'react-native'
+import React, {
+  ForwardRefExoticComponent,
+  ForwardedRef,
+  RefAttributes,
+  forwardRef,
+} from 'react'
+import { Pressable, PressableProps, StyleSheet, View } from 'react-native'
 import { Text } from './Text'
 import { theme, BaseColourMap } from '@/constants/theme'
 
@@ -12,41 +17,49 @@ export interface ButtonProps extends PressableProps {
   bordered?: boolean
 }
 
-export const Button: FC<ButtonProps> = ({
-  bordered = true,
-  children,
-  colour = 'primary',
-  onPress,
-  style,
-  size = 'regular',
-  disabled,
-  ...props
-}) => (
-  <Pressable
-    style={({ pressed }) => [
-      buttonStyles.button,
-      {
-        opacity: pressed || disabled ? 0.5 : 1,
-        borderWidth: bordered ? 1 : 0,
-      },
-      buttonVariants[colour],
-      buttonSizes[size],
+export const Button: ForwardRefExoticComponent<
+  ButtonProps & RefAttributes<View>
+> = forwardRef(
+  (
+    {
+      bordered = true,
+      children,
+      colour = 'primary',
+      onPress,
       style,
-    ]}
-    onPress={onPress}
-    disabled={disabled}
-    {...props}
-  >
-    {(state) =>
-      React.Children.only(
-        typeof children === 'function' ? (
-          children(state)
-        ) : (
-          <Text style={[buttonTextVariants[colour]]}>{children}</Text>
-        ),
-      )
-    }
-  </Pressable>
+      size = 'regular',
+      disabled,
+      ...props
+    },
+    ref: ForwardedRef<View>,
+  ) => (
+    <Pressable
+      style={({ pressed }) => [
+        buttonStyles.button,
+        {
+          opacity: pressed || disabled ? 0.5 : 1,
+          borderWidth: bordered ? 1 : 0,
+        },
+        buttonVariants[colour],
+        buttonSizes[size],
+        style,
+      ]}
+      onPress={onPress}
+      disabled={disabled}
+      ref={ref}
+      {...props}
+    >
+      {(state) =>
+        React.Children.only(
+          typeof children === 'function' ? (
+            children(state)
+          ) : (
+            <Text style={[buttonTextVariants[colour]]}>{children}</Text>
+          ),
+        )
+      }
+    </Pressable>
+  ),
 )
 
 export const buttonStyles = StyleSheet.create({
