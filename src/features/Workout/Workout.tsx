@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useQuery } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { Link, Stack, useLocalSearchParams } from 'expo-router'
 import { FC } from 'react'
 import {
@@ -16,6 +16,8 @@ import { SetTypeName, WorkoutSchema, WorkoutSchemaType } from './types'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
+import { useProfile } from '@/hooks/useProfile'
+import { supabase } from '@/supabase'
 
 type WorkoutMode = 'create' | 'edit' | 'perform'
 
@@ -29,6 +31,17 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     queryFn: () => mockWorkoutData,
     enabled: mode === 'edit' || mode === 'perform',
     gcTime: 0,
+  })
+
+  const profile = useProfile()
+
+  const mutation = useMutation({
+    mutationFn: async (data: WorkoutSchemaType) => {
+      const template = await supabase.from('workout_template').insert({
+        title: data.title,
+        profile_id: profile.profile_id,
+      })
+    },
   })
 
   const methods = useForm<WorkoutSchemaType>({
@@ -69,7 +82,13 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
       <Stack.Screen
         options={{
           headerRight: () => (
-            <Button style={{ backgroundColor: 'transparent' }}>
+            <Button
+              onPress={methods.handleSubmit(
+                (data) => mutation.mutate(data),
+                console.log,
+              )}
+              style={{ backgroundColor: 'transparent' }}
+            >
               {mode === 'perform' ? 'Complete' : 'Save'}
             </Button>
           ),

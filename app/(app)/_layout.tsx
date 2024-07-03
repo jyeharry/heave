@@ -3,6 +3,7 @@ import { Redirect, Stack } from 'expo-router'
 import { StatusBar } from 'expo-status-bar'
 import { Platform } from 'react-native'
 import { theme } from '@/constants/theme'
+import { ProfileProvider } from '@/context/ProfileProvider'
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
@@ -15,7 +16,7 @@ export default function RootLayout() {
   if (!session) return <Redirect href="/" />
 
   return (
-    <>
+    <ProfileProvider session={session}>
       <Stack
         screenOptions={{
           contentStyle: { backgroundColor: theme.colours.grey100 },
@@ -40,6 +41,6 @@ export default function RootLayout() {
 
       {/* Use a light status bar on iOS to account for the black space above the modal */}
       <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
-    </>
+    </ProfileProvider>
   )
 }

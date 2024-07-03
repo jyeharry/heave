@@ -45,7 +45,7 @@ export const Authentication = () => {
               }
             } catch (e: any) {
               if (e.code === 'ERR_REQUEST_CANCELED') {
-                // handle that the user canceled the sign-in flow
+                // handle that the user cancelled the sign-in flow
               } else {
                 console.error(e)
               }
