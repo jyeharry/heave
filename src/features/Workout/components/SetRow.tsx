@@ -79,7 +79,7 @@ export const SetRow = ({
 
   const setType = useWatch<WorkoutSchemaType>({
     name: `${formSetName}.setType`,
-    defaultValue: { name: SetTypeName.Standard },
+    defaultValue: { name: 'Standard' },
   }) as SetType
 
   const sets = useWatch<WorkoutSchemaType>({
@@ -91,9 +91,7 @@ export const SetRow = ({
     .slice(0, setRowIndex)
     .reduce(
       (numOfWarmups, set) =>
-        set.setType.name === SetTypeName.Warmup
-          ? numOfWarmups + 1
-          : numOfWarmups,
+        set.setType.name === 'Warmup' ? numOfWarmups + 1 : numOfWarmups,
       0,
     )
   const previous =
@@ -117,7 +115,7 @@ export const SetRow = ({
           const isAlreadySelected = setType?.name === value.name
           setValue(
             `${formSetName}.setType`,
-            isAlreadySelected ? { name: SetTypeName.Standard } : value,
+            isAlreadySelected ? { name: 'Standard' } : value,
           )
         },
       }}
@@ -126,7 +124,7 @@ export const SetRow = ({
         <MenuOption
           key={i}
           value={nonStandardSetType}
-          text={SetTypeName[nonStandardSetType.name]}
+          text={nonStandardSetType.name}
           active={setType?.name === nonStandardSetType.name}
         />
       ))}

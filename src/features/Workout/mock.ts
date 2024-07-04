@@ -1,4 +1,4 @@
-import { SetTypeAbbreviation, SetTypeName, WorkoutSchemaType } from './types'
+import { SetTypeAbbreviation, WorkoutSchemaType } from './types'
 
 export const mockWorkoutData: WorkoutSchemaType = {
   id: '0',
@@ -11,7 +11,7 @@ export const mockWorkoutData: WorkoutSchemaType = {
       sets: [
         {
           setType: {
-            name: SetTypeName.Warmup,
+            name: 'Warmup',
             abbreviation: SetTypeAbbreviation.W,
           },
           previous: '70kg x 10',
@@ -19,14 +19,14 @@ export const mockWorkoutData: WorkoutSchemaType = {
           reps: 8,
         },
         {
-          setType: { name: SetTypeName.Standard },
+          setType: { name: 'Standard' },
           previous: '70kg x 9',
           weight: 75,
           reps: 6,
         },
         {
           setType: {
-            name: SetTypeName["Drop Set"],
+            name: 'Drop set',
             abbreviation: SetTypeAbbreviation.D,
           },
           previous: '70kg x 8',
@@ -35,7 +35,7 @@ export const mockWorkoutData: WorkoutSchemaType = {
         },
         {
           setType: {
-            name: SetTypeName.Standard,
+            name: 'Standard',
           },
         },
       ],
@@ -45,14 +45,14 @@ export const mockWorkoutData: WorkoutSchemaType = {
       name: 'Incline Dumbbell Press',
       sets: [
         {
-          setType: { name: SetTypeName.Standard },
+          setType: { name: 'Standard' },
           previous: '25kg x 9',
           weight: 25,
           reps: 10,
         },
         {
           setType: {
-            name: SetTypeName.Standard,
+            name: 'Standard',
           },
           previous: '25kg x 8',
           weight: 25,
@@ -60,7 +60,7 @@ export const mockWorkoutData: WorkoutSchemaType = {
         },
         {
           setType: {
-            name: SetTypeName.Standard,
+            name: 'Standard',
           },
           previous: '25kg x 8',
           weight: 25,
@@ -73,14 +73,14 @@ export const mockWorkoutData: WorkoutSchemaType = {
       name: 'Chest Fly (Machine)',
       sets: [
         {
-          setType: { name: SetTypeName.Standard },
+          setType: { name: 'Standard' },
           previous: '55kg x 11',
           weight: 57.5,
           reps: 10,
         },
         {
           setType: {
-            name: SetTypeName.Standard,
+            name: 'Standard',
           },
           previous: '55kg x 10',
           weight: 57.5,
@@ -88,7 +88,7 @@ export const mockWorkoutData: WorkoutSchemaType = {
         },
         {
           setType: {
-            name: SetTypeName.Standard,
+            name: 'Standard',
           },
           previous: '55kg x 10',
           weight: 57.5,

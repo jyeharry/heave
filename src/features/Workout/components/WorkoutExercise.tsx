@@ -80,7 +80,7 @@ export const WorkoutExercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
           onPress={() =>
             append(
               {
-                setType: { name: SetTypeName.Standard },
+                setType: { name: 'Standard' },
               },
               { shouldFocus: false },
             )
