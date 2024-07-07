@@ -10,7 +10,7 @@ export const ProfileProvider: FC<PropsWithChildren<{ session: Session }>> = ({
   session,
   children,
 }) => {
-  const { data, isFetching } = useQuery({
+  const { data } = useQuery({
     queryKey: [session, 'profile'],
     queryFn: async () => {
       const res = await supabase
@@ -23,11 +23,6 @@ export const ProfileProvider: FC<PropsWithChildren<{ session: Session }>> = ({
     gcTime: 0,
     staleTime: 0,
   })
-
-  if (data?.error) console.log({ error: data.error })
-
-  if (!isFetching && !data)
-    console.error('No profile found for user', session.user.id)
 
   return (
     <ProfileContext.Provider value={data?.data || null}>

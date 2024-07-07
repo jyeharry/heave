@@ -31,15 +31,15 @@ export const nonStandardSetTypes: SetType[] = [
 export const WorkoutSetSchema = z.object({
   setType: SetTypeSchema,
   previous: z.string().optional(),
-  weight: z.number().nonnegative().default(0).optional(),
-  reps: z.number().nonnegative().default(0).optional(),
+  weight: z.coerce.number().nonnegative().default(0).optional(),
+  reps: z.coerce.number().int().nonnegative().default(0).optional(),
   completed: z.optional(z.boolean().default(false)),
 })
 
 export type WorkoutSet = z.infer<typeof WorkoutSetSchema>
 
 const ExerciseSchema = z.object({
-  id: z.string(),
+  id: z.string().uuid(),
   name: z.string(),
   sets: z.array(WorkoutSetSchema),
 })
@@ -47,7 +47,7 @@ const ExerciseSchema = z.object({
 export type ExerciseSchemaType = z.infer<typeof ExerciseSchema>
 
 export const WorkoutSchema = z.object({
-  id: z.string(),
+  id: z.string().uuid().optional(),
   title: z.string(),
   notes: z.string().optional(),
   exercises: z.array(ExerciseSchema),

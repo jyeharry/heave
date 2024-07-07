@@ -1,12 +1,12 @@
 import { SetTypeAbbreviation, WorkoutSchemaType } from './types'
 
 export const mockWorkoutData: WorkoutSchemaType = {
-  id: '0',
+  id: '24625f90-585e-4e63-b980-de8f18ccdab7',
   title: 'Push',
   notes: '1 second concentric, 3 second eccentric',
   exercises: [
     {
-      id: '1',
+      id: 'be8ef94f-de30-4097-8cd2-691863395e4b',
       name: 'Bench Press',
       sets: [
         {
@@ -41,7 +41,7 @@ export const mockWorkoutData: WorkoutSchemaType = {
       ],
     },
     {
-      id: '2',
+      id: '37cd7328-d54b-4640-b484-a676f8236343',
       name: 'Incline Dumbbell Press',
       sets: [
         {
@@ -69,7 +69,7 @@ export const mockWorkoutData: WorkoutSchemaType = {
       ],
     },
     {
-      id: '3',
+      id: '9470d602-8f39-49a5-9ba8-948c909835ee',
       name: 'Chest Fly (Machine)',
       sets: [
         {

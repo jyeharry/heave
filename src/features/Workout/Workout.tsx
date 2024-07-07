@@ -37,43 +37,45 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
 
   const mutation = useMutation({
     mutationFn: async (data: WorkoutSchemaType) => {
-      const template = await supabase
-        .from('workout_template')
-        .insert({
-          profile_id: profile.profile_id,
-          author_profile_id: profile.profile_id,
-          title: data.title,
-          notes: data.notes,
-        })
-        .select()
-        .single()
+      try {
+        const parsedData = WorkoutSchema.parse(data)
 
-      const templateExercises = await supabase
-        .from('workout_template_exercise')
-        .insert(
-          data.exercises.map((exercise, index) => ({
-            workout_template_id: template.data?.workout_template_id,
-            exercise_id: exercise.id,
-            index,
-          })),
+        const template = await supabase
+          .from('workout_template')
+          .upsert({
+            workout_template_id: parsedData.id,
+            profile_id: profile.profile_id,
+            author_profile_id: profile.profile_id,
+            title: parsedData.title,
+            notes: parsedData.notes,
+          })
+          .select()
+          .single()
+
+        const templateExercises = await supabase
+          .from('workout_template_exercise')
+          .insert(
+            parsedData.exercises.map((exercise, index) => ({
+              workout_template_id: template.data?.workout_template_id,
+              exercise_id: exercise.id,
+              index,
+            })),
+          )
+          .select()
+
+        if (!templateExercises.data || templateExercises.error) return
+
+        const exerciseMap = parsedData.exercises.reduce<
+          Record<string, ExerciseSchemaType>
+        >(
+          (exMap, ex) => ({
+            ...exMap,
+            [ex.id]: ex,
+          }),
+          {},
         )
-        .select()
 
-      if (!templateExercises.data || templateExercises.error) return
-
-      const exerciseMap = data.exercises.reduce<
-        Record<string, ExerciseSchemaType>
-      >(
-        (exMap, ex) => ({
-          ...exMap,
-          [ex.id]: ex,
-        }),
-        {},
-      )
-
-      const templateExerciseSets = await supabase
-        .from('workout_template_exercise_set')
-        .insert(
+        await supabase.from('workout_template_exercise_set').insert(
           templateExercises.data.flatMap((tempEx) =>
             exerciseMap[tempEx.exercise_id].sets.map((set, index) => ({
               workout_template_exercise_id: tempEx.workout_template_exercise_id,
@@ -84,6 +86,9 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
             })),
           ),
         )
+      } catch (e) {
+        console.log('Workout schema parse error', e)
+      }
     },
   })
 
@@ -128,7 +133,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
             <Button
               onPress={methods.handleSubmit(
                 (data) => mutation.mutate(data),
-                console.log,
+                (data) => console.log('Error', JSON.stringify(data, null, 2)),
               )}
               style={{ backgroundColor: 'transparent' }}
             >

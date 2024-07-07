@@ -14,7 +14,6 @@ import { WorkoutModeContext } from './WorkoutModeContext'
 import {
   SetType,
   SetTypeAbbreviation,
-  SetTypeName,
   WorkoutSchemaType,
   WorkoutSet,
   nonStandardSetTypes,
