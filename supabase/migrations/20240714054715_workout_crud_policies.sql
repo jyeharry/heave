@@ -1,0 +1,94 @@
+drop policy "Enable insert for users based on profile_id" on "public"."workout_template";
+
+drop policy "Enable update for users based on profile_id" on "public"."workout_template";
+
+drop policy "Enable insert for users based on profile_id" on "public"."workout_template_exercise";
+
+drop policy "Enable update for users based on profile_id" on "public"."workout_template_exercise";
+
+drop policy "Enable insert for users based on profile_id" on "public"."workout_template_exercise_set";
+
+drop policy "Enable update for users based on profile_id" on "public"."workout_template_exercise_set";
+
+create policy "Enable CRUD for users based on profile_id"
+on "public"."workout_log"
+as permissive
+for all
+to public
+using ((( SELECT auth.uid() AS uid) = profile_id));
+
+
+create policy "Enable CRUD for users based on profile_id"
+on "public"."workout_log_exercise"
+as permissive
+for all
+to public
+using ((workout_log_exercise_id IN ( SELECT workout_log_exercise.workout_log_exercise_id
+   FROM (profile
+     JOIN workout_log USING (profile_id))
+  WHERE (profile.profile_id = ( SELECT auth.uid() AS uid)))))
+with check ((workout_log_exercise_id IN ( SELECT workout_log_exercise.workout_log_exercise_id
+   FROM (profile
+     JOIN workout_log USING (profile_id))
+  WHERE (profile.profile_id = ( SELECT auth.uid() AS uid)))));
+
+
+create policy "Enable CRUD for users based on profile_id"
+on "public"."workout_log_exercise_set"
+as permissive
+for all
+to public
+using ((workout_log_exercise_id IN ( SELECT workout_log_exercise.workout_log_exercise_id
+   FROM ((profile
+     JOIN workout_log USING (profile_id))
+     JOIN workout_log_exercise USING (workout_log_id))
+  WHERE (profile.profile_id = ( SELECT auth.uid() AS uid)))))
+with check ((workout_log_exercise_id IN ( SELECT workout_log_exercise.workout_log_exercise_id
+   FROM ((profile
+     JOIN workout_log USING (profile_id))
+     JOIN workout_log_exercise USING (workout_log_id))
+  WHERE (profile.profile_id = ( SELECT auth.uid() AS uid)))));
+
+
+create policy "Enable CRUD for users based on profile_id"
+on "public"."workout_template"
+as permissive
+for all
+to public
+using ((( SELECT auth.uid() AS uid) = profile_id))
+with check ((( SELECT auth.uid() AS uid) = profile_id));
+
+
+create policy "Enable CRUD for users based on profile_id"
+on "public"."workout_template_exercise"
+as permissive
+for all
+to public
+using ((workout_template_exercise_id IN ( SELECT workout_template_exercise.workout_template_exercise_id
+   FROM (profile
+     JOIN workout_template USING (profile_id))
+  WHERE (profile.profile_id = ( SELECT auth.uid() AS uid)))))
+with check ((workout_template_exercise_id IN ( SELECT workout_template_exercise.workout_template_exercise_id
+   FROM (profile
+     JOIN workout_template USING (profile_id))
+  WHERE (profile.profile_id = ( SELECT auth.uid() AS uid)))));
+
+
+create policy "Enable CRUD for users based on profile_id"
+on "public"."workout_template_exercise_set"
+as permissive
+for all
+to public
+using ((workout_template_exercise_id IN ( SELECT workout_template_exercise.workout_template_exercise_id
+   FROM ((profile
+     JOIN workout_template USING (profile_id))
+     JOIN workout_template_exercise USING (workout_template_id))
+  WHERE (profile.profile_id = ( SELECT auth.uid() AS uid)))))
+with check ((workout_template_exercise_id IN ( SELECT workout_template_exercise.workout_template_exercise_id
+   FROM ((profile
+     JOIN workout_template USING (profile_id))
+     JOIN workout_template_exercise USING (workout_template_id))
+  WHERE (profile.profile_id = ( SELECT auth.uid() AS uid)))));
+
+
+
