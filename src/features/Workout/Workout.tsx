@@ -106,15 +106,15 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     name: 'exercises',
   })
 
-  const { newExerciseID, newExerciseName, exerciseCount } =
+  const { newExerciseID, newExerciseName, workoutExerciseCount } =
     useLocalSearchParams<{
       newExerciseName?: string
       newExerciseID?: string
-      exerciseCount?: string
+      workoutExerciseCount?: string
     }>()
 
   if (
-    Number(exerciseCount) === exerciseFields.length &&
+    Number(workoutExerciseCount) === exerciseFields.length &&
     newExerciseName &&
     newExerciseID
   ) {
@@ -186,7 +186,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
             <Link
               href={{
                 pathname: '/(app)/(tabs)/workouts/add-exercise',
-                params: { exerciseCount: exerciseFields.length },
+                params: { workoutExerciseCount: exerciseFields.length },
               }}
               asChild
             >

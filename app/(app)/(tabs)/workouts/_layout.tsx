@@ -34,6 +34,9 @@ const WorkoutsLayout: FC = () => {
         options={{
           presentation: 'modal',
           title: 'Add Exercise',
+          headerSearchBarOptions: {
+            hideWhenScrolling: true,
+          },
         }}
       />
     </Stack>
