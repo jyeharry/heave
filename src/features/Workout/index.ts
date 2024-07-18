@@ -1,2 +1,2 @@
-export * from './pages'
+export * from './screens'
 export { WorkoutSchema } from './types'
