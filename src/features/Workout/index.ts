@@ -1,2 +1,2 @@
-export { Workout } from './Workout'
+export * from './pages'
 export { WorkoutSchema } from './types'

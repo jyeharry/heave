@@ -1,14 +1,10 @@
 import { StyleSheet, View } from 'react-native'
 import { Text } from '@/components/Text'
+import { Workouts } from '@/features/Workout'
 
-export default function WorkoutsScreen() {
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} />
-    </View>
-  )
-}
+const WorkoutsScreen = () => <Workouts />
+
+export default WorkoutsScreen
 
 const styles = StyleSheet.create({
   container: {

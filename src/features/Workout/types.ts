@@ -48,7 +48,7 @@ export type ExerciseSchemaType = z.infer<typeof ExerciseSchema>
 
 export const WorkoutSchema = z.object({
   id: z.string().uuid().optional(),
-  title: z.string(),
+  title: z.string().min(1),
   notes: z.string().optional(),
   exercises: z.array(ExerciseSchema),
 })

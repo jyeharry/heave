@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { Link, Stack, useLocalSearchParams } from 'expo-router'
+import { Link, Stack, router, useLocalSearchParams } from 'expo-router'
 import { FC } from 'react'
 import {
   useForm,
@@ -9,10 +9,10 @@ import {
   Controller,
 } from 'react-hook-form'
 import { ScrollView, StyleSheet, View } from 'react-native'
-import { WorkoutExercise } from './components/WorkoutExercise'
-import { WorkoutModeProvider } from './components/WorkoutModeContext'
-import { mockWorkoutData } from './mock'
-import { ExerciseSchemaType, WorkoutSchema, WorkoutSchemaType } from './types'
+import { WorkoutExercise } from '../components/WorkoutExercise'
+import { WorkoutModeProvider } from '../components/WorkoutModeContext'
+import { mockWorkoutData } from '../mock'
+import { ExerciseSchemaType, WorkoutSchema, WorkoutSchemaType } from '../types'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
@@ -38,6 +38,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
   const mutation = useMutation({
     mutationFn: async (data: WorkoutSchemaType) => {
       try {
+        console.log(JSON.stringify(data, null, 2))
         const parsedData = WorkoutSchema.parse(data)
 
         const template = await supabase
@@ -86,6 +87,8 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
             })),
           ),
         )
+
+        router.back()
       } catch (e) {
         console.log('Workout schema parse error', e)
       }
@@ -151,13 +154,21 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           <View>
             <Controller
               name="title"
-              render={({ field: { onChange, onBlur, value } }) => (
+              render={({
+                field: { onChange, onBlur, value },
+                fieldState: { error },
+              }) => (
                 <Input
                   placeholder="Workout Title"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   size="title"
                   value={value}
+                  style={{
+                    borderColor: error ? theme.colours.danger : 'transparent',
+                    borderBottomWidth: 1,
+                    borderRadius: 0,
+                  }}
                 />
               )}
             />
