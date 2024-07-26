@@ -36,36 +36,36 @@ export type Database = {
     Tables: {
       exercise: {
         Row: {
-          body_part: string | null
+          body_part: string
           created_at: string | null
-          equipment: string | null
+          equipment: string
           exercise_id: string
           instructions: string[] | null
-          name: string | null
+          name: string
           secondary_muscles: string[] | null
-          target: string | null
+          target: string
           updated_at: string | null
         }
         Insert: {
-          body_part?: string | null
+          body_part: string
           created_at?: string | null
-          equipment?: string | null
+          equipment: string
           exercise_id?: string
           instructions?: string[] | null
-          name?: string | null
+          name: string
           secondary_muscles?: string[] | null
-          target?: string | null
+          target: string
           updated_at?: string | null
         }
         Update: {
-          body_part?: string | null
+          body_part?: string
           created_at?: string | null
-          equipment?: string | null
+          equipment?: string
           exercise_id?: string
           instructions?: string[] | null
-          name?: string | null
+          name?: string
           secondary_muscles?: string[] | null
-          target?: string | null
+          target?: string
           updated_at?: string | null
         }
         Relationships: []
@@ -164,21 +164,21 @@ export type Database = {
       workout_exercise_set_entity: {
         Row: {
           index: number | null
-          reps: number | null
-          type: Database["public"]["Enums"]["set_type"] | null
-          weight: number | null
+          reps: number
+          type: Database["public"]["Enums"]["set_type"]
+          weight: number
         }
         Insert: {
           index?: number | null
-          reps?: number | null
-          type?: Database["public"]["Enums"]["set_type"] | null
-          weight?: number | null
+          reps: number
+          type: Database["public"]["Enums"]["set_type"]
+          weight: number
         }
         Update: {
           index?: number | null
-          reps?: number | null
-          type?: Database["public"]["Enums"]["set_type"] | null
-          weight?: number | null
+          reps?: number
+          type?: Database["public"]["Enums"]["set_type"]
+          weight?: number
         }
         Relationships: []
       }
@@ -240,21 +240,21 @@ export type Database = {
       workout_log_exercise: {
         Row: {
           exercise_id: string
-          index: number | null
+          index: number
           workout_log_exercise_id: string
-          workout_log_id: string | null
+          workout_log_id: string
         }
         Insert: {
           exercise_id: string
-          index?: number | null
+          index: number
           workout_log_exercise_id?: string
-          workout_log_id?: string | null
+          workout_log_id: string
         }
         Update: {
           exercise_id?: string
-          index?: number | null
+          index?: number
           workout_log_exercise_id?: string
-          workout_log_id?: string | null
+          workout_log_id?: string
         }
         Relationships: [
           {
@@ -276,23 +276,23 @@ export type Database = {
       workout_log_exercise_set: {
         Row: {
           index: number
-          reps: number | null
-          type: Database["public"]["Enums"]["set_type"] | null
-          weight: number | null
+          reps: number
+          type: Database["public"]["Enums"]["set_type"]
+          weight: number
           workout_log_exercise_id: string
         }
         Insert: {
           index: number
-          reps?: number | null
-          type?: Database["public"]["Enums"]["set_type"] | null
-          weight?: number | null
+          reps: number
+          type: Database["public"]["Enums"]["set_type"]
+          weight: number
           workout_log_exercise_id: string
         }
         Update: {
           index?: number
-          reps?: number | null
-          type?: Database["public"]["Enums"]["set_type"] | null
-          weight?: number | null
+          reps?: number
+          type?: Database["public"]["Enums"]["set_type"]
+          weight?: number
           workout_log_exercise_id?: string
         }
         Relationships: [
@@ -353,21 +353,21 @@ export type Database = {
       workout_template_exercise: {
         Row: {
           exercise_id: string
-          index: number | null
+          index: number
           workout_template_exercise_id: string
-          workout_template_id: string | null
+          workout_template_id: string
         }
         Insert: {
           exercise_id: string
-          index?: number | null
+          index: number
           workout_template_exercise_id?: string
-          workout_template_id?: string | null
+          workout_template_id: string
         }
         Update: {
           exercise_id?: string
-          index?: number | null
+          index?: number
           workout_template_exercise_id?: string
-          workout_template_id?: string | null
+          workout_template_id?: string
         }
         Relationships: [
           {
@@ -389,23 +389,23 @@ export type Database = {
       workout_template_exercise_set: {
         Row: {
           index: number
-          reps: number | null
-          type: Database["public"]["Enums"]["set_type"] | null
-          weight: number | null
+          reps: number
+          type: Database["public"]["Enums"]["set_type"]
+          weight: number
           workout_template_exercise_id: string
         }
         Insert: {
           index: number
-          reps?: number | null
-          type?: Database["public"]["Enums"]["set_type"] | null
-          weight?: number | null
+          reps: number
+          type: Database["public"]["Enums"]["set_type"]
+          weight: number
           workout_template_exercise_id: string
         }
         Update: {
           index?: number
-          reps?: number | null
-          type?: Database["public"]["Enums"]["set_type"] | null
-          weight?: number | null
+          reps?: number
+          type?: Database["public"]["Enums"]["set_type"]
+          weight?: number
           workout_template_exercise_id?: string
         }
         Relationships: [
@@ -708,6 +708,10 @@ export type Database = {
           metadata: Json
           updated_at: string
         }[]
+      }
+      operation: {
+        Args: Record<PropertyKey, never>
+        Returns: string
       }
       search: {
         Args: {

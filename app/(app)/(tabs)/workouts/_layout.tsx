@@ -19,16 +19,23 @@ const WorkoutsLayout: FC = () => {
           title: 'Workouts',
           headerShown: true,
           headerRight: ({ tintColor }) => (
-            <HeaderIcon href="/workouts/add" color={tintColor} name="plus" />
+            <HeaderIcon href="/workouts/create" color={tintColor} name="plus" />
           ),
         }}
       />
       <Stack.Screen
-        name="add"
+        name="create"
         options={{
-          title: 'Add Workout',
+          title: 'Create Workout',
         }}
       />
+      <Stack.Screen
+        name="[workout_template_id]/edit"
+        options={{
+          title: 'Edit Workout',
+        }}
+      />
+      <Stack.Screen name="[workout_template_id]/perform" />
       <Stack.Screen
         name="add-exercise"
         options={{

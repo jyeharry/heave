@@ -20,8 +20,7 @@ export const ProfileProvider: FC<PropsWithChildren<{ session: Session }>> = ({
         .single()
       return res
     },
-    gcTime: 0,
-    staleTime: 0,
+    staleTime: 1000 * 60 * 60 * 24,
   })
 
   return (

@@ -5,9 +5,9 @@ import { View } from 'react-native'
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Row, Table } from 'react-native-reanimated-table'
 import { SET_ROW_HEIGHT, SetRow } from './SetRow'
-import { SetTypeName, WorkoutSchemaType } from '../types'
-import { Text } from '@/components/Text'
+import { WorkoutSchemaType } from '../types'
 import { Button } from '@/components/Button'
+import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
 
 interface ExerciseProps {
@@ -80,7 +80,9 @@ export const WorkoutExercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
           onPress={() =>
             append(
               {
-                setType: { name: 'Standard' },
+                setType: 'Standard',
+                reps: 0,
+                weight: 0,
               },
               { shouldFocus: false },
             )

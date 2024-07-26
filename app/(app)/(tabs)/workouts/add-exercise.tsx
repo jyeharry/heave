@@ -1,6 +1,6 @@
 import { FC } from 'react'
-import { Exercise } from '@/features/Exercise'
+import { Exercises } from '@/features/Exercise'
 
-const AddExercise: FC = () => <Exercise />
+const AddExercise: FC = () => <Exercises />
 
 export default AddExercise

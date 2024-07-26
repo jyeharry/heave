@@ -1,9 +1,10 @@
 import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { FC, useState } from 'react'
 import { Pressable, SectionList, View } from 'react-native'
-import { useExercisesQuery } from './hooks/useExerciseQuery'
+import { useExercisesQuery } from '../hooks/useExerciseQuery'
 import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
+import { WorkoutMode } from '@/features/Workout/types'
 import { Tables } from '@/supabase'
 
 const filterAndCategoriseExercisesByLetterReducer =
@@ -37,11 +38,15 @@ const ExerciseItem = ({
   body_part,
   exercise_id,
   workoutExerciseCount,
+  mode,
+  workout_template_id,
 }: {
   name: string
   body_part: string
   exercise_id: string
-  workoutExerciseCount: string
+  workoutExerciseCount?: string
+  mode?: WorkoutMode
+  workout_template_id?: string
 }) => (
   <Pressable
     style={({ pressed }) => ({
@@ -50,16 +55,19 @@ const ExerciseItem = ({
       paddingVertical: 8,
       opacity: pressed ? 0.5 : 1,
     })}
-    onPress={() =>
+    onPress={() => {
       router.navigate({
-        pathname: '/(app)/(tabs)/workouts/add',
+        pathname:
+          mode === 'create'
+            ? '/(app)/(tabs)/workouts/create'
+            : `/(app)/(tabs)/workouts/${workout_template_id}/${mode}`,
         params: {
           newExerciseName: name,
           newExerciseID: exercise_id,
           workoutExerciseCount,
         },
       })
-    }
+    }}
   >
     <Text>{name}</Text>
     <Text size="notes" style={{ color: theme.colours.grey400 }}>
@@ -68,12 +76,15 @@ const ExerciseItem = ({
   </Pressable>
 )
 
-export const Exercise: FC = () => {
-  const { workoutExerciseCount } = useLocalSearchParams<{
-    newExerciseName?: string
-    newExerciseID?: string
-    workoutExerciseCount?: string
-  }>()
+export const Exercises: FC = () => {
+  const { workoutExerciseCount, workout_template_id, mode } =
+    useLocalSearchParams<{
+      workout_template_id: string
+      newExerciseName: string
+      newExerciseID: string
+      workoutExerciseCount: string
+      mode: WorkoutMode
+    }>()
   const { data } = useExercisesQuery()
   const [filter, setFilter] = useState('')
   const sectionList =
@@ -111,10 +122,12 @@ export const Exercise: FC = () => {
         )}
         renderItem={({ item: { name, body_part, exercise_id } }) => (
           <ExerciseItem
-            name={name!}
-            body_part={body_part!}
+            name={name}
+            body_part={body_part}
             exercise_id={exercise_id}
-            workoutExerciseCount={workoutExerciseCount!}
+            workoutExerciseCount={workoutExerciseCount}
+            workout_template_id={workout_template_id}
+            mode={mode}
           />
         )}
         ItemSeparatorComponent={() => (

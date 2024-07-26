@@ -13,10 +13,11 @@ import { Row } from 'react-native-reanimated-table'
 import { WorkoutModeContext } from './WorkoutModeContext'
 import {
   SetType,
-  SetTypeAbbreviation,
   WorkoutSchemaType,
   WorkoutSet,
+  setTypeAbbreviationMap,
   nonStandardSetTypes,
+  NonStandardSetType,
 } from '../types'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
@@ -78,7 +79,7 @@ export const SetRow = ({
 
   const setType = useWatch<WorkoutSchemaType>({
     name: `${formSetName}.setType`,
-    defaultValue: { name: 'Standard' },
+    defaultValue: 'Standard',
   }) as SetType
 
   const sets = useWatch<WorkoutSchemaType>({
@@ -90,16 +91,22 @@ export const SetRow = ({
     .slice(0, setRowIndex)
     .reduce(
       (numOfWarmups, set) =>
-        set.setType.name === 'Warmup' ? numOfWarmups + 1 : numOfWarmups,
+        set.setType === 'Warmup' ? numOfWarmups + 1 : numOfWarmups,
       0,
     )
+
+  const previousReps =
+    defaultValues?.exercises?.[exerciseIndex]?.sets?.[setRowIndex]?.reps
+  const previousWeight =
+    defaultValues?.exercises?.[exerciseIndex]?.sets?.[setRowIndex]?.weight
+
   const previous =
-    defaultValues?.exercises?.[exerciseIndex]?.sets?.[setRowIndex]?.previous
+    previousReps != null &&
+    previousWeight != null &&
+    `${previousWeight}kg x ${previousReps}`
 
   const setLabel =
-    (setType?.abbreviation != null &&
-      SetTypeAbbreviation[setType.abbreviation]) ||
-    setRowIndex + 1 - numOfPreviousWarmups
+    setTypeAbbreviationMap[setType] || setRowIndex + 1 - numOfPreviousWarmups
 
   const row = [
     <MenuButton
@@ -110,11 +117,11 @@ export const SetRow = ({
         bordered: false,
       }}
       menuProps={{
-        onSelect: (value) => {
-          const isAlreadySelected = setType?.name === value.name
+        onSelect: (value: NonStandardSetType) => {
+          const isAlreadySelected = setType === value
           setValue(
             `${formSetName}.setType`,
-            isAlreadySelected ? { name: 'Standard' } : value,
+            isAlreadySelected ? 'Standard' : value,
           )
         },
       }}
@@ -123,12 +130,12 @@ export const SetRow = ({
         <MenuOption
           key={i}
           value={nonStandardSetType}
-          text={nonStandardSetType.name}
-          active={setType?.name === nonStandardSetType.name}
+          text={nonStandardSetType}
+          active={setType === nonStandardSetType}
         />
       ))}
     </MenuButton>,
-    previous ?? (
+    previous || (
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <Octicons name="dash" size={22} />
       </View>
