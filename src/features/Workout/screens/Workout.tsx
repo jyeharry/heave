@@ -1,15 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link, Stack, router, useLocalSearchParams, useSegments } from 'expo-router'
+import { Stack, router, useLocalSearchParams } from 'expo-router'
 import { FC } from 'react'
-import {
-  useForm,
-  FormProvider,
-  useFieldArray,
-  Controller,
-} from 'react-hook-form'
+import { useForm, FormProvider, Controller } from 'react-hook-form'
 import { Alert, ScrollView, StyleSheet, View } from 'react-native'
-import { WorkoutExercise } from '../components/WorkoutExercise'
+import { WorkoutExercises } from '../components/WorkoutExercises'
 import { WorkoutModeProvider } from '../components/WorkoutModeContext'
 import {
   ExerciseSchemaType,
@@ -28,16 +23,8 @@ export interface WorkoutProps {
 }
 
 export const Workout: FC<WorkoutProps> = ({ mode }) => {
-  const {
-    workout_template_id,
-    newExerciseID,
-    newExerciseName,
-    workoutExerciseCount,
-  } = useLocalSearchParams<{
+  const { workout_template_id } = useLocalSearchParams<{
     workout_template_id?: string
-    newExerciseName?: string
-    newExerciseID?: string
-    workoutExerciseCount?: string
   }>()
 
   const { profile_id } = useProfile()
@@ -82,7 +69,6 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
   const mutation = useMutation({
     mutationFn: async (data: WorkoutSchemaType) => {
       try {
-        console.log(JSON.stringify(data, null, 2))
         const parsedData = WorkoutSchema.parse(data)
 
         const template = await supabase
@@ -93,20 +79,27 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
             author_profile_id: profile_id,
             title: parsedData.title,
             notes: parsedData.notes,
+            ...(mode === 'perform' && {
+              last_performed: new Date().toISOString(),
+            }),
           })
           .select()
           .single()
 
         if (!template.data || template.error) {
-          console.log(template.error)
+          console.error('template.error', template.error)
           return
         }
 
         const templateExercises = await supabase
           .from('workout_template_exercise')
-          .insert(
+          .upsert(
             parsedData.exercises.map((exercise, index) => ({
               workout_template_id: template.data.workout_template_id,
+              ...(exercise.workout_template_exercise_id && {
+                workout_template_exercise_id:
+                  exercise.workout_template_exercise_id,
+              }),
               exercise_id: exercise.exercise.exercise_id,
               index,
             })),
@@ -114,7 +107,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           .select()
 
         if (!templateExercises.data || templateExercises.error) {
-          console.log(template.error)
+          console.error('templateExercises.error', templateExercises.error)
           return
         }
 
@@ -128,7 +121,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           {},
         )
 
-        await supabase.from('workout_template_exercise_set').insert(
+        await supabase.from('workout_template_exercise_set').upsert(
           templateExercises.data.flatMap((tempEx) =>
             exerciseMap[tempEx.exercise_id].sets.map((set, index) => ({
               workout_template_exercise_id: tempEx.workout_template_exercise_id,
@@ -142,7 +135,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
 
         router.back()
       } catch (e) {
-        console.log('Workout schema parse error', e)
+        console.error('Workout schema parse error', e)
       }
     },
     onSuccess: () => {
@@ -150,12 +143,6 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
         queryKey: ['profile', profile_id, 'workouts'],
       })
     },
-  })
-
-  // console.log('hella data', JSON.stringify({ data }, null, 2))
-  console.log('WorkoutSchema.safeParse(data)', {
-    success: WorkoutSchema.safeParse(data).success,
-    error: WorkoutSchema.safeParse(data).error,
   })
 
   const methods = useForm<WorkoutSchemaType>({
@@ -172,28 +159,6 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     resolver: zodResolver(WorkoutSchema),
   })
 
-  console.log('form values', methods.getValues())
-
-  const { fields: exerciseFields, append } = useFieldArray<WorkoutSchemaType>({
-    control: methods.control,
-    name: 'exercises',
-  })
-
-  console.log('exercise fields', JSON.stringify(exerciseFields, null, 2))
-
-  if (
-    Number(workoutExerciseCount) === exerciseFields.length &&
-    newExerciseName &&
-    newExerciseID
-  ) {
-    append({
-      exercise: { name: newExerciseName, exercise_id: newExerciseID },
-      sets: [{ setType: 'Standard', reps: 0, weight: 0 }],
-    })
-  }
-
-  const segments = useSegments()
-
   return (
     <WorkoutModeProvider value={mode}>
       <Stack.Screen
@@ -202,42 +167,31 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           headerRight: () => (
             <Button
               onPress={methods.handleSubmit(
-                (data) => {
+                async (data) => {
                   const hasIncompletedSets = data.exercises.some((ex) =>
                     ex.sets.some((set) => !set.completed),
                   )
-                  let canProceed = true
-                  let processedData: undefined | WorkoutSchemaType
+                  let dataWithoutIncompleteSets: undefined | WorkoutSchemaType
 
                   if (hasIncompletedSets && mode === 'perform') {
-                    Alert.alert(
-                      'Incomplete sets',
-                      'If you proceed, all incomplete sets will be disregarded.',
-                      [
-                        {
-                          text: 'Go back',
-                          style: 'cancel',
-                          onPress: () => (canProceed = false),
-                        },
-                        {
-                          text: 'Submit anyway',
-                          style: 'destructive',
-                          onPress: () => {
-                            processedData = {
-                              ...data,
-                              exercises: data.exercises.map((ex) => ({
-                                ...ex,
-                                sets: ex.sets.filter((set) => set.completed),
-                              })),
-                            }
-                          },
-                        },
-                      ],
-                    )
+                    const willSubmit = await alertWhetherToSubmit()
+
+                    if (!willSubmit) {
+                      return
+                    }
+
+                    dataWithoutIncompleteSets = {
+                      ...data,
+                      exercises: data.exercises.map((ex) => ({
+                        ...ex,
+                        sets: ex.sets.filter((set) => set.completed),
+                      })),
+                    }
                   }
-                  canProceed && mutation.mutate(processedData || data)
+
+                  mutation.mutate(dataWithoutIncompleteSets || data)
                 },
-                (data) => console.log('Error', JSON.stringify(data, null, 2)),
+                (data) => console.error('Error', JSON.stringify(data, null, 2)),
               )}
               style={{ backgroundColor: 'transparent' }}
             >
@@ -287,44 +241,40 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
               )}
             />
           </View>
-          <View style={{ gap: 32 }}>
-            {exerciseFields.map((exercise, i) => (
-              <WorkoutExercise
-                key={exercise.id}
-                exerciseIndex={i}
-                name={methods.getValues(`exercises.${i}.exercise.name`)}
-              />
-            ))}
-            <Link
-              href={{
-                pathname: segments.join('/') + '/add-exercise',
-                params: {
-                  workoutExerciseCount: exerciseFields.length,
-                  mode,
-                  workout_template_id,
-                },
-              }}
-              asChild
-            >
-              <Button>Add Exercise</Button>
-            </Link>
-            <Button
-              colour="danger"
-              onPress={() =>
-                append({
-                  exercise: { name: '', exercise_id: '' },
-                  sets: [{ setType: 'Standard', reps: 0, weight: 0 }],
-                })
-              }
-            >
-              Cancel Workout
-            </Button>
-          </View>
+          <WorkoutExercises />
+          <Button
+            style={{ marginTop: 16 }}
+            colour="danger"
+            onPress={() => router.back()}
+          >
+            Cancel Workout
+          </Button>
         </ScrollView>
       </FormProvider>
     </WorkoutModeProvider>
   )
 }
+
+const alertWhetherToSubmit = () =>
+  new Promise<boolean>((res) =>
+    Alert.alert(
+      'Incomplete sets',
+      'If you proceed, all incomplete sets will be disregarded.',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+          onPress: () => res(false),
+        },
+        {
+          text: 'Submit anyway',
+          style: 'destructive',
+          onPress: () => res(true),
+        },
+      ],
+      { cancelable: false },
+    ),
+  )
 
 const styles = StyleSheet.create({
   container: {
