@@ -24,20 +24,40 @@ const WorkoutsLayout: FC = () => {
         }}
       />
       <Stack.Screen
-        name="create"
+        name="create/index"
         options={{
           title: 'Create Workout',
         }}
       />
       <Stack.Screen
-        name="[workout_template_id]/edit"
+        name="create/add-exercise"
+        options={{
+          presentation: 'modal',
+          title: 'Add Exercise',
+          headerSearchBarOptions: {
+            hideWhenScrolling: true,
+          },
+        }}
+      />
+      <Stack.Screen
+        name="[workout_template_id]/edit/index"
         options={{
           title: 'Edit Workout',
         }}
       />
-      <Stack.Screen name="[workout_template_id]/perform" />
       <Stack.Screen
-        name="add-exercise"
+        name="[workout_template_id]/edit/add-exercise"
+        options={{
+          presentation: 'modal',
+          title: 'Add Exercise',
+          headerSearchBarOptions: {
+            hideWhenScrolling: true,
+          },
+        }}
+      />
+      <Stack.Screen name="[workout_template_id]/perform/index" />
+      <Stack.Screen
+        name="[workout_template_id]/perform/add-exercise"
         options={{
           presentation: 'modal',
           title: 'Add Exercise',

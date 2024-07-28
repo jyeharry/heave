@@ -1,6 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Link, Stack, router, useLocalSearchParams } from 'expo-router'
+import { Link, Stack, router, useLocalSearchParams, useSegments } from 'expo-router'
 import { FC } from 'react'
 import {
   useForm,
@@ -8,7 +8,7 @@ import {
   useFieldArray,
   Controller,
 } from 'react-hook-form'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 import { WorkoutExercise } from '../components/WorkoutExercise'
 import { WorkoutModeProvider } from '../components/WorkoutModeContext'
 import {
@@ -152,12 +152,11 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     },
   })
 
-  console.log('hella data', JSON.stringify({ data }, null, 2))
-  console.log(
-    'WorkoutSchema.safeParse(data)',
-    WorkoutSchema.safeParse(data).success,
-    WorkoutSchema.safeParse(data).error,
-  )
+  // console.log('hella data', JSON.stringify({ data }, null, 2))
+  console.log('WorkoutSchema.safeParse(data)', {
+    success: WorkoutSchema.safeParse(data).success,
+    error: WorkoutSchema.safeParse(data).error,
+  })
 
   const methods = useForm<WorkoutSchemaType>({
     defaultValues: {
@@ -173,10 +172,14 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     resolver: zodResolver(WorkoutSchema),
   })
 
+  console.log('form values', methods.getValues())
+
   const { fields: exerciseFields, append } = useFieldArray<WorkoutSchemaType>({
     control: methods.control,
     name: 'exercises',
   })
+
+  console.log('exercise fields', JSON.stringify(exerciseFields, null, 2))
 
   if (
     Number(workoutExerciseCount) === exerciseFields.length &&
@@ -189,6 +192,8 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     })
   }
 
+  const segments = useSegments()
+
   return (
     <WorkoutModeProvider value={mode}>
       <Stack.Screen
@@ -197,7 +202,41 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           headerRight: () => (
             <Button
               onPress={methods.handleSubmit(
-                (data) => mutation.mutate(data),
+                (data) => {
+                  const hasIncompletedSets = data.exercises.some((ex) =>
+                    ex.sets.some((set) => !set.completed),
+                  )
+                  let canProceed = true
+                  let processedData: undefined | WorkoutSchemaType
+
+                  if (hasIncompletedSets && mode === 'perform') {
+                    Alert.alert(
+                      'Incomplete sets',
+                      'If you proceed, all incomplete sets will be disregarded.',
+                      [
+                        {
+                          text: 'Go back',
+                          style: 'cancel',
+                          onPress: () => (canProceed = false),
+                        },
+                        {
+                          text: 'Submit anyway',
+                          style: 'destructive',
+                          onPress: () => {
+                            processedData = {
+                              ...data,
+                              exercises: data.exercises.map((ex) => ({
+                                ...ex,
+                                sets: ex.sets.filter((set) => set.completed),
+                              })),
+                            }
+                          },
+                        },
+                      ],
+                    )
+                  }
+                  canProceed && mutation.mutate(processedData || data)
+                },
                 (data) => console.log('Error', JSON.stringify(data, null, 2)),
               )}
               style={{ backgroundColor: 'transparent' }}
@@ -258,7 +297,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
             ))}
             <Link
               href={{
-                pathname: '/(app)/(tabs)/workouts/add-exercise',
+                pathname: segments.join('/') + '/add-exercise',
                 params: {
                   workoutExerciseCount: exerciseFields.length,
                   mode,
@@ -269,7 +308,17 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
             >
               <Button>Add Exercise</Button>
             </Link>
-            <Button colour="danger">Cancel Workout</Button>
+            <Button
+              colour="danger"
+              onPress={() =>
+                append({
+                  exercise: { name: '', exercise_id: '' },
+                  sets: [{ setType: 'Standard', reps: 0, weight: 0 }],
+                })
+              }
+            >
+              Cancel Workout
+            </Button>
           </View>
         </ScrollView>
       </FormProvider>

@@ -70,7 +70,7 @@ const ExerciseItem = ({
     }}
   >
     <Text>{name}</Text>
-    <Text size="notes" style={{ color: theme.colours.grey400 }}>
+    <Text type="notes" style={{ color: theme.colours.grey400 }}>
       {body_part}
     </Text>
   </Pressable>
@@ -115,7 +115,7 @@ export const Exercises: FC = () => {
               backgroundColor: theme.colours.grey100,
             }}
           >
-            <Text size="notes" style={{ color: theme.colours.grey400 }}>
+            <Text type="notes" style={{ color: theme.colours.grey400 }}>
               {title}
             </Text>
           </View>

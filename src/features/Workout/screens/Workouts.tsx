@@ -12,7 +12,7 @@ export const Workouts = () => {
     queryFn: async () => {
       return supabase
         .from('workout_template')
-        .select('workout_template_id, title, updated_at')
+        .select('workout_template_id, title, last_performed')
         .eq('profile_id', profile_id)
     },
   })
@@ -20,12 +20,13 @@ export const Workouts = () => {
   return (
     <View style={styles.container}>
       {isFetching && <Text>Loading</Text>}
-      {data?.data?.map(({ title, updated_at, workout_template_id }) => (
+      {data?.data?.map(({ title, last_performed, workout_template_id }) => (
         <WorkoutCard
           key={workout_template_id}
           title={title}
-          lastPerformed={updated_at}
-          id={workout_template_id}
+          profileID={profile_id}
+          lastPerformed={last_performed}
+          workoutTemplateID={workout_template_id}
         />
       ))}
     </View>

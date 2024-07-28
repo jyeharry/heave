@@ -99,27 +99,30 @@ export type Database = {
       workout_entity: {
         Row: {
           author_profile_id: string | null
-          created_at: string | null
+          created_at: string
+          last_performed: string | null
           notes: string | null
           profile_id: string | null
           title: string
-          updated_at: string | null
+          updated_at: string
         }
         Insert: {
           author_profile_id?: string | null
-          created_at?: string | null
+          created_at?: string
+          last_performed?: string | null
           notes?: string | null
           profile_id?: string | null
           title: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Update: {
           author_profile_id?: string | null
-          created_at?: string | null
+          created_at?: string
+          last_performed?: string | null
           notes?: string | null
           profile_id?: string | null
           title?: string
-          updated_at?: string | null
+          updated_at?: string
         }
         Relationships: [
           {
@@ -185,31 +188,34 @@ export type Database = {
       workout_log: {
         Row: {
           author_profile_id: string | null
-          created_at: string | null
+          created_at: string
+          last_performed: string | null
           notes: string | null
           profile_id: string
           title: string
-          updated_at: string | null
+          updated_at: string
           workout_log_id: string
           workout_template_id: string | null
         }
         Insert: {
           author_profile_id?: string | null
-          created_at?: string | null
+          created_at?: string
+          last_performed?: string | null
           notes?: string | null
           profile_id: string
           title: string
-          updated_at?: string | null
+          updated_at?: string
           workout_log_id?: string
           workout_template_id?: string | null
         }
         Update: {
           author_profile_id?: string | null
-          created_at?: string | null
+          created_at?: string
+          last_performed?: string | null
           notes?: string | null
           profile_id?: string
           title?: string
-          updated_at?: string | null
+          updated_at?: string
           workout_log_id?: string
           workout_template_id?: string | null
         }
@@ -308,29 +314,32 @@ export type Database = {
       workout_template: {
         Row: {
           author_profile_id: string | null
-          created_at: string | null
+          created_at: string
+          last_performed: string | null
           notes: string | null
           profile_id: string
           title: string
-          updated_at: string | null
+          updated_at: string
           workout_template_id: string
         }
         Insert: {
           author_profile_id?: string | null
-          created_at?: string | null
+          created_at?: string
+          last_performed?: string | null
           notes?: string | null
           profile_id: string
           title: string
-          updated_at?: string | null
+          updated_at?: string
           workout_template_id?: string
         }
         Update: {
           author_profile_id?: string | null
-          created_at?: string | null
+          created_at?: string
+          last_performed?: string | null
           notes?: string | null
           profile_id?: string
           title?: string
-          updated_at?: string | null
+          updated_at?: string
           workout_template_id?: string
         }
         Relationships: [
