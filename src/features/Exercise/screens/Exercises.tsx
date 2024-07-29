@@ -39,14 +39,14 @@ const ExerciseItem = ({
   exercise_id,
   workoutExerciseCount,
   mode,
-  workout_template_id,
+  workoutTemplateID,
 }: {
   name: string
   body_part: string
   exercise_id: string
   workoutExerciseCount?: string
   mode?: WorkoutMode
-  workout_template_id?: string
+  workoutTemplateID?: string
 }) => (
   <Pressable
     style={({ pressed }) => ({
@@ -60,7 +60,7 @@ const ExerciseItem = ({
         pathname:
           mode === 'create'
             ? '/(app)/(tabs)/workouts/create'
-            : `/(app)/(tabs)/workouts/${workout_template_id}/${mode}`,
+            : `/(app)/(tabs)/workouts/${workoutTemplateID}/${mode}`,
         params: {
           newExerciseName: name,
           newExerciseID: exercise_id,
@@ -77,9 +77,9 @@ const ExerciseItem = ({
 )
 
 export const Exercises: FC = () => {
-  const { workoutExerciseCount, workout_template_id, mode } =
+  const { workoutExerciseCount, workoutTemplateID, mode } =
     useLocalSearchParams<{
-      workout_template_id: string
+      workoutTemplateID: string
       newExerciseName: string
       newExerciseID: string
       workoutExerciseCount: string
@@ -126,7 +126,7 @@ export const Exercises: FC = () => {
             body_part={body_part}
             exercise_id={exercise_id}
             workoutExerciseCount={workoutExerciseCount}
-            workout_template_id={workout_template_id}
+            workoutTemplateID={workoutTemplateID}
             mode={mode}
           />
         )}

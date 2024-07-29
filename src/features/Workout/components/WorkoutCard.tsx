@@ -1,22 +1,15 @@
-import { useQuery } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
-import { Link } from 'expo-router'
 import { FC, useState } from 'react'
-import { Pressable, View, useWindowDimensions } from 'react-native'
-import Modal from 'react-native-modal'
+import { Pressable, useWindowDimensions } from 'react-native'
 import { WorkoutModal } from './WorkoutModal'
 import { Card } from '@/components/Card'
-import { IconButton } from '@/components/IconButton'
 import { Text } from '@/components/Text'
-import { theme } from '@/constants/theme'
-import { supabase } from '@/supabase'
 
 export const WorkoutCard: FC<{
   title: string
   lastPerformed?: string | null
-  profileID: string
   workoutTemplateID: string
-}> = ({ title, lastPerformed, workoutTemplateID, profileID }) => {
+}> = ({ title, lastPerformed, workoutTemplateID }) => {
   const { width } = useWindowDimensions()
   const [visible, setVisible] = useState(false)
 
@@ -45,7 +38,6 @@ export const WorkoutCard: FC<{
         visible={visible}
         title={title}
         lastPerformedToNow={lastPerformedToNow}
-        profileID={profileID}
         workoutTemplateID={workoutTemplateID}
       />
     </>

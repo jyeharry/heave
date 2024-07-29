@@ -1,0 +1,42 @@
+{
+  "title": "Push",
+  "notes": "One second concentric, three second eccentric",
+  "exercises": [
+    {
+      "exercise": {
+        "name": "Barbell Bench Press",
+        "exercise_id": "bae25d07-c140-460a-8537-17a05747fc8f"
+      },
+      "sets": [
+        {
+          "setType": "Warmup",
+          "weight": 40,
+          "reps": 8
+        },
+        {
+          "setType": "Standard",
+          "weight": 75,
+          "reps": 8
+        }
+      ]
+    },
+    {
+      "exercise": {
+        "name": "Incline Dumbbell Press",
+        "exercise_id": "72c1f863-3bb6-458d-9f34-b9f249cc41ae"
+      },
+      "sets": [
+        {
+          "setType": "Standard",
+          "weight": 27.5,
+          "reps": 8
+        },
+        {
+          "setType": "Standard",
+          "weight": 27.5,
+          "reps": 8
+        }
+      ]
+    }
+  ]
+}

@@ -6,6 +6,7 @@ import { useForm, FormProvider, Controller } from 'react-hook-form'
 import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 import { WorkoutExercises } from '../components/WorkoutExercises'
 import { WorkoutModeProvider } from '../components/WorkoutModeContext'
+import { workoutTemplateQueries } from '../queries'
 import {
   ExerciseSchemaType,
   WorkoutMode,
@@ -18,48 +19,19 @@ import { theme } from '@/constants/theme'
 import { useProfile } from '@/hooks/useProfile'
 import { supabase } from '@/supabase'
 
-export interface WorkoutProps {
+interface WorkoutProps {
   mode: WorkoutMode
 }
 
 export const Workout: FC<WorkoutProps> = ({ mode }) => {
-  const { workout_template_id } = useLocalSearchParams<{
-    workout_template_id?: string
+  const { workoutTemplateID } = useLocalSearchParams<{
+    workoutTemplateID: string
   }>()
 
   const { profile_id } = useProfile()
 
   const { data } = useQuery({
-    queryKey: ['profile', profile_id, 'workout', workout_template_id],
-    queryFn: async () => {
-      const res = await supabase
-        .from('workout_template')
-        .select(
-          `
-          workout_template_id,
-          title,
-          notes,
-          exercises:workout_template_exercise (
-            exercise (
-              exercise_id,
-              name
-            ),
-            index,
-            sets:workout_template_exercise_set (
-              setType:type,
-              reps,
-              weight,
-              index
-            )
-          )
-        `,
-        )
-        .eq('workout_template_id', workout_template_id!)
-        .eq('profile_id', profile_id)
-        .single()
-
-      return res.data
-    },
+    ...workoutTemplateQueries.detail(workoutTemplateID!),
     enabled: mode === 'edit' || mode === 'perform',
     gcTime: 0,
   })
@@ -74,7 +46,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
         const template = await supabase
           .from('workout_template')
           .upsert({
-            workout_template_id: parsedData.workout_template_id,
+            workout_template_id: parsedData.workoutTemplateID,
             profile_id,
             author_profile_id: profile_id,
             title: parsedData.title,
@@ -96,9 +68,9 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           .upsert(
             parsedData.exercises.map((exercise, index) => ({
               workout_template_id: template.data.workout_template_id,
-              ...(exercise.workout_template_exercise_id && {
+              ...(exercise.workoutTemplateExerciseID && {
                 workout_template_exercise_id:
-                  exercise.workout_template_exercise_id,
+                  exercise.workoutTemplateExerciseID,
               }),
               exercise_id: exercise.exercise.exercise_id,
               index,
@@ -132,6 +104,12 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
             })),
           ),
         )
+
+        // if (mode === 'perform') {
+        //   queryClient.fetchQuery(
+        //     workoutTemplateQueries.detail(workoutTemplateID!),
+        //   )
+        // }
 
         router.back()
       } catch (e) {

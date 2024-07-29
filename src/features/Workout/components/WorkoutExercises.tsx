@@ -9,12 +9,12 @@ import { Button } from '@/components/Button'
 
 export const WorkoutExercises = () => {
   const {
-    workout_template_id,
+    workoutTemplateID,
     newExerciseID,
     newExerciseName,
     workoutExerciseCount,
   } = useLocalSearchParams<{
-    workout_template_id?: string
+    workoutTemplateID: string
     newExerciseName?: string
     newExerciseID?: string
     workoutExerciseCount?: string
@@ -55,7 +55,7 @@ export const WorkoutExercises = () => {
           params: {
             workoutExerciseCount: exerciseFields.length,
             mode,
-            workout_template_id,
+            workoutTemplateID,
           },
         }}
         asChild

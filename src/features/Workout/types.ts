@@ -28,7 +28,7 @@ export const WorkoutSetSchema = z.object({
 export type WorkoutSet = z.infer<typeof WorkoutSetSchema>
 
 const ExerciseSchema = z.object({
-  workout_template_exercise_id: z.string().uuid().optional(),
+  workoutTemplateExerciseID: z.string().uuid().optional(),
   exercise: z.object({
     name: z.string(),
     exercise_id: z.string().uuid(),
@@ -39,7 +39,7 @@ const ExerciseSchema = z.object({
 export type ExerciseSchemaType = z.infer<typeof ExerciseSchema>
 
 export const WorkoutSchema = z.object({
-  workout_template_id: z.string().uuid().optional(),
+  workoutTemplateID: z.string().uuid().optional(),
   title: z.string().min(1),
   notes: z.string().optional().nullable(),
   exercises: z.array(ExerciseSchema),

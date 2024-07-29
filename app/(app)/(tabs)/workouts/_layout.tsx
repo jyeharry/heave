@@ -40,13 +40,13 @@ const WorkoutsLayout: FC = () => {
         }}
       />
       <Stack.Screen
-        name="[workout_template_id]/edit/index"
+        name="[workoutTemplateID]/edit/index"
         options={{
           title: 'Edit Workout',
         }}
       />
       <Stack.Screen
-        name="[workout_template_id]/edit/add-exercise"
+        name="[workoutTemplateID]/edit/add-exercise"
         options={{
           presentation: 'modal',
           title: 'Add Exercise',
@@ -55,9 +55,9 @@ const WorkoutsLayout: FC = () => {
           },
         }}
       />
-      <Stack.Screen name="[workout_template_id]/perform/index" />
+      <Stack.Screen name="[workoutTemplateID]/perform/index" />
       <Stack.Screen
-        name="[workout_template_id]/perform/add-exercise"
+        name="[workoutTemplateID]/perform/add-exercise"
         options={{
           presentation: 'modal',
           title: 'Add Exercise',

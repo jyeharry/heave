@@ -3,18 +3,17 @@ import { Link } from 'expo-router'
 import { FC } from 'react'
 import { View } from 'react-native'
 import Modal from 'react-native-modal'
+import { workoutTemplateQueries } from '../queries'
 import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import { IconButton } from '@/components/IconButton'
 import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
-import { supabase } from '@/supabase'
 
 export const WorkoutModal: FC<{
   visible: boolean
   setVisible: (v: boolean) => void
   lastPerformedToNow?: string | null
-  profileID: string
   workoutTemplateID: string
   title: string
 }> = ({
@@ -22,42 +21,10 @@ export const WorkoutModal: FC<{
   title,
   setVisible,
   lastPerformedToNow,
-  profileID,
   workoutTemplateID,
 }) => {
-  const key = ['profile', profileID, 'workout', workoutTemplateID]
   const res = useQuery({
-    queryKey: key,
-    queryFn: async () => {
-      const res = await supabase
-        .from('workout_template')
-        .select(
-          `
-            workout_template_id,
-            title,
-            notes,
-            exercises:workout_template_exercise (
-              exercise (
-                exercise_id,
-                name
-              ),
-              index,
-              sets:workout_template_exercise_set (
-                setType:type,
-                reps,
-                weight,
-                index
-              )
-            )
-          `,
-        )
-        .eq('workout_template_id', workoutTemplateID)
-        .eq('profile_id', profileID)
-        .single()
-
-      if (res.error) throw new Error(res.error.message)
-      return res.data
-    },
+    ...workoutTemplateQueries.detail(workoutTemplateID),
     enabled: visible,
     gcTime: 0,
   })
@@ -90,8 +57,8 @@ export const WorkoutModal: FC<{
           <Text>{title}</Text>
           <Link
             href={{
-              pathname: '/workouts/[workout_template_id]/edit',
-              params: { workout_template_id: workoutTemplateID },
+              pathname: '/workouts/[workoutTemplateID]/edit',
+              params: { workoutTemplateID },
             }}
             onPress={() => setVisible(false)}
           >
@@ -105,8 +72,8 @@ export const WorkoutModal: FC<{
           {res.data?.notes && <Text type="notes">{res.data.notes}</Text>}
           <Link
             href={{
-              pathname: '/workouts/[workout_template_id]/perform',
-              params: { workout_template_id: workoutTemplateID },
+              pathname: '/workouts/[workoutTemplateID]/perform',
+              params: { workoutTemplateID },
             }}
             onPress={() => setVisible(false)}
             asChild
