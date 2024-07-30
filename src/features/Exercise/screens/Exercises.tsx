@@ -4,14 +4,23 @@ import { Pressable, SectionList, View } from 'react-native'
 import { useExercisesQuery } from '../hooks/useExerciseQuery'
 import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
-import { WorkoutMode } from '@/features/Workout/types'
-import { Tables } from '@/supabase'
 
 const filterAndCategoriseExercisesByLetterReducer =
   (filter: string) =>
   (
-    sectionList: { title: string; data: Tables<'exercise'>[] }[],
-    exercise: Tables<'exercise'>,
+    sectionList: {
+      title: string
+      data: {
+        name: string
+        bodyPart: string
+        exerciseID: string
+      }[]
+    }[],
+    exercise: {
+      name: string
+      bodyPart: string
+      exerciseID: string
+    },
   ) => {
     if (
       !exercise.name ||
@@ -38,15 +47,11 @@ const ExerciseItem = ({
   body_part,
   exercise_id,
   workoutExerciseCount,
-  mode,
-  workoutTemplateID,
 }: {
   name: string
   body_part: string
   exercise_id: string
   workoutExerciseCount?: string
-  mode?: WorkoutMode
-  workoutTemplateID?: string
 }) => (
   <Pressable
     style={({ pressed }) => ({
@@ -57,10 +62,7 @@ const ExerciseItem = ({
     })}
     onPress={() => {
       router.navigate({
-        pathname:
-          mode === 'create'
-            ? '/(app)/(tabs)/workouts/create'
-            : `/(app)/(tabs)/workouts/${workoutTemplateID}/${mode}`,
+        pathname: '.',
         params: {
           newExerciseName: name,
           newExerciseID: exercise_id,
@@ -77,14 +79,9 @@ const ExerciseItem = ({
 )
 
 export const Exercises: FC = () => {
-  const { workoutExerciseCount, workoutTemplateID, mode } =
-    useLocalSearchParams<{
-      workoutTemplateID: string
-      newExerciseName: string
-      newExerciseID: string
-      workoutExerciseCount: string
-      mode: WorkoutMode
-    }>()
+  const { workoutExerciseCount } = useLocalSearchParams<{
+    workoutExerciseCount: string
+  }>()
   const { data } = useExercisesQuery()
   const [filter, setFilter] = useState('')
   const sectionList =
@@ -102,7 +99,7 @@ export const Exercises: FC = () => {
       <SectionList
         contentInsetAdjustmentBehavior="automatic"
         sections={sectionList}
-        keyExtractor={(item) => item.exercise_id}
+        keyExtractor={(item) => item.exerciseID}
         renderSectionHeader={({ section: { title } }) => (
           <View
             style={{
@@ -120,14 +117,12 @@ export const Exercises: FC = () => {
             </Text>
           </View>
         )}
-        renderItem={({ item: { name, body_part, exercise_id } }) => (
+        renderItem={({ item: { name, bodyPart, exerciseID } }) => (
           <ExerciseItem
             name={name}
-            body_part={body_part}
-            exercise_id={exercise_id}
+            body_part={bodyPart}
+            exercise_id={exerciseID}
             workoutExerciseCount={workoutExerciseCount}
-            workoutTemplateID={workoutTemplateID}
-            mode={mode}
           />
         )}
         ItemSeparatorComponent={() => (

@@ -110,15 +110,14 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
         //     workoutTemplateQueries.detail(workoutTemplateID!),
         //   )
         // }
-
-        router.back()
       } catch (e) {
         console.error('Workout schema parse error', e)
       }
     },
     onSuccess: () => {
+      router.back()
       queryClient.invalidateQueries({
-        queryKey: ['profile', profile_id, 'workouts'],
+        queryKey: workoutTemplateQueries.list(profile_id).queryKey,
       })
     },
   })

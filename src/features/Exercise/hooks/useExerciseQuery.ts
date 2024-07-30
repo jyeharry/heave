@@ -1,11 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { supabase } from '@/supabase'
+import { exerciseQueries } from '../queries'
 
 export const useExercisesQuery = () =>
   useQuery({
-    queryKey: ['exercises'],
-    queryFn: async () => {
-      const { data } = await supabase.from('exercise').select().order('name')
-      return data
-    },
+    ...exerciseQueries.list,
+    gcTime: 1000 * 60 * 60 * 6,
+    staleTime: Infinity,
   })
