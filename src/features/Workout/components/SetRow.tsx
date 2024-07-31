@@ -183,6 +183,7 @@ export const SetRow = ({
 
   return (
     <Swipeable
+      enabled={workoutMode === 'perform'}
       containerStyle={{ overflow: 'visible' }}
       overshootFriction={2}
       renderRightActions={() => (

@@ -130,9 +130,9 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     values: WorkoutSchema.safeParse(data).success
       ? WorkoutSchema.safeParse(data).data
       : {
-          title: '',
-          exercises: [],
-        },
+        title: '',
+        exercises: [],
+      },
     resolver: zodResolver(WorkoutSchema),
   })
 
@@ -179,9 +179,10 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
       />
       <FormProvider {...methods}>
         <ScrollView
-          contentInset={{ bottom: 48 }}
           style={styles.container}
           contentContainerStyle={contentStyles.container}
+          contentInset={{ bottom: 48 }}
+          automaticallyAdjustKeyboardInsets
         >
           <View>
             <Controller
