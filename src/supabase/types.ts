@@ -100,7 +100,6 @@ export type Database = {
         Row: {
           author_profile_id: string | null
           created_at: string
-          last_performed: string | null
           notes: string | null
           profile_id: string | null
           title: string
@@ -109,7 +108,6 @@ export type Database = {
         Insert: {
           author_profile_id?: string | null
           created_at?: string
-          last_performed?: string | null
           notes?: string | null
           profile_id?: string | null
           title: string
@@ -118,7 +116,6 @@ export type Database = {
         Update: {
           author_profile_id?: string | null
           created_at?: string
-          last_performed?: string | null
           notes?: string | null
           profile_id?: string | null
           title?: string
@@ -174,7 +171,7 @@ export type Database = {
         Insert: {
           index?: number | null
           reps: number
-          type: Database["public"]["Enums"]["set_type"]
+          type?: Database["public"]["Enums"]["set_type"]
           weight: number
         }
         Update: {
@@ -189,7 +186,6 @@ export type Database = {
         Row: {
           author_profile_id: string | null
           created_at: string
-          last_performed: string | null
           notes: string | null
           profile_id: string
           title: string
@@ -200,7 +196,6 @@ export type Database = {
         Insert: {
           author_profile_id?: string | null
           created_at?: string
-          last_performed?: string | null
           notes?: string | null
           profile_id: string
           title: string
@@ -211,7 +206,6 @@ export type Database = {
         Update: {
           author_profile_id?: string | null
           created_at?: string
-          last_performed?: string | null
           notes?: string | null
           profile_id?: string
           title?: string
@@ -290,7 +284,7 @@ export type Database = {
         Insert: {
           index: number
           reps: number
-          type: Database["public"]["Enums"]["set_type"]
+          type?: Database["public"]["Enums"]["set_type"]
           weight: number
           workout_log_exercise_id: string
         }
@@ -406,7 +400,7 @@ export type Database = {
         Insert: {
           index: number
           reps: number
-          type: Database["public"]["Enums"]["set_type"]
+          type?: Database["public"]["Enums"]["set_type"]
           weight: number
           workout_template_exercise_id: string
         }
@@ -432,7 +426,12 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      upsert_workout: {
+        Args: {
+          payload: Json
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       set_type: "Standard" | "Warmup" | "Drop set"

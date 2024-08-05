@@ -32,8 +32,9 @@ export const WorkoutExercises = () => {
     newExerciseID
   ) {
     append({
-      exercise: { name: newExerciseName, exercise_id: newExerciseID },
-      sets: [{ setType: 'Standard', reps: 0, weight: 0 }],
+      exercise: { name: newExerciseName, exerciseID: newExerciseID },
+      index: exerciseFields.length,
+      sets: [{ setType: 'Standard', reps: 0, weight: 0, index: 0 }],
     })
   }
 

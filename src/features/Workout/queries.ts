@@ -9,13 +9,14 @@ export const workoutTemplateQueries = createQueryKeys('workout-template', {
         .from('workout_template')
         .select(
           `
-            workout_template_id,
+            workoutTemplateID:workout_template_id,
             title,
             notes,
+            lastPerformed:last_performed,
             exercises:workout_template_exercise (
               workoutTemplateExerciseID:workout_template_exercise_id,
               exercise (
-                exercise_id,
+                exerciseID:exercise_id,
                 name
               ),
               index,

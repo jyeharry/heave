@@ -23,6 +23,7 @@ export const WorkoutSetSchema = z.object({
   weight: z.coerce.number().nonnegative().default(0),
   reps: z.coerce.number().int().nonnegative().default(0),
   completed: z.optional(z.boolean().default(false)),
+  index: z.number().int().nonnegative(),
 })
 
 export type WorkoutSet = z.infer<typeof WorkoutSetSchema>
@@ -31,18 +32,23 @@ const ExerciseSchema = z.object({
   workoutTemplateExerciseID: z.string().uuid().optional(),
   exercise: z.object({
     name: z.string(),
-    exercise_id: z.string().uuid(),
+    exerciseID: z.string().uuid(),
   }),
+  index: z.number().int().nonnegative(),
   sets: z.array(WorkoutSetSchema),
 })
 
 export type ExerciseSchemaType = z.infer<typeof ExerciseSchema>
 
-export const WorkoutSchema = z.object({
-  workoutTemplateID: z.string().uuid().optional(),
-  title: z.string().min(1),
-  notes: z.string().optional().nullable(),
-  exercises: z.array(ExerciseSchema),
-})
+export const WorkoutSchema = z
+  .object({
+    title: z.string().min(1),
+    notes: z.string().optional().nullable(),
+    mode: z.enum(['create', 'edit', 'perform']),
+    workoutTemplateID: z.string().uuid().optional(),
+    lastPerformed: z.string().datetime().optional(),
+    exercises: z.array(ExerciseSchema),
+  })
+  .strict()
 
 export type WorkoutSchemaType = z.infer<typeof WorkoutSchema>

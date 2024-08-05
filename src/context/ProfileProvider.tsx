@@ -18,13 +18,14 @@ export const ProfileProvider: FC<PropsWithChildren<{ session: Session }>> = ({
         .select()
         .eq('profile_id', session.user.id)
         .single()
-      return res
+      if (res.error) throw new Error(res.error.message)
+      return res.data
     },
     staleTime: 1000 * 60 * 60 * 24,
   })
 
   return (
-    <ProfileContext.Provider value={data?.data || null}>
+    <ProfileContext.Provider value={data || null}>
       {children}
     </ProfileContext.Provider>
   )

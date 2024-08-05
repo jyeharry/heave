@@ -174,16 +174,17 @@ export const SetRow = ({
         />
       )}
     />,
-    <CompleteSetButton
-      completed={!!completed}
-      onPress={() => setValue(`${formSetName}.completed`, !completed)}
-      disabled={workoutMode !== 'perform'}
-    />,
+    <View style={{ backgroundColor: theme.backgroundColour, borderRadius: 8 }}>
+      <CompleteSetButton
+        completed={!!completed}
+        onPress={() => setValue(`${formSetName}.completed`, !completed)}
+        disabled={workoutMode !== 'perform'}
+      />
+    </View>,
   ]
 
   return (
     <Swipeable
-      enabled={workoutMode === 'perform'}
       containerStyle={{ overflow: 'visible' }}
       overshootFriction={2}
       renderRightActions={() => (

@@ -1,6 +1,6 @@
 import MCIcon from '@expo/vector-icons/MaterialCommunityIcons'
 import { FC } from 'react'
-import { useFieldArray } from 'react-hook-form'
+import { useFieldArray, useFormContext } from 'react-hook-form'
 import { View } from 'react-native'
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Row, Table } from 'react-native-reanimated-table'
@@ -23,6 +23,8 @@ export const WorkoutExercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
   } = useFieldArray<WorkoutSchemaType>({
     name: `exercises.${exerciseIndex}.sets`,
   })
+
+  const { getValues } = useFormContext()
 
   const header = [
     'Set',
@@ -82,7 +84,10 @@ export const WorkoutExercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
               {
                 setType: 'Standard',
                 reps: 0,
-                weight: 0,
+                weight: getValues(
+                  `exercises.${exerciseIndex}.sets.${setFields.length - 1}.weight`,
+                ),
+                index: setFields.length,
               },
               { shouldFocus: false },
             )

@@ -1,16 +1,30 @@
 import { useQuery } from '@tanstack/react-query'
-import { StyleSheet, View } from 'react-native'
+import { RefreshControl, ScrollView, StyleSheet } from 'react-native'
 import { WorkoutCard } from '../components/WorkoutCard'
 import { workoutTemplateQueries } from '../queries'
 import { Text } from '@/components/Text'
+import { theme } from '@/constants/theme'
 import { useProfile } from '@/hooks/useProfile'
 
+// TODO: remove non null assertions
 export const Workouts = () => {
-  const { profile_id } = useProfile()
-  const { data, isFetching } = useQuery(workoutTemplateQueries.list(profile_id))
+  const profile = useProfile()
+  const { data, isFetching, refetch, isRefetching } = useQuery(
+    workoutTemplateQueries.list(profile?.profile_id!),
+  )
 
   return (
-    <View style={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      refreshControl={
+        <RefreshControl
+          refreshing={isRefetching}
+          colors={[theme.colours.primary]}
+          tintColor={theme.colours.primary}
+          onRefresh={refetch}
+        />
+      }
+    >
       {isFetching && <Text>Loading</Text>}
       {data?.data?.map(({ title, last_performed, workoutTemplateID }, i) => (
         <WorkoutCard
@@ -20,7 +34,7 @@ export const Workouts = () => {
           workoutTemplateID={workoutTemplateID}
         />
       ))}
-    </View>
+    </ScrollView>
   )
 }
 
