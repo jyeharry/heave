@@ -1,25 +1,37 @@
+import { Entypo } from '@expo/vector-icons'
 import MCIcon from '@expo/vector-icons/MaterialCommunityIcons'
+import { router } from 'expo-router'
 import { FC } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import {
+  UseFieldArrayRemove,
+  useFieldArray,
+  useFormContext,
+} from 'react-hook-form'
 import { View } from 'react-native'
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Row, Table } from 'react-native-reanimated-table'
 import { SET_ROW_HEIGHT, SetRow } from './SetRow'
 import { WorkoutSchemaType } from '../types'
 import { Button } from '@/components/Button'
+import { MenuButton, MenuOption } from '@/components/Menu'
 import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
 
 interface ExerciseProps {
   name: string
   exerciseIndex: number
+  remove: UseFieldArrayRemove
 }
 
-export const WorkoutExercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
+export const WorkoutExercise: FC<ExerciseProps> = ({
+  name,
+  exerciseIndex,
+  remove,
+}) => {
   const {
     fields: setFields,
     append,
-    remove,
+    remove: removeSet,
   } = useFieldArray<WorkoutSchemaType>({
     name: `exercises.${exerciseIndex}.sets`,
   })
@@ -52,7 +64,31 @@ export const WorkoutExercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
   return (
     <View>
       <Table style={{ rowGap }}>
-        <Text>{name}</Text>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+          <Text>{name}</Text>
+          <MenuButton
+            triggerButtonChildren={
+              <Entypo name="dots-three-horizontal" size={16} />
+            }
+            triggerButtonProps={{
+              size: 'small',
+              colour: 'grey',
+              bordered: false,
+            }}
+          >
+            <MenuOption
+              text="Remove exercise"
+              onSelect={() => {
+                router.setParams({
+                  newExerciseName: undefined,
+                  newExerciseID: undefined,
+                  workoutExerciseCount: undefined,
+                })
+                remove(exerciseIndex)
+              }}
+            />
+          </MenuButton>
+        </View>
         <Row
           data={header}
           flexArr={flexArr}
@@ -72,7 +108,7 @@ export const WorkoutExercise: FC<ExerciseProps> = ({ name, exerciseIndex }) => {
               exerciseIndex={exerciseIndex}
               setRowIndex={i}
               flexArr={flexArr}
-              remove={remove}
+              remove={removeSet}
             />
           ))}
         </Animated.View>

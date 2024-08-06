@@ -6,10 +6,12 @@ export const MenuOption: FC<MenuOptionProps & { active?: boolean }> = ({
   value,
   text,
   active,
+  onSelect,
 }) => (
   <Option
     value={value}
     text={text}
+    onSelect={onSelect}
     customStyles={{
       optionWrapper: [
         {

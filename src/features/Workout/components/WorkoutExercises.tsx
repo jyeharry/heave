@@ -22,7 +22,11 @@ export const WorkoutExercises = () => {
 
   const segments = useSegments()
 
-  const { fields: exerciseFields, append } = useFieldArray<WorkoutSchemaType>({
+  const {
+    fields: exerciseFields,
+    append,
+    remove,
+  } = useFieldArray<WorkoutSchemaType>({
     name: 'exercises',
   })
 
@@ -48,6 +52,7 @@ export const WorkoutExercises = () => {
           key={exercise.id}
           exerciseIndex={i}
           name={methods.getValues(`exercises.${i}.exercise.name`)}
+          remove={remove}
         />
       ))}
       <Link

@@ -74,8 +74,8 @@ export const MenuButton: FC<{
           TriggerTouchableComponent: Button,
         }}
       >
-        {typeof children === 'function' ? (
-          children
+        {typeof triggerButtonChildren === 'function' ? (
+          triggerButtonChildren
         ) : (
           <Text style={[buttonTextVariants[colour]]}>
             {triggerButtonChildren}
