@@ -3,7 +3,7 @@ import { RefreshControl, ScrollView, StyleSheet } from 'react-native'
 import { WorkoutCard } from '../components/WorkoutCard'
 import { workoutTemplateQueries } from '../queries'
 import { Text } from '@/components/Text'
-import { theme } from '@/constants/theme'
+import { theme } from '@/theme/theme'
 import { useProfile } from '@/hooks/useProfile'
 
 // TODO: remove non null assertions

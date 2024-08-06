@@ -1,5 +1,5 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory'
-import { supabase } from '@/supabase'
+import { supabase } from '@/supabase/supabase'
 
 export const workoutTemplateQueries = createQueryKeys('workout-template', {
   detail: (workoutTemplateID: string) => ({

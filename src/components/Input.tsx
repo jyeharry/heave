@@ -5,7 +5,8 @@ import {
   forwardRef,
 } from 'react'
 import { TextInputProps, StyleSheet, TextInput } from 'react-native'
-import { BaseColourMap, theme } from '@/constants/theme'
+import { theme } from '@/theme/theme'
+import { BaseColourMap } from '@/theme/types'
 
 type InputColourMap = Pick<BaseColourMap, 'grey'>
 

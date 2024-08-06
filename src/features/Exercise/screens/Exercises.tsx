@@ -3,7 +3,7 @@ import { FC, useState } from 'react'
 import { Pressable, SectionList, View } from 'react-native'
 import { useExercisesQuery } from '../hooks/useExerciseQuery'
 import { Text } from '@/components/Text'
-import { theme } from '@/constants/theme'
+import { theme } from '@/theme/theme'
 
 const filterAndCategoriseExercisesByLetterReducer =
   (filter: string) =>

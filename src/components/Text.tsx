@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { Text as RNText, TextProps as RNTextProps } from 'react-native'
-import { theme } from '@/constants/theme'
+import { theme } from '@/theme/theme'
 
 interface TextProps extends RNTextProps {
   type?: keyof typeof theme.text

@@ -7,7 +7,8 @@ import React, {
 } from 'react'
 import { Pressable, PressableProps, StyleSheet, View } from 'react-native'
 import { Text } from './Text'
-import { theme, BaseColourMap } from '@/constants/theme'
+import { theme } from '@/theme/theme'
+import { BaseColourMap } from '@/theme/types'
 
 type ButtonColourMap = Pick<BaseColourMap, 'primary' | 'danger' | 'grey'>
 

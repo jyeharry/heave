@@ -21,8 +21,9 @@ import {
 } from '../types'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
-import { MenuButton, MenuOption } from '@/components/Menu'
-import { theme } from '@/constants/theme'
+import { MenuButton } from '@/components/Menu/MenuButton'
+import { MenuOption } from '@/components/Menu/MenuOption'
+import { theme } from '@/theme/theme'
 
 const CompleteSetButton: FC<
   PressableProps & {

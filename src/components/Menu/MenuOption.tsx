@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { MenuOption as Option, MenuOptionProps } from 'react-native-popup-menu'
-import { theme } from '@/constants/theme'
+import { theme } from '@/theme/theme'
 
 export const MenuOption: FC<MenuOptionProps & { active?: boolean }> = ({
   value,
