@@ -9,8 +9,8 @@
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "eslint .",
-    "gen-types": "supabase gen types typescript --linked > src/supabase/types.ts",
-    "gen-types-local": "supabase gen types typescript --local > src/supabase/types.ts"
+    "gen-types": "supabase gen types typescript --linked > src/supabase/types.ts && prettier --write src/supabase/types.ts",
+    "gen-types-local": "supabase gen types typescript --local > src/supabase/types.ts && prettier --write src/supabase/types.ts"
   },
   "jest": {
     "preset": "jest-expo"
