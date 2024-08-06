@@ -1,16 +1,19 @@
 import { formatDistanceToNow } from 'date-fns'
+import { MotiView } from 'moti'
+import { Skeleton } from 'moti/skeleton'
 import { FC, useState } from 'react'
-import { Pressable, useWindowDimensions } from 'react-native'
+import { Pressable, PressableProps } from 'react-native'
 import { WorkoutModal } from './WorkoutModal'
 import { Card } from '@/components/Card'
 import { Text } from '@/components/Text'
 
-export const WorkoutCard: FC<{
-  title: string
-  lastPerformed?: string | null
-  workoutTemplateID: string
-}> = ({ title, lastPerformed, workoutTemplateID }) => {
-  const { width } = useWindowDimensions()
+export const WorkoutCard: FC<
+  {
+    title: string
+    lastPerformed?: string | null
+    workoutTemplateID: string
+  } & PressableProps
+> = ({ title, lastPerformed, workoutTemplateID, style }) => {
   const [visible, setVisible] = useState(false)
 
   let lastPerformedToNow
@@ -21,15 +24,14 @@ export const WorkoutCard: FC<{
 
   return (
     <>
-      <Pressable
-        onPress={() => setVisible(!visible)}
-        style={{
-          flexBasis: width / 2 - 16 * 2 + 8,
-        }}
-      >
+      <Pressable onPress={() => setVisible(!visible)} style={style}>
         <Card>
           <Text>{title}</Text>
-          {lastPerformed && <Text type="notes">{lastPerformedToNow}</Text>}
+          {lastPerformed && (
+            <Text type="notes" style={{ fontSize: 15 }}>
+              {lastPerformedToNow}
+            </Text>
+          )}
         </Card>
       </Pressable>
 
@@ -43,3 +45,22 @@ export const WorkoutCard: FC<{
     </>
   )
 }
+
+export const WorkoutCardSkeleton: FC<{ flexBasis: number }> = ({
+  flexBasis,
+}) => (
+  <Skeleton.Group show>
+    <Card
+      style={{
+        flexBasis,
+      }}
+    >
+      <Skeleton height={16} width="40%" radius="square" colorMode="light" />
+      <MotiView style={{ height: 5 }} />
+      <MotiView>
+        <Skeleton height={15} width="100%" radius="square" colorMode="light" />
+        <Skeleton height={15} width="30%" radius="square" colorMode="light" />
+      </MotiView>
+    </Card>
+  </Skeleton.Group>
+)

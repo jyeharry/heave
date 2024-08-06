@@ -1,1 +1,1 @@
-export {Exercises} from './Exercises'
+export { Exercises } from './Exercises'

@@ -69,10 +69,10 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     values: WorkoutSchema.safeParse(data).success
       ? WorkoutSchema.safeParse(data).data
       : {
-        title: '',
-        mode,
-        exercises: [],
-      },
+          title: '',
+          mode,
+          exercises: [],
+        },
     resolver: zodResolver(WorkoutSchema),
   })
 
