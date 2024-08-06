@@ -10,9 +10,9 @@ import { workoutTemplateQueries } from '../queries'
 import { WorkoutMode, WorkoutSchema, WorkoutSchemaType } from '../types'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
-import { theme } from '@/theme/theme'
 import { useProfile } from '@/hooks/useProfile'
 import { supabase } from '@/supabase/supabase'
+import { theme } from '@/theme/theme'
 
 interface WorkoutProps {
   mode: WorkoutMode
