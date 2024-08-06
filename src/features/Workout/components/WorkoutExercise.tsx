@@ -8,7 +8,7 @@ import { SET_ROW_HEIGHT, SetRow } from './SetRow'
 import { WorkoutSchemaType } from '../types'
 import { Button } from '@/components/Button'
 import { Text } from '@/components/Text'
-import { theme } from '@/theme/theme'
+import { theme } from '@/constants/theme'
 
 interface ExerciseProps {
   name: string

@@ -10,9 +10,9 @@ import { workoutTemplateQueries } from '../queries'
 import { WorkoutMode, WorkoutSchema, WorkoutSchemaType } from '../types'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
+import { theme } from '@/constants/theme'
 import { useProfile } from '@/hooks/useProfile'
-import { supabase } from '@/supabase/supabase'
-import { theme } from '@/theme/theme'
+import { supabase } from '@/supabase'
 
 interface WorkoutProps {
   mode: WorkoutMode
@@ -69,10 +69,10 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     values: WorkoutSchema.safeParse(data).success
       ? WorkoutSchema.safeParse(data).data
       : {
-          title: '',
-          mode,
-          exercises: [],
-        },
+        title: '',
+        mode,
+        exercises: [],
+      },
     resolver: zodResolver(WorkoutSchema),
   })
 

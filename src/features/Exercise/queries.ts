@@ -1,5 +1,5 @@
 import { createQueryKeys } from '@lukemorales/query-key-factory'
-import { supabase } from '@/supabase/supabase'
+import { supabase } from '@/supabase'
 
 export const exerciseQueries = createQueryKeys('exercise', {
   list: {

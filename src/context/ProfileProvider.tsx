@@ -1,7 +1,7 @@
 import { Session } from '@supabase/supabase-js'
 import { useQuery } from '@tanstack/react-query'
 import { FC, PropsWithChildren, createContext } from 'react'
-import { supabase } from '@/supabase/supabase'
+import { supabase } from '@/supabase'
 import { Tables } from '@/supabase/types'
 
 export const ProfileContext = createContext<Tables<'profile'> | null>(null)
@@ -23,8 +23,6 @@ export const ProfileProvider: FC<PropsWithChildren<{ session: Session }>> = ({
     },
     staleTime: 1000 * 60 * 60 * 24,
   })
-
-  console.log('profile', { data })
 
   return (
     <ProfileContext.Provider value={data || null}>

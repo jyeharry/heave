@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { Button, ButtonProps } from '@/components/Button'
-import { supabase } from '@/supabase/supabase'
+import { supabase } from '@/supabase'
 
 type SignOutProps = Pick<ButtonProps, 'colour' | 'size'>
 

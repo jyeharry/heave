@@ -15,7 +15,7 @@ import {
   buttonTextVariants,
 } from '@/components/Button'
 import { Text } from '@/components/Text'
-import { theme } from '@/theme/theme'
+import { theme } from '@/constants/theme'
 
 type MenuTriggerButtonProps = MenuTriggerProps & {
   customStyles?: MenuTriggerProps['customStyles'] & {

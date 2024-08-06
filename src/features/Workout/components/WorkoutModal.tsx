@@ -8,7 +8,7 @@ import { Button } from '@/components/Button'
 import { Card } from '@/components/Card'
 import { IconButton } from '@/components/IconButton'
 import { Text } from '@/components/Text'
-import { theme } from '@/theme/theme'
+import { theme } from '@/constants/theme'
 
 export const WorkoutModal: FC<{
   visible: boolean

@@ -1,5 +1,4 @@
 import { mergeQueryKeys } from '@lukemorales/query-key-factory'
-import { exerciseQueries } from './features/Exercise/queries'
-import { workoutTemplateQueries } from './features/Workout/queries'
+import { workoutTemplateQueries } from './features/Workout'
 
-export const queries = mergeQueryKeys(workoutTemplateQueries, exerciseQueries)
+export const queries = mergeQueryKeys(workoutTemplateQueries)
