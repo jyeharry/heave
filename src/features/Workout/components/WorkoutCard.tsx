@@ -54,6 +54,8 @@ export const WorkoutCard: FC<
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
+              flexWrap: 'wrap',
+              gap: 8,
             }}
           >
             <Text>{title}</Text>

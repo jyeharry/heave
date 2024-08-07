@@ -42,21 +42,21 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
 
   const mutation = useMutation({
     mutationFn: async (data: WorkoutSchemaType) => {
-      try {
-        const parsedData = WorkoutSchema.parse(data)
-        const { error } = await supabase.rpc('upsert_workout', {
-          payload: parsedData,
-        })
-        if (error) throw error
-      } catch (e) {
-        console.error('Error updating workout', e)
-      }
+      const parsedData = WorkoutSchema.parse(data)
+      console.log('title', parsedData.title)
+      const { error } = await supabase.rpc('upsert_workout', {
+        payload: parsedData,
+      })
+      if (error) throw error
     },
     onSuccess: () => {
       router.back()
       queryClient.invalidateQueries({
         queryKey: workoutTemplateQueries.list(profile?.profile_id!).queryKey,
       })
+    },
+    onError: (error) => {
+      console.error('Error updating workout', error)
     },
   })
 
@@ -83,6 +83,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           ...(mode === 'perform' && { title: data?.title }),
           headerRight: () => (
             <Button
+              disabled={!methods.getValues('exercises').length}
               onPress={methods.handleSubmit(
                 async (data) => {
                   const hasIncompletedSets = data.exercises.some((ex) =>
@@ -127,21 +128,13 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           <View>
             <Controller
               name="title"
-              render={({
-                field: { onChange, onBlur, value },
-                fieldState: { error },
-              }) => (
+              render={({ field: { onChange, onBlur, value } }) => (
                 <Input
                   placeholder="Workout Title"
                   onBlur={onBlur}
                   onChangeText={onChange}
                   size="title"
                   value={value}
-                  style={{
-                    borderColor: error ? theme.colours.danger : 'transparent',
-                    borderBottomWidth: 1,
-                    borderRadius: 0,
-                  }}
                 />
               )}
             />
