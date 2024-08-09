@@ -12,14 +12,14 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "usesAppleSignIn": true,
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.heave"
     },
     "android": {
+      "package": "com.heave",
       "adaptiveIcon": {
         "foregroundImage": "./src/assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -32,7 +32,13 @@
     },
     "plugins": [
       "expo-apple-authentication",
-      "expo-router"
+      "expo-router",
+      [
+        "@react-native-google-signin/google-signin",
+        {
+          "iosUrlScheme": "com.googleusercontent.apps.480694613299-ap6rls9a5v46ep32irnoa69ocippdfpn"
+        }
+      ]
     ],
     "experiments": {
       "tsconfigPaths": true,

@@ -43,7 +43,6 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
   const mutation = useMutation({
     mutationFn: async (data: WorkoutSchemaType) => {
       const parsedData = WorkoutSchema.parse(data)
-      console.log('title', parsedData.title)
       const { error } = await supabase.rpc('upsert_workout', {
         payload: parsedData,
       })
@@ -76,6 +75,31 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     resolver: zodResolver(WorkoutSchema),
   })
 
+  const submitWorkout = async (data: WorkoutSchemaType) => {
+    const hasIncompletedSets = data.exercises.some((ex) =>
+      ex.sets.some((set) => !set.completed),
+    )
+    let dataWithoutIncompleteSets: undefined | WorkoutSchemaType
+
+    if (hasIncompletedSets && mode === 'perform') {
+      const willSubmit = await alertWhetherToSubmit()
+
+      if (!willSubmit) {
+        return
+      }
+
+      dataWithoutIncompleteSets = {
+        ...data,
+        exercises: data.exercises.map((ex) => ({
+          ...ex,
+          sets: ex.sets.filter((set) => set.completed),
+        })),
+      }
+    }
+
+    mutation.mutate(dataWithoutIncompleteSets || data)
+  }
+
   return (
     <WorkoutModeProvider value={mode}>
       <Stack.Screen
@@ -84,32 +108,11 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
           headerRight: () => (
             <Button
               disabled={!methods.getValues('exercises').length}
-              onPress={methods.handleSubmit(
-                async (data) => {
-                  const hasIncompletedSets = data.exercises.some((ex) =>
-                    ex.sets.some((set) => !set.completed),
-                  )
-                  let dataWithoutIncompleteSets: undefined | WorkoutSchemaType
-
-                  if (hasIncompletedSets && mode === 'perform') {
-                    const willSubmit = await alertWhetherToSubmit()
-
-                    if (!willSubmit) {
-                      return
-                    }
-
-                    dataWithoutIncompleteSets = {
-                      ...data,
-                      exercises: data.exercises.map((ex) => ({
-                        ...ex,
-                        sets: ex.sets.filter((set) => set.completed),
-                      })),
-                    }
-                  }
-
-                  mutation.mutate(dataWithoutIncompleteSets || data)
-                },
-                (data) => console.error('Error', JSON.stringify(data, null, 2)),
+              onPress={methods.handleSubmit(submitWorkout, (data) =>
+                console.error(
+                  'Workout submit error',
+                  JSON.stringify(data, null, 2),
+                ),
               )}
               style={{ backgroundColor: 'transparent' }}
             >
