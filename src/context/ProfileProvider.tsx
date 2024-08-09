@@ -24,8 +24,8 @@ export const ProfileProvider: FC<PropsWithChildren<{ session: Session }>> = ({
     staleTime: 1000 * 60 * 60 * 24,
   })
 
-  console.error('Profile time', new Date().toISOString())
-  console.error({ profile: data })
+  console.log('Profile time', new Date().toISOString())
+  console.log({ profile: data })
 
   return (
     <ProfileContext.Provider value={data || null}>

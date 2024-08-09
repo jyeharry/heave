@@ -26,7 +26,7 @@ export const Authentication = () => {
       'https://www.googleapis.com/auth/userinfo.profile',
       'openid',
     ],
-    webClientId: process.env.EXPO_PUBLIC_GOOGLE_CLIENT_ID,
+    webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
   })
 
   return (
@@ -76,15 +76,16 @@ export const Authentication = () => {
               await GoogleSignin.hasPlayServices()
               const userInfo = await GoogleSignin.signIn()
               if (userInfo.idToken) {
-                const { data, error } = await supabase.auth.signInWithIdToken({
+                const { error } = await supabase.auth.signInWithIdToken({
                   provider: 'google',
                   token: userInfo.idToken,
                 })
-                console.log(error, data)
+                if (error) throw error
               } else {
                 throw new Error('no ID token present!')
               }
             } catch (error: any) {
+              console.error(error)
               if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 // user cancelled the login flow
               } else if (error.code === statusCodes.IN_PROGRESS) {

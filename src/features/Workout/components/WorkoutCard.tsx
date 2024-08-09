@@ -54,11 +54,11 @@ export const WorkoutCard: FC<
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              flexWrap: 'wrap',
               gap: 8,
+              alignItems: 'flex-start',
             }}
           >
-            <Text>{title}</Text>
+            <Text style={{ flex: 1 }}>{title}</Text>
             <MenuButton
               triggerButtonChildren={
                 <Entypo name="dots-three-horizontal" size={16} />
