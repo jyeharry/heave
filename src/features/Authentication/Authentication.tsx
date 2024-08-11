@@ -15,6 +15,7 @@ import { router, Redirect } from 'expo-router'
 import { Platform, StyleSheet, View } from 'react-native'
 import { Text } from '@/components/Text'
 import { supabase } from '@/supabase'
+import { theme } from '@/constants/theme'
 
 export const Authentication = () => {
   const sessionCtx = useSessionContext()
@@ -27,6 +28,7 @@ export const Authentication = () => {
       'openid',
     ],
     webClientId: process.env.EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID,
+    iosClientId: process.env.EXPO_PUBLIC_GOOGLE_IOS_CLIENT_ID,
   })
 
   return (
@@ -67,40 +69,37 @@ export const Authentication = () => {
           }}
         />
       )}
-      {Platform.OS === 'android' && (
-        <GoogleSigninButton
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={async () => {
-            try {
-              await GoogleSignin.hasPlayServices()
-              const userInfo = await GoogleSignin.signIn()
-              if (userInfo.idToken) {
-                const { error } = await supabase.auth.signInWithIdToken({
-                  provider: 'google',
-                  token: userInfo.idToken,
-                })
-                if (error) throw error
-              } else {
-                throw new Error('no ID token present!')
-              }
-            } catch (error: any) {
-              console.error(error)
-              if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-                // user cancelled the login flow
-              } else if (error.code === statusCodes.IN_PROGRESS) {
-                // operation (e.g. sign in) is in progress already
-              } else if (
-                error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE
-              ) {
-                // play services not available or outdated
-              } else {
-                // some other error happened
-              }
+      <GoogleSigninButton
+        size={GoogleSigninButton.Size.Wide}
+        color={GoogleSigninButton.Color.Light}
+        style={{ width: '102%', height: 48, borderRadius: 8 }}
+        onPress={async () => {
+          try {
+            await GoogleSignin.hasPlayServices()
+            const userInfo = await GoogleSignin.signIn()
+            if (userInfo.idToken) {
+              const { error } = await supabase.auth.signInWithIdToken({
+                provider: 'google',
+                token: userInfo.idToken,
+              })
+              if (error) throw error
+            } else {
+              throw new Error('no ID token present!')
             }
-          }}
-        />
-      )}
+          } catch (error: any) {
+            console.error(error)
+            if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+              // user cancelled the login flow
+            } else if (error.code === statusCodes.IN_PROGRESS) {
+              // operation (e.g. sign in) is in progress already
+            } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+              // play services not available or outdated
+            } else {
+              // some other error happened
+            }
+          }
+        }}
+      />
     </View>
   )
 }
@@ -111,5 +110,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: theme.backgroundColour,
   },
 })
