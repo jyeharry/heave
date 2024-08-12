@@ -2,13 +2,11 @@ import { useQuery } from '@tanstack/react-query'
 import { Link } from 'expo-router'
 import { FC } from 'react'
 import { View } from 'react-native'
-import Modal from 'react-native-modal'
 import { workoutTemplateQueries } from '../queries'
 import { Button } from '@/components/Button'
-import { Card } from '@/components/Card'
 import { IconButton } from '@/components/IconButton'
+import { Modal } from '@/components/Modal'
 import { Text } from '@/components/Text'
-import { theme } from '@/constants/theme'
 
 export const WorkoutModal: FC<{
   visible: boolean
@@ -23,28 +21,19 @@ export const WorkoutModal: FC<{
   lastPerformedToNow,
   workoutTemplateID,
 }) => {
-  const res = useQuery({
+  const { data } = useQuery({
     ...workoutTemplateQueries.detail(workoutTemplateID),
     enabled: visible,
     gcTime: 0,
   })
 
   return (
-    <Modal
-      isVisible={visible}
-      onBackdropPress={() => setVisible(false)}
-      backdropOpacity={0.5}
-      animationIn="fadeIn"
-      animationOut="fadeOut"
-      animationOutTiming={100}
-    >
-      <Card
+    <Modal isVisible={visible} onBackdropPress={() => setVisible(false)}>
+      <View
         style={{
-          backgroundColor: theme.colours.grey100,
-          height: '75%',
           gap: 16,
+          padding: 16,
         }}
-        bordered={false}
       >
         <View
           style={{
@@ -69,7 +58,7 @@ export const WorkoutModal: FC<{
           {lastPerformedToNow && (
             <Text type="notes">Last performed: {lastPerformedToNow}</Text>
           )}
-          {res.data?.notes && <Text type="notes">{res.data.notes}</Text>}
+          {data?.notes && <Text type="notes">{data.notes}</Text>}
           <Link
             href={{
               pathname: '/workouts/[workoutTemplateID]/perform',
@@ -81,7 +70,7 @@ export const WorkoutModal: FC<{
             <Button>Start Workout</Button>
           </Link>
         </View>
-      </Card>
+      </View>
     </Modal>
   )
 }

@@ -4,55 +4,57 @@ import { Pressable, SectionList, View } from 'react-native'
 import { useExercisesQuery } from '../hooks/useExerciseQuery'
 import { Text } from '@/components/Text'
 import { theme } from '@/constants/theme'
+import { WorkoutParams } from '@/features/Workout/types'
 
 const filterAndCategoriseExercisesByLetterReducer =
   (filter: string) =>
-  (
-    sectionList: {
-      title: string
-      data: {
+    (
+      sectionList: {
+        title: string
+        data: {
+          name: string
+          bodyPart: string
+          exerciseID: string
+        }[]
+      }[],
+      exercise: {
         name: string
         bodyPart: string
         exerciseID: string
-      }[]
-    }[],
-    exercise: {
-      name: string
-      bodyPart: string
-      exerciseID: string
-    },
-  ) => {
-    if (
-      !exercise.name ||
-      !exercise.name.toLowerCase().includes(filter.toLowerCase())
-    ) {
-      return sectionList
+      },
+    ) => {
+      if (
+        !exercise.name ||
+        !exercise.name.toLowerCase().includes(filter.toLowerCase())
+      ) {
+        return sectionList
+      }
+      const title = exercise.name[0].toUpperCase()
+      const sectionIndex = sectionList.findIndex(
+        (section) => section.title === title,
+      )
+      if (sectionIndex === -1) {
+        return sectionList.concat({ title, data: [exercise] })
+      }
+      const section = sectionList[sectionIndex]
+      return sectionList.toSpliced(sectionIndex, 1, {
+        title,
+        data: section.data.concat(exercise),
+      })
     }
-    const title = exercise.name[0].toUpperCase()
-    const sectionIndex = sectionList.findIndex(
-      (section) => section.title === title,
-    )
-    if (sectionIndex === -1) {
-      return sectionList.concat({ title, data: [exercise] })
-    }
-    const section = sectionList[sectionIndex]
-    return sectionList.toSpliced(sectionIndex, 1, {
-      title,
-      data: section.data.concat(exercise),
-    })
-  }
 
 const ExerciseItem = ({
   name,
   body_part,
   exercise_id,
   workoutExerciseCount,
+  mode,
+  exerciseIndex,
 }: {
   name: string
   body_part: string
   exercise_id: string
-  workoutExerciseCount?: string
-}) => (
+} & Pick<WorkoutParams, 'workoutExerciseCount' | 'mode' | 'exerciseIndex'>) => (
   <Pressable
     style={({ pressed }) => ({
       gap: 2,
@@ -67,6 +69,8 @@ const ExerciseItem = ({
           newExerciseName: name,
           newExerciseID: exercise_id,
           workoutExerciseCount,
+          mode,
+          exerciseIndex,
         },
       })
     }}
@@ -79,9 +83,8 @@ const ExerciseItem = ({
 )
 
 export const Exercises: FC = () => {
-  const { workoutExerciseCount } = useLocalSearchParams<{
-    workoutExerciseCount: string
-  }>()
+  const { workoutExerciseCount, mode, exerciseIndex } =
+    useLocalSearchParams<WorkoutParams>()
   const { data } = useExercisesQuery()
   const [filter, setFilter] = useState('')
   const sectionList =
@@ -124,6 +127,8 @@ export const Exercises: FC = () => {
             body_part={bodyPart}
             exercise_id={exerciseID}
             workoutExerciseCount={workoutExerciseCount}
+            mode={mode}
+            exerciseIndex={exerciseIndex}
           />
         )}
         ItemSeparatorComponent={() => (

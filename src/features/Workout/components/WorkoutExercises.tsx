@@ -1,49 +1,73 @@
-import { Link, useLocalSearchParams, useSegments } from 'expo-router'
-import { useContext } from 'react'
+import { Link, router, useLocalSearchParams } from 'expo-router'
+import { useEffect } from 'react'
 import { useFieldArray, useFormContext } from 'react-hook-form'
 import { View } from 'react-native'
 import { WorkoutExercise } from './WorkoutExercise'
-import { WorkoutModeContext } from './WorkoutModeContext'
-import { WorkoutSchemaType } from '../types'
+import { WorkoutParams, WorkoutSchemaType } from '../types'
 import { Button } from '@/components/Button'
 
 export const WorkoutExercises = () => {
-  const {
-    workoutTemplateID,
-    newExerciseID,
-    newExerciseName,
-    workoutExerciseCount,
-  } = useLocalSearchParams<{
-    workoutTemplateID: string
-    newExerciseName?: string
-    newExerciseID?: string
-    workoutExerciseCount?: string
-  }>()
-
-  const segments = useSegments()
+  const params = useLocalSearchParams<WorkoutParams>()
 
   const {
     fields: exerciseFields,
     append,
     remove,
+    update,
   } = useFieldArray<WorkoutSchemaType>({
     name: 'exercises',
   })
 
-  if (
-    Number(workoutExerciseCount) === exerciseFields.length &&
-    newExerciseName &&
-    newExerciseID
-  ) {
-    append({
-      exercise: { name: newExerciseName, exerciseID: newExerciseID },
-      index: exerciseFields.length,
-      sets: [{ setType: 'Standard', reps: 0, weight: 0, index: 0 }],
-    })
-  }
+  useEffect(() => {
+    if (
+      params.mode === 'add' &&
+      Number(params.workoutExerciseCount) === exerciseFields.length &&
+      params.newExerciseName &&
+      params.newExerciseID
+    ) {
+      router.setParams({
+        newExerciseName: '',
+        newExerciseID: '',
+        workoutExerciseCount: '',
+        mode: '',
+        exerciseIndex: '',
+      })
+      append({
+        exercise: {
+          name: params.newExerciseName,
+          exerciseID: params.newExerciseID,
+        },
+        index: exerciseFields.length,
+        sets: [{ setType: 'Standard', reps: 0, weight: 0, index: 0 }],
+      })
+    }
+
+    if (
+      params.mode === 'replace' &&
+      params.exerciseIndex &&
+      typeof Number(params.exerciseIndex) === 'number' &&
+      params.newExerciseName &&
+      params.newExerciseID
+    ) {
+      router.setParams({
+        newExerciseName: '',
+        newExerciseID: '',
+        workoutExerciseCount: '',
+        mode: '',
+        exerciseIndex: '',
+      })
+      update(Number(params.exerciseIndex), {
+        exercise: {
+          name: params.newExerciseName,
+          exerciseID: params.newExerciseID,
+        },
+        index: Number(params.exerciseIndex),
+        sets: [{ setType: 'Standard', reps: 0, weight: 0, index: 0 }],
+      })
+    }
+  }, [params])
 
   const methods = useFormContext()
-  const mode = useContext(WorkoutModeContext)
 
   return (
     <View style={{ gap: 32 }}>
@@ -60,8 +84,8 @@ export const WorkoutExercises = () => {
           pathname: './add-exercise',
           params: {
             workoutExerciseCount: exerciseFields.length,
-            mode,
-            workoutTemplateID,
+            workoutTemplateID: params.workoutTemplateID,
+            mode: 'add',
           },
         }}
         asChild

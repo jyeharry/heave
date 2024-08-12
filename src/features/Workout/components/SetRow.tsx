@@ -69,6 +69,7 @@ export const SetRow = ({
     setValue,
     control,
     formState: { defaultValues },
+    getValues,
   } = useFormContext<WorkoutSchemaType>()
   const formSetName = `exercises.${exerciseIndex}.sets.${setRowIndex}` as const
 
@@ -95,15 +96,20 @@ export const SetRow = ({
       0,
     )
 
-  const previousReps =
-    defaultValues?.exercises?.[exerciseIndex]?.sets?.[setRowIndex]?.reps
+  const hasReplacedExercise =
+    defaultValues?.exercises?.[exerciseIndex]?.exercise?.exerciseID !==
+    getValues(`exercises.${exerciseIndex}`).exercise.exerciseID
+
   const previousWeight =
     defaultValues?.exercises?.[exerciseIndex]?.sets?.[setRowIndex]?.weight
+  const previousReps =
+    defaultValues?.exercises?.[exerciseIndex]?.sets?.[setRowIndex]?.reps
 
-  const previous =
-    previousReps != null &&
-    previousWeight != null &&
-    `${previousWeight}kg x ${previousReps}`
+  const previousWeightAndRepsText = previousReps
+    ? previousWeight
+      ? `${previousWeight}kg x ${previousReps}`
+      : `${previousReps} reps`
+    : null
 
   const setLabel =
     setTypeAbbreviationMap[setType] || setRowIndex + 1 - numOfPreviousWarmups
@@ -135,7 +141,7 @@ export const SetRow = ({
         />
       ))}
     </MenuButton>,
-    previous || (
+    (!hasReplacedExercise && previousWeightAndRepsText) || (
       <View style={{ justifyContent: 'center', alignItems: 'center' }}>
         <Octicons name="dash" size={22} />
       </View>
@@ -160,11 +166,14 @@ export const SetRow = ({
     <Controller
       control={control}
       name={`${formSetName}.reps`}
-      render={({ field: { onChange, onBlur, value } }) => (
+      render={({
+        field: { onChange, onBlur, value },
+        fieldState: { isDirty },
+      }) => (
         <Input
           onBlur={onBlur}
           onChangeText={onChange}
-          value={value?.toString()}
+          value={isDirty ? value?.toString() : '0'}
           inputMode="numeric"
           style={{
             height: '100%',

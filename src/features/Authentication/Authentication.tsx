@@ -14,8 +14,8 @@ import {
 import { router, Redirect } from 'expo-router'
 import { Platform, StyleSheet, View } from 'react-native'
 import { Text } from '@/components/Text'
-import { supabase } from '@/supabase'
 import { theme } from '@/constants/theme'
+import { supabase } from '@/supabase'
 
 export const Authentication = () => {
   const sessionCtx = useSessionContext()

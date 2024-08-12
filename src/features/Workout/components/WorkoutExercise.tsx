@@ -77,15 +77,17 @@ export const WorkoutExercise: FC<ExerciseProps> = ({
             }}
           >
             <MenuOption
-              text="Remove exercise"
-              onSelect={() => {
-                router.setParams({
-                  newExerciseName: undefined,
-                  newExerciseID: undefined,
-                  workoutExerciseCount: undefined,
+              text="Replace exercise"
+              onSelect={() =>
+                router.navigate({
+                  pathname: './add-exercise',
+                  params: { mode: 'replace', exerciseIndex },
                 })
-                remove(exerciseIndex)
-              }}
+              }
+            />
+            <MenuOption
+              text="Remove exercise"
+              onSelect={() => remove(exerciseIndex)}
             />
           </MenuButton>
         </View>
