@@ -93,6 +93,7 @@ export const Exercises: FC = () => {
         options={{
           headerSearchBarOptions: {
             onChangeText: (e) => setFilter(e.nativeEvent.text),
+            barTintColor: theme.colours.light,
           },
         }}
       />

@@ -20,7 +20,7 @@ export const MenuOption: FC<MenuOptionProps & { active?: boolean }> = ({
           marginVertical: 8,
         },
       ],
-      optionText: [theme.text.body],
+      optionText: theme.text.body,
       optionTouchable: {
         activeOpacity: 0.5,
         style: [

@@ -57,7 +57,7 @@ export const WorkoutExercises = () => {
       ))}
       <Link
         href={{
-          pathname: segments.join('/') + '/add-exercise',
+          pathname: './add-exercise',
           params: {
             workoutExerciseCount: exerciseFields.length,
             mode,

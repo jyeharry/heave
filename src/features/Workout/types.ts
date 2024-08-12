@@ -18,6 +18,15 @@ export const setTypeAbbreviationMap: Partial<Record<SetType, string>> = {
   'Drop set': 'D',
 }
 
+export type WorkoutParams = {
+  workoutTemplateID: string
+  newExerciseName?: string
+  newExerciseID?: string
+  workoutExerciseCount?: `${number}`
+  mode?: 'add' | 'replace'
+  exerciseIndex?: `${number}`
+}
+
 export const WorkoutSetSchema = z.object({
   setType: SetTypeSchema,
   weight: z.coerce.number().nonnegative().default(0),
