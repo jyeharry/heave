@@ -1,77 +1,29 @@
 import { Link, router, useLocalSearchParams } from 'expo-router'
 import { useEffect } from 'react'
-import { useFieldArray, useFormContext } from 'react-hook-form'
+import {
+  useFieldArray,
+  useFormContext,
+  FieldArrayWithId,
+  UseFieldArrayAppend,
+  UseFieldArrayUpdate,
+} from 'react-hook-form'
 import { View } from 'react-native'
 import { WorkoutExercise } from './WorkoutExercise'
 import { WorkoutParams, WorkoutSchemaType } from '../types'
 import { Button } from '@/components/Button'
 
 export const WorkoutExercises = () => {
-  const params = useLocalSearchParams<WorkoutParams>()
-
-  const {
-    fields: exerciseFields,
-    append,
-    remove,
-    update,
-  } = useFieldArray<WorkoutSchemaType>({
+  const { fields, remove, append, update } = useFieldArray<WorkoutSchemaType>({
     name: 'exercises',
   })
 
-  useEffect(() => {
-    if (
-      params.mode === 'add' &&
-      Number(params.workoutExerciseCount) === exerciseFields.length &&
-      params.newExerciseName &&
-      params.newExerciseID
-    ) {
-      router.setParams({
-        newExerciseName: '',
-        newExerciseID: '',
-        workoutExerciseCount: '',
-        mode: '',
-        exerciseIndex: '',
-      })
-      append({
-        exercise: {
-          name: params.newExerciseName,
-          exerciseID: params.newExerciseID,
-        },
-        index: exerciseFields.length,
-        sets: [{ setType: 'Standard', reps: 0, weight: 0, index: 0 }],
-      })
-    }
-
-    if (
-      params.mode === 'replace' &&
-      params.exerciseIndex &&
-      typeof Number(params.exerciseIndex) === 'number' &&
-      params.newExerciseName &&
-      params.newExerciseID
-    ) {
-      router.setParams({
-        newExerciseName: '',
-        newExerciseID: '',
-        workoutExerciseCount: '',
-        mode: '',
-        exerciseIndex: '',
-      })
-      update(Number(params.exerciseIndex), {
-        exercise: {
-          name: params.newExerciseName,
-          exerciseID: params.newExerciseID,
-        },
-        index: Number(params.exerciseIndex),
-        sets: [{ setType: 'Standard', reps: 0, weight: 0, index: 0 }],
-      })
-    }
-  }, [params])
+  useNewExerciseEffect(fields, append, update)
 
   const methods = useFormContext()
 
   return (
     <View style={{ gap: 32 }}>
-      {exerciseFields.map((exercise, i) => (
+      {fields.map((exercise, i) => (
         <WorkoutExercise
           key={exercise.id}
           exerciseIndex={i}
@@ -83,9 +35,8 @@ export const WorkoutExercises = () => {
         href={{
           pathname: './add-exercise',
           params: {
-            workoutExerciseCount: exerciseFields.length,
-            workoutTemplateID: params.workoutTemplateID,
-            mode: 'add',
+            workoutExerciseCount: fields.length,
+            action: 'add',
           },
         }}
         asChild
@@ -94,4 +45,83 @@ export const WorkoutExercises = () => {
       </Link>
     </View>
   )
+}
+
+const useNewExerciseEffect = (
+  fields: FieldArrayWithId<
+    WorkoutSchemaType,
+    'exercises' | `exercises.${number}.sets`,
+    'id'
+  >[],
+  append: UseFieldArrayAppend<
+    WorkoutSchemaType,
+    'exercises' | `exercises.${number}.sets`
+  >,
+  update: UseFieldArrayUpdate<
+    WorkoutSchemaType,
+    'exercises' | `exercises.${number}.sets`
+  >,
+) => {
+  const {
+    action,
+    workoutExerciseCount,
+    newExerciseName,
+    newExerciseID,
+    exerciseIndex,
+  } = useLocalSearchParams<WorkoutParams>()
+
+  useEffect(() => {
+    if (
+      action === 'add' &&
+      Number(workoutExerciseCount) === fields.length &&
+      newExerciseName &&
+      newExerciseID
+    ) {
+      router.setParams({
+        newExerciseName: '',
+        newExerciseID: '',
+        workoutExerciseCount: '',
+        action: '',
+        exerciseIndex: '',
+      })
+      append({
+        exercise: {
+          name: newExerciseName,
+          exerciseID: newExerciseID,
+        },
+        index: fields.length,
+        sets: [{ setType: 'Standard', reps: 0, weight: 0, index: 0 }],
+      })
+    }
+
+    if (
+      action === 'replace' &&
+      exerciseIndex &&
+      typeof Number(exerciseIndex) === 'number' &&
+      newExerciseName &&
+      newExerciseID
+    ) {
+      router.setParams({
+        newExerciseName: '',
+        newExerciseID: '',
+        workoutExerciseCount: '',
+        action: '',
+        exerciseIndex: '',
+      })
+      update(Number(exerciseIndex), {
+        exercise: {
+          name: newExerciseName,
+          exerciseID: newExerciseID,
+        },
+        index: Number(exerciseIndex),
+        sets: [{ setType: 'Standard', reps: 0, weight: 0, index: 0 }],
+      })
+    }
+  }, [
+    action,
+    workoutExerciseCount,
+    newExerciseName,
+    newExerciseID,
+    exerciseIndex,
+  ])
 }

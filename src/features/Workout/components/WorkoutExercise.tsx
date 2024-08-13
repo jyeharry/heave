@@ -81,7 +81,7 @@ export const WorkoutExercise: FC<ExerciseProps> = ({
               onSelect={() =>
                 router.navigate({
                   pathname: './add-exercise',
-                  params: { mode: 'replace', exerciseIndex },
+                  params: { action: 'replace', exerciseIndex },
                 })
               }
             />

@@ -23,7 +23,7 @@ export type WorkoutParams = {
   newExerciseName?: string
   newExerciseID?: string
   workoutExerciseCount?: `${number}`
-  mode?: 'add' | 'replace'
+  action?: 'add' | 'replace'
   exerciseIndex?: `${number}`
 }
 
