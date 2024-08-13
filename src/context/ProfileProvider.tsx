@@ -21,7 +21,6 @@ export const ProfileProvider: FC<PropsWithChildren<{ session: Session }>> = ({
       if (res.error) throw new Error(res.error.message)
       return res.data
     },
-    staleTime: 1000 * 60 * 60 * 24,
   })
 
   return (

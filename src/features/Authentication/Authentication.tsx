@@ -60,6 +60,7 @@ export const Authentication = () => {
                 throw new Error('No identityToken.')
               }
             } catch (e: any) {
+              console.error(e)
               if (e.code === 'ERR_REQUEST_CANCELED') {
                 // handle that the user cancelled the sign-in flow
               } else {
@@ -83,6 +84,7 @@ export const Authentication = () => {
                 token: userInfo.idToken,
               })
               if (error) throw error
+              router.replace('/(app)/(tabs)')
             } else {
               throw new Error('no ID token present!')
             }
