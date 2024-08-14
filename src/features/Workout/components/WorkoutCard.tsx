@@ -1,4 +1,5 @@
 import Entypo from '@expo/vector-icons/Entypo'
+import MCIcon from '@expo/vector-icons/MaterialCommunityIcons'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { formatDistanceToNow } from 'date-fns'
 import { MotiView } from 'moti'
@@ -10,6 +11,7 @@ import { workoutTemplateQueries } from '../queries'
 import { Card } from '@/components/Card'
 import { MenuButton, MenuOption } from '@/components/Menu'
 import { Text } from '@/components/Text'
+import { theme } from '@/constants/theme'
 import { useProfile } from '@/hooks/useProfile'
 import { supabase } from '@/supabase'
 
@@ -73,9 +75,12 @@ export const WorkoutCard: FC<
             </MenuButton>
           </View>
           {lastPerformed && (
-            <Text type="notes" style={{ fontSize: 15 }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+            <MCIcon name="clock" size={18} color={theme.text.metadata.color} />
+            <Text type="metadata" style={{ fontSize: 15 }}>
               {lastPerformedToNow}
             </Text>
+          </View>
           )}
         </Card>
       </Pressable>

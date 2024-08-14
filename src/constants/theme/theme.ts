@@ -17,7 +17,12 @@ export const theme = {
     notes: {
       fontSize: 16,
       fontWeight: '600',
-      color: colours.grey700,
+      color: colours.grey900,
+    },
+    metadata: {
+      fontSize: 16,
+      fontWeight: '600',
+      color: colours.grey600,
     },
     title: {
       fontSize: 24,
