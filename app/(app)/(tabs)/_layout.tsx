@@ -1,12 +1,16 @@
 import MCIcon from '@expo/vector-icons/MaterialCommunityIcons'
 import { Tabs } from 'expo-router'
+import { ComponentProps } from 'react'
 import HeaderIcon from '@/components/HeaderIcon'
 import { theme } from '@/constants/theme'
 
 /**
  * You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
  */
-const TabBarIcon = (props: { source: any; color: string }) => (
+const TabBarIcon = (props: {
+  source: ComponentProps<typeof MCIcon>['name']
+  color: string
+}) => (
   <MCIcon size={28} name={props.source} type="material-community" {...props} />
 )
 
@@ -25,10 +29,20 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
+          title: 'Home',
           tabBarIcon: ({ color }) => <TabBarIcon source="home" color={color} />,
           headerRight: ({ tintColor }) => (
             <HeaderIcon href="/modal" color={tintColor} name="information" />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="friends"
+        options={{
+          title: 'Friends',
+          headerShown: false,
+          tabBarIcon: ({ color }) => (
+            <TabBarIcon source="account-group" color={color} />
           ),
         }}
       />

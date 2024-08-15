@@ -17,7 +17,6 @@ const WorkoutsLayout: FC = () => {
         name="index"
         options={{
           title: 'Workouts',
-          headerShown: true,
           headerRight: ({ tintColor }) => (
             <HeaderIcon href="/workouts/create" color={tintColor} name="plus" />
           ),
@@ -35,6 +34,7 @@ const WorkoutsLayout: FC = () => {
           presentation: 'modal',
           title: 'Add Exercise',
           headerSearchBarOptions: {
+            barTintColor: theme.colours.light,
             hideWhenScrolling: true,
           },
         }}
