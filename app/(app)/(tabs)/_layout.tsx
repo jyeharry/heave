@@ -37,12 +37,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="friends"
+        name="discover"
         options={{
-          title: 'Friends',
+          title: 'Discover',
           headerShown: false,
           tabBarIcon: ({ color }) => (
-            <TabBarIcon source="account-group" color={color} />
+            <TabBarIcon source="magnify" color={color} />
           ),
         }}
       />

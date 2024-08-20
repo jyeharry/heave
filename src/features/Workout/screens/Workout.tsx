@@ -104,7 +104,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     <WorkoutModeProvider value={mode}>
       <Stack.Screen
         options={{
-          ...(mode === 'perform' && { title: data?.title }),
+          ...(mode === 'perform' &&data?.title&& { title: data.title }),
           headerRight: () => (
             <Button
               disabled={!methods.getValues('exercises').length}

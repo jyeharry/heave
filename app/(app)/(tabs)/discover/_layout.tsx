@@ -2,7 +2,7 @@ import { Stack } from 'expo-router'
 import { FC } from 'react'
 import { theme } from '@/constants/theme'
 
-const FriendsLayout: FC = () => {
+const DiscoverLayout: FC = () => {
   return (
     <Stack
       screenOptions={{
@@ -15,7 +15,7 @@ const FriendsLayout: FC = () => {
       <Stack.Screen
         name="index"
         options={{
-          title: 'Friends',
+          title: 'Discover Profiles',
           headerShown: true,
         }}
       />
@@ -23,4 +23,4 @@ const FriendsLayout: FC = () => {
   )
 }
 
-export default FriendsLayout
+export default DiscoverLayout

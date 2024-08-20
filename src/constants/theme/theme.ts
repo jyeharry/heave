@@ -20,7 +20,7 @@ export const theme = {
       color: colours.grey900,
     },
     metadata: {
-      fontSize: 16,
+      fontSize: 14,
       fontWeight: '600',
       color: colours.grey600,
     },

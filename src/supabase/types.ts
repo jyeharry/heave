@@ -468,18 +468,11 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      search_profiles: {
+      discover_search: {
         Args: {
           name: string
         }
-        Returns: {
-          created_at: string
-          email: string
-          first_name: string | null
-          last_name: string | null
-          profile_id: string
-          updated_at: string | null
-        }[]
+        Returns: Database['public']['CompositeTypes']['discover_search_type'][]
       }
       upsert_workout: {
         Args: {
@@ -492,7 +485,12 @@ export type Database = {
       set_type: 'Standard' | 'Warmup' | 'Drop set'
     }
     CompositeTypes: {
-      [_ in never]: never
+      discover_search_type: {
+        profile_id: string | null
+        first_name: string | null
+        last_name: string | null
+        workout_count: number | null
+      }
     }
   }
   storage: {

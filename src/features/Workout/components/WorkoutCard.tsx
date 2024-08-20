@@ -77,7 +77,7 @@ export const WorkoutCard: FC<
           {lastPerformed && (
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
             <MCIcon name="clock" size={18} color={theme.text.metadata.color} />
-            <Text type="metadata" style={{ fontSize: 15 }}>
+            <Text type="metadata">
               {lastPerformedToNow}
             </Text>
           </View>
