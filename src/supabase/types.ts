@@ -70,19 +70,61 @@ export type Database = {
         }
         Relationships: []
       }
+      follower: {
+        Row: {
+          followed_at: string | null
+          follower_id: string
+          profile_id: string
+        }
+        Insert: {
+          followed_at?: string | null
+          follower_id: string
+          profile_id: string
+        }
+        Update: {
+          followed_at?: string | null
+          follower_id?: string
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: 'followers_follower_id_fkey'
+            columns: ['follower_id']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['profile_id']
+          },
+          {
+            foreignKeyName: 'followers_profile_id_fkey'
+            columns: ['profile_id']
+            isOneToOne: false
+            referencedRelation: 'profile'
+            referencedColumns: ['profile_id']
+          },
+        ]
+      }
       profile: {
         Row: {
           created_at: string
+          email: string
+          first_name: string | null
+          last_name: string | null
           profile_id: string
           updated_at: string | null
         }
         Insert: {
           created_at?: string
+          email: string
+          first_name?: string | null
+          last_name?: string | null
           profile_id: string
           updated_at?: string | null
         }
         Update: {
           created_at?: string
+          email?: string
+          first_name?: string | null
+          last_name?: string | null
           profile_id?: string
           updated_at?: string | null
         }
@@ -102,7 +144,7 @@ export type Database = {
           created_at: string
           notes: string | null
           profile_id: string | null
-          title: string
+          title: string | null
           updated_at: string
         }
         Insert: {
@@ -110,7 +152,7 @@ export type Database = {
           created_at?: string
           notes?: string | null
           profile_id?: string | null
-          title: string
+          title?: string | null
           updated_at?: string
         }
         Update: {
@@ -118,7 +160,7 @@ export type Database = {
           created_at?: string
           notes?: string | null
           profile_id?: string | null
-          title?: string
+          title?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -188,7 +230,7 @@ export type Database = {
           created_at: string
           notes: string | null
           profile_id: string
-          title: string
+          title: string | null
           updated_at: string
           workout_log_id: string
           workout_template_id: string | null
@@ -198,7 +240,7 @@ export type Database = {
           created_at?: string
           notes?: string | null
           profile_id: string
-          title: string
+          title?: string | null
           updated_at?: string
           workout_log_id?: string
           workout_template_id?: string | null
@@ -208,7 +250,7 @@ export type Database = {
           created_at?: string
           notes?: string | null
           profile_id?: string
-          title?: string
+          title?: string | null
           updated_at?: string
           workout_log_id?: string
           workout_template_id?: string | null
@@ -312,7 +354,7 @@ export type Database = {
           last_performed: string | null
           notes: string | null
           profile_id: string
-          title: string
+          title: string | null
           updated_at: string
           workout_template_id: string
         }
@@ -322,7 +364,7 @@ export type Database = {
           last_performed?: string | null
           notes?: string | null
           profile_id: string
-          title: string
+          title?: string | null
           updated_at?: string
           workout_template_id?: string
         }
@@ -332,7 +374,7 @@ export type Database = {
           last_performed?: string | null
           notes?: string | null
           profile_id?: string
-          title?: string
+          title?: string | null
           updated_at?: string
           workout_template_id?: string
         }
@@ -426,6 +468,19 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      search_profiles: {
+        Args: {
+          name: string
+        }
+        Returns: {
+          created_at: string
+          email: string
+          first_name: string | null
+          last_name: string | null
+          profile_id: string
+          updated_at: string | null
+        }[]
+      }
       upsert_workout: {
         Args: {
           payload: Json
