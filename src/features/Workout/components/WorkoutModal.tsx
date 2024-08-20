@@ -30,7 +30,19 @@ export const WorkoutModal: FC<{
       isVisible={visible}
       setIsVisible={setVisible}
       title={title}
-      headerRightComponent={
+      Footer={
+        <Link
+          href={{
+            pathname: '/workouts/[workoutTemplateID]/perform',
+            params: { workoutTemplateID },
+          }}
+          onPress={() => setVisible(false)}
+          asChild
+        >
+          <Button>Start Workout</Button>
+        </Link>
+      }
+      HeaderRightComponent={
         <Link
           href={{
             pathname: '/workouts/[workoutTemplateID]/edit',
@@ -49,29 +61,21 @@ export const WorkoutModal: FC<{
           paddingTop: 0,
         }}
       >
-        <View style={{ gap: 16 }}>
-          {lastPerformedToNow && (
-            <Text type="notes">Last performed: {lastPerformedToNow}</Text>
-          )}
-          {data?.notes && <Text type="notes">{data.notes}</Text>}
-          <View style={{ gap: 8 }}>
-            {data?.exercises.map((ex) => (
-              <Text type="notes">
-                {ex.sets.filter((set) => set.setType !== 'Warmup').length} x{' '}
-                {ex.exercise?.name}
-              </Text>
-            ))}
+        <View style={{ gap: 16, justifyContent: 'space-between' }}>
+          <View style={{ gap: 16 }}>
+            {lastPerformedToNow && (
+              <Text type="notes">Last performed: {lastPerformedToNow}</Text>
+            )}
+            {data?.notes && <Text type="notes">{data.notes}</Text>}
+            <View style={{ gap: 8 }}>
+              {data?.exercises.map((ex, i) => (
+                <Text key={i} type="notes">
+                  {ex.sets.filter((set) => set.setType !== 'Warmup').length} x{' '}
+                  {ex.exercise?.name}
+                </Text>
+              ))}
+            </View>
           </View>
-          <Link
-            href={{
-              pathname: '/workouts/[workoutTemplateID]/perform',
-              params: { workoutTemplateID },
-            }}
-            onPress={() => setVisible(false)}
-            asChild
-          >
-            <Button>Start Workout</Button>
-          </Link>
         </View>
       </View>
     </Modal>

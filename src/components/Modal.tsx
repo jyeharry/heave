@@ -10,10 +10,10 @@ export const Modal: FC<
   ChooseRequired<
     Partial<ModalProps> & {
       containerStyle?: StyleProp<ViewStyle>
-      header?: React.ReactNode
       hasHeader?: boolean
+      Footer?: React.ReactElement
       title?: string
-      headerRightComponent?: React.ReactElement
+      HeaderRightComponent?: React.ReactElement
       setIsVisible: (v: boolean) => void
     },
     'children' | 'isVisible'
@@ -25,10 +25,10 @@ export const Modal: FC<
   animationIn = 'fadeIn',
   animationOut = 'fadeOut',
   containerStyle,
-  header,
   hasHeader = true,
+  Footer,
   title,
-  headerRightComponent,
+  HeaderRightComponent,
   setIsVisible,
   ...props
 }) => {
@@ -56,7 +56,7 @@ export const Modal: FC<
       >
         <Text>{title}</Text>
       </View>
-      <View style={{ marginRight: 16 }}>{headerRightComponent}</View>
+      <View style={{ marginRight: 16 }}>{HeaderRightComponent}</View>
     </View>
   )
   return (
@@ -74,12 +74,14 @@ export const Modal: FC<
             borderRadius: 8,
             backgroundColor: theme.backgroundColour,
             maxHeight: '80%',
+            minHeight: '60%',
           },
           containerStyle,
         ]}
       >
         {hasHeader && <Header />}
         <ScrollView>{children}</ScrollView>
+        {Footer && <View style={{ padding: 16 }}>{Footer}</View>}
       </View>
     </ReactNativeModal>
   )
