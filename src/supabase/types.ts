@@ -144,7 +144,7 @@ export type Database = {
           created_at: string
           notes: string | null
           profile_id: string | null
-          title: string | null
+          title: string
           updated_at: string
         }
         Insert: {
@@ -152,7 +152,7 @@ export type Database = {
           created_at?: string
           notes?: string | null
           profile_id?: string | null
-          title?: string | null
+          title?: string
           updated_at?: string
         }
         Update: {
@@ -160,7 +160,7 @@ export type Database = {
           created_at?: string
           notes?: string | null
           profile_id?: string | null
-          title?: string | null
+          title?: string
           updated_at?: string
         }
         Relationships: [
@@ -230,7 +230,7 @@ export type Database = {
           created_at: string
           notes: string | null
           profile_id: string
-          title: string | null
+          title: string
           updated_at: string
           workout_log_id: string
           workout_template_id: string | null
@@ -240,7 +240,7 @@ export type Database = {
           created_at?: string
           notes?: string | null
           profile_id: string
-          title?: string | null
+          title?: string
           updated_at?: string
           workout_log_id?: string
           workout_template_id?: string | null
@@ -250,7 +250,7 @@ export type Database = {
           created_at?: string
           notes?: string | null
           profile_id?: string
-          title?: string | null
+          title?: string
           updated_at?: string
           workout_log_id?: string
           workout_template_id?: string | null
@@ -354,7 +354,7 @@ export type Database = {
           last_performed: string | null
           notes: string | null
           profile_id: string
-          title: string | null
+          title: string
           updated_at: string
           workout_template_id: string
         }
@@ -364,7 +364,7 @@ export type Database = {
           last_performed?: string | null
           notes?: string | null
           profile_id: string
-          title?: string | null
+          title?: string
           updated_at?: string
           workout_template_id?: string
         }
@@ -374,7 +374,7 @@ export type Database = {
           last_performed?: string | null
           notes?: string | null
           profile_id?: string
-          title?: string | null
+          title?: string
           updated_at?: string
           workout_template_id?: string
         }

@@ -19,6 +19,12 @@ const DiscoverLayout: FC = () => {
           headerShown: true,
         }}
       />
+      <Stack.Screen
+        name="[profileID]"
+        options={{
+          headerShown: true,
+        }}
+      />
     </Stack>
   )
 }

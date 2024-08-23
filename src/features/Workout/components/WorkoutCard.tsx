@@ -20,8 +20,9 @@ export const WorkoutCard: FC<
     title: string
     lastPerformed?: string | null
     workoutTemplateID: string
+    authorProfileID: string
   } & PressableProps
-> = ({ title, lastPerformed, workoutTemplateID, style }) => {
+> = ({ title, lastPerformed, workoutTemplateID, authorProfileID, style }) => {
   const [visible, setVisible] = useState(false)
 
   let lastPerformedToNow
@@ -61,26 +62,32 @@ export const WorkoutCard: FC<
             }}
           >
             <Text style={{ flex: 1 }}>{title}</Text>
-            <MenuButton
-              triggerButtonChildren={
-                <Entypo name="dots-three-horizontal" size={16} />
-              }
-              triggerButtonProps={{
-                size: 'small',
-                colour: 'grey',
-                bordered: false,
-              }}
-            >
-              <MenuOption text="Remove workout" onSelect={mutation.mutate} />
-            </MenuButton>
+            {profile?.profile_id === authorProfileID && (
+              <MenuButton
+                triggerButtonChildren={
+                  <Entypo name="dots-three-horizontal" size={16} />
+                }
+                triggerButtonProps={{
+                  size: 'small',
+                  colour: 'grey',
+                  bordered: false,
+                }}
+              >
+                <MenuOption text="Remove workout" onSelect={mutation.mutate} />
+              </MenuButton>
+            )}
           </View>
           {lastPerformed && (
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
-            <MCIcon name="clock" size={18} color={theme.text.metadata.color} />
-            <Text type="metadata">
-              {lastPerformedToNow}
-            </Text>
-          </View>
+            <View
+              style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}
+            >
+              <MCIcon
+                name="clock"
+                size={18}
+                color={theme.text.metadata.color}
+              />
+              <Text type="metadata">{lastPerformedToNow}</Text>
+            </View>
           )}
         </Card>
       </Pressable>
