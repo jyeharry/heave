@@ -20,9 +20,17 @@ export const WorkoutCard: FC<
     title: string
     lastPerformed?: string | null
     workoutTemplateID: string
-    authorProfileID: string
+    isOwnedByLoggedInUser: boolean
+    profileID: string
   } & PressableProps
-> = ({ title, lastPerformed, workoutTemplateID, authorProfileID, style }) => {
+> = ({
+  title,
+  lastPerformed,
+  workoutTemplateID,
+  isOwnedByLoggedInUser,
+  style,
+  profileID,
+}) => {
   const [visible, setVisible] = useState(false)
 
   let lastPerformedToNow
@@ -33,6 +41,7 @@ export const WorkoutCard: FC<
 
   const queryClient = useQueryClient()
   const profile = useProfile()
+  const loggedInProfileID = profile?.profile_id!
 
   const mutation = useMutation({
     mutationFn: async () => {
@@ -44,7 +53,7 @@ export const WorkoutCard: FC<
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: workoutTemplateQueries.list(profile?.profile_id!).queryKey,
+        queryKey: workoutTemplateQueries.list(loggedInProfileID).queryKey,
       })
     },
   })
@@ -62,7 +71,7 @@ export const WorkoutCard: FC<
             }}
           >
             <Text style={{ flex: 1 }}>{title}</Text>
-            {profile?.profile_id === authorProfileID && (
+            {isOwnedByLoggedInUser && (
               <MenuButton
                 triggerButtonChildren={
                   <Entypo name="dots-three-horizontal" size={16} />
@@ -98,6 +107,8 @@ export const WorkoutCard: FC<
         title={title}
         lastPerformedToNow={lastPerformedToNow}
         workoutTemplateID={workoutTemplateID}
+        isOwnedByLoggedInUser={isOwnedByLoggedInUser}
+        profileID={profileID}
       />
     </>
   )

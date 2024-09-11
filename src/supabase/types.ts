@@ -182,15 +182,15 @@ export type Database = {
       }
       workout_exercise_entity: {
         Row: {
-          exercise_id: string | null
+          exercise_id: string
           index: number | null
         }
         Insert: {
-          exercise_id?: string | null
+          exercise_id: string
           index?: number | null
         }
         Update: {
-          exercise_id?: string | null
+          exercise_id?: string
           index?: number | null
         }
         Relationships: [
@@ -349,30 +349,33 @@ export type Database = {
       }
       workout_template: {
         Row: {
-          author_profile_id: string | null
+          author_profile_id: string
           created_at: string
           last_performed: string | null
           notes: string | null
+          parent_workout_template_id: string | null
           profile_id: string
           title: string
           updated_at: string
           workout_template_id: string
         }
         Insert: {
-          author_profile_id?: string | null
+          author_profile_id: string
           created_at?: string
           last_performed?: string | null
           notes?: string | null
+          parent_workout_template_id?: string | null
           profile_id: string
           title?: string
           updated_at?: string
           workout_template_id?: string
         }
         Update: {
-          author_profile_id?: string | null
+          author_profile_id?: string
           created_at?: string
           last_performed?: string | null
           notes?: string | null
+          parent_workout_template_id?: string | null
           profile_id?: string
           title?: string
           updated_at?: string
@@ -385,6 +388,13 @@ export type Database = {
             isOneToOne: false
             referencedRelation: 'profile'
             referencedColumns: ['profile_id']
+          },
+          {
+            foreignKeyName: 'workout_template_parent_workout_template_id_fkey'
+            columns: ['parent_workout_template_id']
+            isOneToOne: false
+            referencedRelation: 'workout_template'
+            referencedColumns: ['workout_template_id']
           },
           {
             foreignKeyName: 'workout_template_profile_id_fkey'

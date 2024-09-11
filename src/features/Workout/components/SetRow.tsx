@@ -13,8 +13,8 @@ import { Row } from 'react-native-reanimated-table'
 import { WorkoutModeContext } from './WorkoutModeContext'
 import {
   SetType,
-  WorkoutSchemaType,
-  WorkoutSet,
+  WorkoutFormSchemaType,
+  WorkoutSetFormType,
   setTypeAbbreviationMap,
   nonStandardSetTypes,
   NonStandardSetType,
@@ -70,23 +70,23 @@ export const SetRow = ({
     control,
     formState: { defaultValues },
     getValues,
-  } = useFormContext<WorkoutSchemaType>()
+  } = useFormContext<WorkoutFormSchemaType>()
   const formSetName = `exercises.${exerciseIndex}.sets.${setRowIndex}` as const
 
-  const completed = useWatch<WorkoutSchemaType>({
+  const completed = useWatch<WorkoutFormSchemaType>({
     name: `${formSetName}.completed`,
     defaultValue: false,
   })
 
-  const setType = useWatch<WorkoutSchemaType>({
+  const setType = useWatch<WorkoutFormSchemaType>({
     name: `${formSetName}.setType`,
     defaultValue: 'Standard',
   }) as SetType
 
-  const sets = useWatch<WorkoutSchemaType>({
+  const sets = useWatch<WorkoutFormSchemaType>({
     name: `exercises.${exerciseIndex}.sets`,
     defaultValue: [],
-  }) as WorkoutSet[]
+  }) as WorkoutSetFormType[]
 
   const numOfPreviousWarmups = sets
     .slice(0, setRowIndex)
@@ -168,12 +168,11 @@ export const SetRow = ({
       name={`${formSetName}.reps`}
       render={({
         field: { onChange, onBlur, value },
-        fieldState: { isDirty },
       }) => (
         <Input
           onBlur={onBlur}
           onChangeText={onChange}
-          value={isDirty ? value?.toString() : '0'}
+          value={value?.toString()}
           inputMode="numeric"
           style={{
             height: '100%',

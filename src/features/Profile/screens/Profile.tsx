@@ -13,7 +13,7 @@ export const Profile = () => {
         options={{
           title: `${firstName} ${lastName}`,
           headerShown: true,
-          headerBackTitle: 'Discover'
+          headerBackTitle: 'Discover',
         }}
       />
       <WorkoutList profileID={profileID!} />

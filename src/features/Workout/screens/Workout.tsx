@@ -7,7 +7,12 @@ import { Alert, ScrollView, StyleSheet, View } from 'react-native'
 import { WorkoutExercises } from '../components/WorkoutExercises'
 import { WorkoutModeProvider } from '../components/WorkoutModeContext'
 import { workoutTemplateQueries } from '../queries'
-import { WorkoutMode, WorkoutSchema, WorkoutSchemaType } from '../types'
+import {
+  WorkoutMode,
+  WorkoutFormSchema,
+  WorkoutFormSchemaType,
+  WorkoutDataSchema,
+} from '../types'
 import { Button } from '@/components/Button'
 import { Input } from '@/components/Input'
 import { theme } from '@/constants/theme'
@@ -21,28 +26,29 @@ interface WorkoutProps {
 // TODO: remove non null assertions
 export const Workout: FC<WorkoutProps> = ({ mode }) => {
   const { workoutTemplateID } = useLocalSearchParams<{
-    workoutTemplateID: string
+    workoutTemplateID: string // route params are never undefined, despite what TS says
   }>()
   const [lastPerformed] = useState(new Date().toISOString())
 
   const profile = useProfile()
+  const profileID = profile?.profile_id! // if we're here, we know we have a profile
 
   const { data } = useQuery({
-    ...workoutTemplateQueries.detail(workoutTemplateID!),
+    ...workoutTemplateQueries.detail(workoutTemplateID!, profileID),
     enabled: mode === 'edit' || mode === 'perform',
     gcTime: 0,
-    select: (data) => ({
-      ...data,
-      mode,
-      lastPerformed,
-    }),
   })
 
   const queryClient = useQueryClient()
 
   const mutation = useMutation({
-    mutationFn: async (data: WorkoutSchemaType) => {
-      const parsedData = WorkoutSchema.parse(data)
+    mutationFn: async (data: WorkoutFormSchemaType) => {
+      const parsedData = WorkoutDataSchema.parse({
+        ...data,
+        mode,
+        profileID,
+        ...(mode === 'perform' && { lastPerformed }),
+      })
       const { error } = await supabase.rpc('upsert_workout', {
         payload: parsedData,
       })
@@ -51,7 +57,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     onSuccess: () => {
       router.back()
       queryClient.invalidateQueries({
-        queryKey: workoutTemplateQueries.list(profile?.profile_id!).queryKey,
+        queryKey: workoutTemplateQueries.list(profileID).queryKey,
       })
     },
     onError: (error) => {
@@ -59,27 +65,27 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     },
   })
 
-  const methods = useForm<WorkoutSchemaType>({
+  const methods = useForm<WorkoutFormSchemaType>({
     defaultValues: {
       title: '',
-      mode,
+      authorProfileID: profileID,
       exercises: [],
     },
-    values: WorkoutSchema.safeParse(data).success
-      ? WorkoutSchema.safeParse(data).data
+    values: WorkoutFormSchema.safeParse(data).success
+      ? WorkoutFormSchema.safeParse(data).data
       : {
           title: '',
-          mode,
+          authorProfileID: profileID,
           exercises: [],
         },
-    resolver: zodResolver(WorkoutSchema),
+    resolver: zodResolver(WorkoutFormSchema),
   })
 
-  const submitWorkout = async (data: WorkoutSchemaType) => {
+  const submitWorkout = async (data: WorkoutFormSchemaType) => {
     const hasIncompletedSets = data.exercises.some((ex) =>
       ex.sets.some((set) => !set.completed),
     )
-    let dataWithoutIncompleteSets: undefined | WorkoutSchemaType
+    let dataWithoutIncompleteSets: undefined | WorkoutFormSchemaType
 
     if (hasIncompletedSets && mode === 'perform') {
       const willSubmit = await alertWhetherToSubmit()
@@ -104,7 +110,7 @@ export const Workout: FC<WorkoutProps> = ({ mode }) => {
     <WorkoutModeProvider value={mode}>
       <Stack.Screen
         options={{
-          ...(mode === 'perform' &&data?.title&& { title: data.title }),
+          ...(mode === 'perform' && data?.title && { title: data.title }),
           headerRight: () => (
             <Button
               disabled={!methods.getValues('exercises').length}

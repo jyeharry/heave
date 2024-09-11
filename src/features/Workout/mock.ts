@@ -1,6 +1,6 @@
-import { WorkoutSchemaType } from './types'
+import { WorkoutFormSchemaType } from './types'
 
-export const mockWorkoutData: WorkoutSchemaType = {
+export const mockWorkoutData: WorkoutFormSchemaType = {
   workout_template_id: '24625f90-585e-4e63-b980-de8f18ccdab7',
   title: 'Push',
   notes: '1 second concentric, 3 second eccentric',

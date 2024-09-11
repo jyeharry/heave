@@ -27,37 +27,57 @@ export type WorkoutParams = {
   exerciseIndex?: `${number}`
 }
 
-export const WorkoutSetSchema = z.object({
+export const WorkoutSetFormSchema = z.object({
   setType: SetTypeSchema,
-  weight: z.coerce.number().nonnegative().default(0),
-  reps: z.coerce.number().int().nonnegative().default(0),
+  weight: z.coerce.number().nonnegative().optional(),
+  reps: z.coerce.number().int().nonnegative().optional(),
   completed: z.optional(z.boolean().default(false)),
   index: z.number().int().nonnegative(),
 })
 
-export type WorkoutSet = z.infer<typeof WorkoutSetSchema>
+export type WorkoutSetFormType = z.infer<typeof WorkoutSetFormSchema>
 
-const ExerciseSchema = z.object({
+export const WorkoutSetDataSchema = WorkoutSetFormSchema.extend({
+  weight: WorkoutSetFormSchema.shape.weight.default(0),
+  reps: WorkoutSetFormSchema.shape.reps.default(0),
+})
+
+export type WorkoutSetDataType = z.infer<typeof WorkoutSetDataSchema>
+
+const ExerciseFormSchema = z.object({
   workoutTemplateExerciseID: z.string().uuid().optional(),
   exercise: z.object({
     name: z.string(),
     exerciseID: z.string().uuid(),
   }),
   index: z.number().int().nonnegative(),
-  sets: z.array(WorkoutSetSchema),
+  sets: z.array(WorkoutSetFormSchema),
 })
 
-export type ExerciseSchemaType = z.infer<typeof ExerciseSchema>
+export type ExerciseFormSchemaType = z.infer<typeof ExerciseFormSchema>
 
-export const WorkoutSchema = z
-  .object({
-    title: z.string().transform((val) => (val ? val : 'Untitled Workout')),
-    notes: z.string().optional().nullable(),
-    mode: z.enum(['create', 'edit', 'perform']),
-    workoutTemplateID: z.string().uuid().optional(),
-    lastPerformed: z.string().datetime().optional(),
-    exercises: z.array(ExerciseSchema),
-  })
-  .strict()
+const ExerciseDataSchema = ExerciseFormSchema.extend({
+  sets: z.array(WorkoutSetDataSchema),
+})
 
-export type WorkoutSchemaType = z.infer<typeof WorkoutSchema>
+export type ExerciseDataSchemaType = z.infer<typeof ExerciseDataSchema>
+
+export const WorkoutFormSchema = z.object({
+  title: z.string().transform((val) => val || 'Untitled Workout'),
+  notes: z.string().optional().nullable(),
+  workoutTemplateID: z.string().uuid().optional(),
+  exercises: z.array(ExerciseFormSchema),
+  authorProfileID: z.string().uuid(),
+  parentWorkoutTemplateID: z.string().uuid().nullish(),
+})
+
+export type WorkoutFormSchemaType = z.infer<typeof WorkoutFormSchema>
+
+export const WorkoutDataSchema = WorkoutFormSchema.extend({
+  mode: z.enum(['create', 'edit', 'perform']),
+  lastPerformed: z.string().datetime().optional(),
+  exercises: z.array(ExerciseDataSchema),
+  profileID: z.string().uuid(),
+}).strict()
+
+export type WorkoutDataSchemaType = z.infer<typeof WorkoutDataSchema>

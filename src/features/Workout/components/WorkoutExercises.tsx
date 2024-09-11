@@ -9,11 +9,11 @@ import {
 } from 'react-hook-form'
 import { View } from 'react-native'
 import { WorkoutExercise } from './WorkoutExercise'
-import { WorkoutParams, WorkoutSchemaType } from '../types'
+import { WorkoutParams, WorkoutFormSchemaType } from '../types'
 import { Button } from '@/components/Button'
 
 export const WorkoutExercises = () => {
-  const { fields, remove, append, update } = useFieldArray<WorkoutSchemaType>({
+  const { fields, remove, append, update } = useFieldArray<WorkoutFormSchemaType>({
     name: 'exercises',
   })
 
@@ -49,16 +49,16 @@ export const WorkoutExercises = () => {
 
 const useNewExerciseEffect = (
   fields: FieldArrayWithId<
-    WorkoutSchemaType,
+    WorkoutFormSchemaType,
     'exercises' | `exercises.${number}.sets`,
     'id'
   >[],
   append: UseFieldArrayAppend<
-    WorkoutSchemaType,
+    WorkoutFormSchemaType,
     'exercises' | `exercises.${number}.sets`
   >,
   update: UseFieldArrayUpdate<
-    WorkoutSchemaType,
+    WorkoutFormSchemaType,
     'exercises' | `exercises.${number}.sets`
   >,
 ) => {
@@ -90,7 +90,7 @@ const useNewExerciseEffect = (
           exerciseID: newExerciseID,
         },
         index: fields.length,
-        sets: [{ setType: 'Standard', reps: 0, weight: 0, index: 0 }],
+        sets: [{ setType: 'Standard', index: 0 }],
       })
     }
 

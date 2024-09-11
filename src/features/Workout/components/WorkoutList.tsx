@@ -9,6 +9,7 @@ import {
 import { WorkoutCard, WorkoutCardSkeleton } from '../components/WorkoutCard'
 import { workoutTemplateQueries } from '../queries'
 import { theme } from '@/constants/theme'
+import { useProfile } from '@/hooks/useProfile'
 
 export const WorkoutList: FC<{ profileID: string }> = ({ profileID }) => {
   const { width } = useWindowDimensions()
@@ -16,6 +17,15 @@ export const WorkoutList: FC<{ profileID: string }> = ({ profileID }) => {
     workoutTemplateQueries.list(profileID),
   )
   const cardWidth = width / 2 - 16 * 2 + 8
+  const profile = useProfile()
+  const isOwnedByLoggedInUser = profile?.profile_id === profileID
+
+  const workoutsOwnedByProfile = data?.data?.filter(
+    (workout) => workout.authorProfileID === profileID,
+  )
+  const workoutsNotOwnedByProfile = data?.data?.filter(
+    (workout) => workout.authorProfileID !== profileID,
+  )
 
   return (
     <ScrollView
@@ -42,7 +52,8 @@ export const WorkoutList: FC<{ profileID: string }> = ({ profileID }) => {
           title={title}
           lastPerformed={last_performed}
           workoutTemplateID={workoutTemplateID}
-          authorProfileID={profileID}
+          isOwnedByLoggedInUser={isOwnedByLoggedInUser}
+          profileID={profileID}
           style={{
             flexBasis: cardWidth,
           }}

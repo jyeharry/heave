@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, ReactNode } from 'react'
 import { ScrollView, StyleProp, View, ViewStyle } from 'react-native'
 import ReactNativeModal, { ModalProps } from 'react-native-modal'
 import { Text } from './Text'
@@ -11,9 +11,9 @@ export const Modal: FC<
     Partial<ModalProps> & {
       containerStyle?: StyleProp<ViewStyle>
       hasHeader?: boolean
-      Footer?: React.ReactElement
+      Footer?: ReactNode
       title?: string
-      HeaderRightComponent?: React.ReactElement
+      HeaderRightComponent?: ReactNode
       setIsVisible: (v: boolean) => void
     },
     'children' | 'isVisible'

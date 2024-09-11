@@ -9,7 +9,10 @@ import { Pressable, PressableProps, StyleSheet, View } from 'react-native'
 import { Text } from './Text'
 import { theme, BaseColourMap } from '@/constants/theme'
 
-type ButtonColourMap = Pick<BaseColourMap, 'primary' | 'danger' | 'grey'>
+type ButtonColourMap = Pick<
+  BaseColourMap,
+  'primary' | 'danger' | 'grey'
+>
 
 export interface ButtonProps extends PressableProps {
   colour?: keyof ButtonColourMap

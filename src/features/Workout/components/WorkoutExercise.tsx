@@ -11,7 +11,7 @@ import { View } from 'react-native'
 import Animated, { useAnimatedStyle, withTiming } from 'react-native-reanimated'
 import { Row, Table } from 'react-native-reanimated-table'
 import { SET_ROW_HEIGHT, SetRow } from './SetRow'
-import { WorkoutSchemaType } from '../types'
+import { WorkoutFormSchemaType } from '../types'
 import { Button } from '@/components/Button'
 import { MenuButton, MenuOption } from '@/components/Menu'
 import { Text } from '@/components/Text'
@@ -32,7 +32,7 @@ export const WorkoutExercise: FC<ExerciseProps> = ({
     fields: setFields,
     append,
     remove: removeSet,
-  } = useFieldArray<WorkoutSchemaType>({
+  } = useFieldArray<WorkoutFormSchemaType>({
     name: `exercises.${exerciseIndex}.sets`,
   })
 
@@ -121,7 +121,6 @@ export const WorkoutExercise: FC<ExerciseProps> = ({
             append(
               {
                 setType: 'Standard',
-                reps: 0,
                 weight: getValues(
                   `exercises.${exerciseIndex}.sets.${setFields.length - 1}.weight`,
                 ),
